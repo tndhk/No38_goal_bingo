@@ -1,0 +1,12 @@
+program_id: 個人開発
+project_id: bingo_goal_app
+participant_name: takahiko_tsunoda
+flow_dir: bingo_goal_app
+flow_base: "Flow/202601/2026-01-16/bingo_goal_app"
+stock_base: "Stock/programs/個人開発/projects/bingo_goal_app"
+period: 2025-01-15 → 2025-01-22
+purpose: 学習・記録
+background: 既存ツールの不満
+app_type: Webアプリ
+main_user: 自分自身
+app_summary: 年度別、目標ビンゴを作成するツール。管理も。
