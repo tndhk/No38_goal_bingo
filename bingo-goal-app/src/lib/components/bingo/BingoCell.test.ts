@@ -1,0 +1,72 @@
+import { describe, test, expect, vi } from 'vitest';
+import { render, screen, fireEvent } from '@testing-library/svelte';
+import BingoCell from './BingoCell.svelte';
+import type { Cell } from '$lib/types/bingo';
+
+describe('BingoCell', () => {
+	const createCell = (overrides: Partial<Cell> = {}): Cell => ({
+		position: 'topLeft',
+		goal: '',
+		isAchieved: false,
+		...overrides
+	});
+
+	test('displays goal text', () => {
+		const cell = createCell({ goal: 'Learn TypeScript' });
+		render(BingoCell, { props: { cell, ontap: vi.fn() } });
+
+		expect(screen.getByText('Learn TypeScript')).toBeTruthy();
+	});
+
+	test('shows green background when achieved', () => {
+		const cell = createCell({ isAchieved: true, goal: 'Done' });
+		const { container } = render(BingoCell, { props: { cell, ontap: vi.fn() } });
+
+		const button = container.querySelector('button');
+		expect(button?.classList.contains('bg-achieved')).toBe(true);
+	});
+
+	test('shows gray background when not achieved', () => {
+		const cell = createCell({ isAchieved: false, goal: 'Not done' });
+		const { container } = render(BingoCell, { props: { cell, ontap: vi.fn() } });
+
+		const button = container.querySelector('button');
+		expect(button?.classList.contains('bg-unachieved')).toBe(true);
+	});
+
+	test('calls ontap when tapped', async () => {
+		const ontap = vi.fn();
+		const cell = createCell({ goal: 'Test goal' });
+		render(BingoCell, { props: { cell, ontap } });
+
+		const button = screen.getByRole('button');
+		await fireEvent.click(button);
+
+		expect(ontap).toHaveBeenCalledTimes(1);
+	});
+
+	test('shows placeholder when goal is empty', () => {
+		const cell = createCell({ goal: '' });
+		render(BingoCell, { props: { cell, ontap: vi.fn() } });
+
+		expect(screen.getByText('タップして入力')).toBeTruthy();
+	});
+
+	test('applies highlight style when isHighlighted is true', () => {
+		const cell = createCell({ goal: 'Highlighted' });
+		const { container } = render(BingoCell, {
+			props: { cell, ontap: vi.fn(), isHighlighted: true }
+		});
+
+		const button = container.querySelector('button');
+		expect(button?.classList.contains('ring-bingo-line')).toBe(true);
+	});
+
+	test('does not apply highlight style by default', () => {
+		const cell = createCell({ goal: 'Not highlighted' });
+		const { container } = render(BingoCell, { props: { cell, ontap: vi.fn() } });
+
+		const button = container.querySelector('button');
+		expect(button?.classList.contains('ring-bingo-line')).toBe(false);
+	});
+});
