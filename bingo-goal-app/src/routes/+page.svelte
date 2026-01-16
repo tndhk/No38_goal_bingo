@@ -16,8 +16,11 @@
 	import SaveIndicator from '$lib/components/ui/SaveIndicator.svelte';
 	import ProgressDisplay from '$lib/components/bingo/ProgressDisplay.svelte';
 	import { getProgressSummary, getBingoLinePositions } from '$lib/utils/bingo';
+	import { celebrateBingo, celebratePerfect } from '$lib/utils/celebration';
 
 	let isModalOpen = $state(false);
+	let prevBingoCount = $state<number | null>(null);
+	let prevIsPerfect = $state<boolean | null>(null);
 	let selectedPosition = $state<CellPosition | null>(null);
 	let isYearDialogOpen = $state(false);
 	let selectedYear = $state(new Date().getFullYear());
@@ -46,6 +49,26 @@
 
 	onMount(() => {
 		initializeStore();
+	});
+
+	$effect(() => {
+		if (!progress) return;
+
+		// PERFECT達成時の演出（ビンゴより優先）
+		if (progress.isPerfect && prevIsPerfect === false) {
+			celebratePerfect();
+		}
+		// ビンゴ成立時の演出
+		else if (
+			prevBingoCount !== null &&
+			progress.bingoCount > prevBingoCount &&
+			!progress.isPerfect
+		) {
+			celebrateBingo();
+		}
+
+		prevBingoCount = progress.bingoCount;
+		prevIsPerfect = progress.isPerfect;
 	});
 
 	function handleCellTap(position: CellPosition) {

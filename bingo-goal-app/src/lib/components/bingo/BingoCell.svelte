@@ -47,7 +47,7 @@
 	type="button"
 	class="flex items-center justify-center w-full h-full min-h-[80px] p-2 rounded-lg text-sm font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/50
 		{cell.isAchieved ? 'bg-achieved text-white' : 'bg-unachieved text-gray-700'}
-		{isHighlighted ? 'ring-2 ring-bingo-line ring-offset-2' : ''}"
+		{isHighlighted ? 'ring-2 ring-bingo-line ring-offset-2 bingo-highlight' : ''}"
 	onmousedown={handleMouseDown}
 	onmouseup={handleMouseUp}
 	onmouseleave={handleMouseLeave}
@@ -84,5 +84,23 @@
 		-webkit-line-clamp: 3;
 		-webkit-box-orient: vertical;
 		overflow: hidden;
+	}
+
+	.bingo-highlight {
+		animation: pulse-bingo 2s ease-in-out infinite;
+	}
+
+	@keyframes pulse-bingo {
+		0%,
+		100% {
+			box-shadow:
+				0 0 0 2px #fbbf24,
+				0 0 0 4px rgba(251, 191, 36, 0.3);
+		}
+		50% {
+			box-shadow:
+				0 0 0 3px #fbbf24,
+				0 0 0 8px rgba(251, 191, 36, 0.2);
+		}
 	}
 </style>
