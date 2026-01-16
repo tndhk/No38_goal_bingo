@@ -5,11 +5,42 @@
 		cell: Cell;
 		isHighlighted?: boolean;
 		ontap: () => void;
+		onlongpress?: () => void;
 	}
 
-	let { cell, isHighlighted = false, ontap }: Props = $props();
+	let { cell, isHighlighted = false, ontap, onlongpress }: Props = $props();
 
 	const isEmpty = $derived(cell.goal.trim() === '');
+
+	let pressTimer: ReturnType<typeof setTimeout> | null = null;
+	let isLongPress = false;
+
+	function handleMouseDown() {
+		isLongPress = false;
+		pressTimer = setTimeout(() => {
+			isLongPress = true;
+			onlongpress?.();
+		}, 500);
+	}
+
+	function handleMouseUp() {
+		if (pressTimer) {
+			clearTimeout(pressTimer);
+			pressTimer = null;
+		}
+		if (!isLongPress) {
+			ontap();
+		}
+		isLongPress = false;
+	}
+
+	function handleMouseLeave() {
+		if (pressTimer) {
+			clearTimeout(pressTimer);
+			pressTimer = null;
+		}
+		isLongPress = false;
+	}
 </script>
 
 <button
@@ -17,7 +48,12 @@
 	class="flex items-center justify-center w-full h-full min-h-[80px] p-2 rounded-lg text-sm font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/50
 		{cell.isAchieved ? 'bg-achieved text-white' : 'bg-unachieved text-gray-700'}
 		{isHighlighted ? 'ring-2 ring-bingo-line ring-offset-2' : ''}"
-	onclick={ontap}
+	onmousedown={handleMouseDown}
+	onmouseup={handleMouseUp}
+	onmouseleave={handleMouseLeave}
+	ontouchstart={handleMouseDown}
+	ontouchend={handleMouseUp}
+	ontouchcancel={handleMouseLeave}
 >
 	{#if isEmpty}
 		<span class="text-gray-400 text-xs">タップして入力</span>

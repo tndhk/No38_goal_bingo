@@ -40,10 +40,31 @@ describe('BingoGrid', () => {
 		render(BingoGrid, { props: { board, onCellTap } });
 
 		const buttons = screen.getAllByRole('button');
-		await fireEvent.click(buttons[0]);
+		await fireEvent.mouseDown(buttons[0]);
+		await fireEvent.mouseUp(buttons[0]);
 
 		expect(onCellTap).toHaveBeenCalledTimes(1);
 		expect(onCellTap).toHaveBeenCalledWith('topLeft');
+	});
+
+	test('calls onCellLongPress with position on long press', async () => {
+		vi.useFakeTimers();
+		const board = createBoard();
+		const onCellTap = vi.fn();
+		const onCellLongPress = vi.fn();
+		render(BingoGrid, { props: { board, onCellTap, onCellLongPress } });
+
+		const buttons = screen.getAllByRole('button');
+		await fireEvent.mouseDown(buttons[0]);
+
+		vi.advanceTimersByTime(500);
+
+		await fireEvent.mouseUp(buttons[0]);
+
+		expect(onCellLongPress).toHaveBeenCalledTimes(1);
+		expect(onCellLongPress).toHaveBeenCalledWith('topLeft');
+		expect(onCellTap).not.toHaveBeenCalled();
+		vi.useRealTimers();
 	});
 
 	test('displays goal text in each cell', () => {

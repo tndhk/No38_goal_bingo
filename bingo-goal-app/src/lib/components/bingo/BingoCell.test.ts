@@ -34,15 +34,35 @@ describe('BingoCell', () => {
 		expect(button?.classList.contains('bg-unachieved')).toBe(true);
 	});
 
-	test('calls ontap when tapped', async () => {
+	test('calls ontap when tapped (quick press)', async () => {
 		const ontap = vi.fn();
 		const cell = createCell({ goal: 'Test goal' });
 		render(BingoCell, { props: { cell, ontap } });
 
 		const button = screen.getByRole('button');
-		await fireEvent.click(button);
+		await fireEvent.mouseDown(button);
+		await fireEvent.mouseUp(button);
 
 		expect(ontap).toHaveBeenCalledTimes(1);
+	});
+
+	test('calls onlongpress on long press', async () => {
+		vi.useFakeTimers();
+		const ontap = vi.fn();
+		const onlongpress = vi.fn();
+		const cell = createCell({ goal: 'Test goal' });
+		render(BingoCell, { props: { cell, ontap, onlongpress } });
+
+		const button = screen.getByRole('button');
+		await fireEvent.mouseDown(button);
+
+		vi.advanceTimersByTime(500);
+
+		await fireEvent.mouseUp(button);
+
+		expect(onlongpress).toHaveBeenCalledTimes(1);
+		expect(ontap).not.toHaveBeenCalled();
+		vi.useRealTimers();
 	});
 
 	test('shows placeholder when goal is empty', () => {

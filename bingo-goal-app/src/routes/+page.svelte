@@ -6,13 +6,16 @@
 		initializeStore,
 		createBoard,
 		updateCell,
-		setCurrentBoard
+		setCurrentBoard,
+		toggleAchieved
 	} from '$lib/stores/boardStore';
 	import type { CellPosition } from '$lib/types/bingo';
 	import { getCellByPosition } from '$lib/types/bingo';
 	import BingoGrid from '$lib/components/bingo/BingoGrid.svelte';
 	import GoalInputModal from '$lib/components/bingo/GoalInputModal.svelte';
 	import SaveIndicator from '$lib/components/ui/SaveIndicator.svelte';
+	import ProgressDisplay from '$lib/components/bingo/ProgressDisplay.svelte';
+	import { getProgressSummary, getBingoLinePositions } from '$lib/utils/bingo';
 
 	let isModalOpen = $state(false);
 	let selectedPosition = $state<CellPosition | null>(null);
@@ -26,6 +29,9 @@
 	const selectedCell = $derived(
 		board && selectedPosition ? getCellByPosition(board, selectedPosition) : null
 	);
+
+	const progress = $derived(board ? getProgressSummary(board.cells) : null);
+	const highlightedPositions = $derived(board ? getBingoLinePositions(board.cells) : []);
 
 	const availableYears = $derived(() => {
 		const currentYear = new Date().getFullYear();
@@ -45,6 +51,12 @@
 	function handleCellTap(position: CellPosition) {
 		selectedPosition = position;
 		isModalOpen = true;
+	}
+
+	function handleCellLongPress(position: CellPosition) {
+		if (board) {
+			toggleAchieved(board.id, position);
+		}
 	}
 
 	function handleSave(goal: string) {
@@ -126,7 +138,22 @@
 		{/if}
 
 		{#if board}
-			<BingoGrid {board} onCellTap={handleCellTap} />
+			<BingoGrid
+				{board}
+				onCellTap={handleCellTap}
+				onCellLongPress={handleCellLongPress}
+				{highlightedPositions}
+			/>
+
+			{#if progress}
+				<ProgressDisplay
+					achieved={progress.achieved}
+					total={progress.total}
+					bingoCount={progress.bingoCount}
+					hint={progress.hint}
+					isPerfect={progress.isPerfect}
+				/>
+			{/if}
 		{:else}
 			<div class="text-center py-12">
 				<p class="text-gray-500 mb-4">ボードがありません</p>
