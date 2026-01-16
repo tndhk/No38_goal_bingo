@@ -1,0 +1,212 @@
+story_map:
+  project: bingo_goal_app
+  version: "1.0"
+  date: "2026-01-16"
+
+  epics:
+    - id: EP001
+      title: "ビンゴボード管理"
+      description: "ビンゴボードの作成・編集・閲覧"
+      stories:
+        - ST001
+        - ST002
+        - ST003
+        - ST004
+
+    - id: EP002
+      title: "目標管理"
+      description: "各マスの目標入力・達成管理"
+      stories:
+        - ST005
+        - ST006
+        - ST007
+
+    - id: EP003
+      title: "達成演出"
+      description: "ビンゴ達成時の体験"
+      stories:
+        - ST008
+        - ST009
+
+    - id: EP004
+      title: "データ永続化"
+      description: "データの保存・読み込み"
+      stories:
+        - ST010
+        - ST011
+
+  stories:
+    - id: ST001
+      epic: EP001
+      title: "新しいビンゴボードを作成する"
+      user_story: |
+        As a ユーザー
+        I want to 新しい年度のビンゴボードを作成したい
+        So that 年間目標を整理できる
+      solution: SL001
+      release: MVP
+      priority: 1
+      acceptance_criteria:
+        - "「新規作成」ボタンをタップできる"
+        - "年度を選択できる（2025, 2026, ...）"
+        - "3x3の空のビンゴボードが表示される"
+
+    - id: ST002
+      epic: EP001
+      title: "ビンゴボードを一覧で見る"
+      user_story: |
+        As a ユーザー
+        I want to 作成済みのビンゴボードを一覧で見たい
+        So that 過去の年度のボードにアクセスできる
+      solution: SL001
+      release: MVP
+      priority: 2
+      acceptance_criteria:
+        - "作成済みのボードが年度順に表示される"
+        - "ボードをタップすると詳細画面に遷移する"
+
+    - id: ST003
+      epic: EP001
+      title: "年度を切り替える"
+      user_story: |
+        As a ユーザー
+        I want to 年度を切り替えてボードを見たい
+        So that 異なる年の目標を確認できる
+      solution: SL001
+      release: MVP
+      priority: 3
+      acceptance_criteria:
+        - "年度選択のドロップダウンがある"
+        - "年度を変更するとボードが切り替わる"
+        - "存在しない年度は新規作成を促す"
+
+    - id: ST004
+      epic: EP001
+      title: "ビンゴボードを削除する"
+      user_story: |
+        As a ユーザー
+        I want to 不要なビンゴボードを削除したい
+        So that 間違って作ったボードを消せる
+      solution: SL001
+      release: MVP
+      priority: 8
+      acceptance_criteria:
+        - "削除ボタンがある"
+        - "確認ダイアログが表示される"
+        - "削除後はボード一覧に戻る"
+
+    - id: ST005
+      epic: EP002
+      title: "マスに目標を入力する"
+      user_story: |
+        As a ユーザー
+        I want to 各マスに目標を入力したい
+        So that 年間で達成したいことを記録できる
+      solution: SL001
+      release: MVP
+      priority: 4
+      acceptance_criteria:
+        - "マスをタップすると入力画面が開く"
+        - "テキストを入力できる（最大50文字）"
+        - "保存するとマスに目標が表示される"
+
+    - id: ST006
+      epic: EP002
+      title: "目標を達成済みにする"
+      user_story: |
+        As a ユーザー
+        I want to 達成した目標にチェックを付けたい
+        So that 進捗が分かる
+      solution: SL001
+      release: MVP
+      priority: 5
+      acceptance_criteria:
+        - "マスを長押しすると達成済みになる"
+        - "達成済みマスは色が変わる"
+        - "再度長押しすると未達成に戻る"
+
+    - id: ST007
+      epic: EP002
+      title: "進捗を確認する"
+      user_story: |
+        As a ユーザー
+        I want to 現在の進捗を数字で確認したい
+        So that あとどれくらいか分かる
+      solution: SL003
+      release: MVP
+      priority: 6
+      acceptance_criteria:
+        - "「5/9 達成」のように表示される"
+        - "「あと1マスでビンゴ！」のヒント表示"
+        - "全体の達成率がパーセントで表示される"
+
+    - id: ST008
+      epic: EP003
+      title: "ビンゴ達成でアニメーションを見る"
+      user_story: |
+        As a ユーザー
+        I want to ビンゴが揃った時にアニメーションを見たい
+        So that 達成感を味わえる
+      solution: SL002
+      release: MVP
+      priority: 7
+      acceptance_criteria:
+        - "縦/横/斜めが揃うとアニメーションが再生"
+        - "「BINGO!」のテキストが表示される"
+        - "紙吹雪や光るエフェクトがある"
+
+    - id: ST009
+      epic: EP003
+      title: "複数ビンゴの達成を見る"
+      user_story: |
+        As a ユーザー
+        I want to 複数ビンゴを同時に達成した時にも祝福されたい
+        So that 頑張りが認められる
+      solution: SL002
+      release: MVP
+      priority: 9
+      acceptance_criteria:
+        - "「ダブルビンゴ達成！」のような表示"
+        - "達成ライン数がカウントされる"
+        - "全マス達成時は特別な演出"
+
+    - id: ST010
+      epic: EP004
+      title: "データを自動保存する"
+      user_story: |
+        As a ユーザー
+        I want to データが自動で保存されてほしい
+        So that 保存し忘れの心配がない
+      solution: SL004
+      release: MVP
+      priority: 10
+      acceptance_criteria:
+        - "入力するたびに自動保存される"
+        - "アプリを閉じてもデータが残る"
+        - "保存中は「保存中...」と表示"
+
+    - id: ST011
+      epic: EP004
+      title: "ブラウザを変えてもデータを引き継ぐ"
+      user_story: |
+        As a ユーザー
+        I want to 別のブラウザ/デバイスでもデータを見たい
+        So that PCとスマホで同期できる
+      solution: SL004
+      release: v1.1
+      priority: 15
+      acceptance_criteria:
+        - "ユーザー認証ができる"
+        - "クラウドにデータが保存される"
+        - "他デバイスでログインするとデータが同期"
+
+  release_plan:
+    MVP:
+      stories: [ST001, ST002, ST003, ST004, ST005, ST006, ST007, ST008, ST009, ST010]
+      target_date: "2026-01-31"
+      description: "コア機能のリリース"
+
+    v1.1:
+      stories: [ST011]
+      target_date: "2026-04-30"
+      description: "同期機能とシェア機能"

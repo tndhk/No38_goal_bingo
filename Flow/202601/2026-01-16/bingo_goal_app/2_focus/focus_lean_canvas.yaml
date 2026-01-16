@@ -1,0 +1,78 @@
+lean_canvas:
+  project: bingo_goal_app
+  version: "1.0"
+  date: "2026-01-16"
+
+  problem:
+    problem_1: "92%が新年の抱負で挫折し、42%が目標を忘れてしまう"
+    problem_2: "既存の目標管理アプリ（9x9マンダラチャート等）が複雑すぎて続かない"
+    problem_3: "目標を達成しても達成感を感じにくく、モチベーションが維持できない"
+
+  customer_segments:
+    primary: "新年の抱負を毎年立てるが挫折する20-40代の社会人"
+    secondary: "9x9マンダラチャートが複雑すぎると感じる人"
+    early_adopter: "年間目標を立てたいが、シンプルなツールを探している人"
+
+  unique_value_proposition:
+    headline: "年度別目標ビンゴ - 9マスから始める、揃えて楽しい年間目標"
+    sub_headline: "3x3ビンゴで「立てて終わり」にならない目標管理"
+    high_level_concept: "目標管理のMinecraft"
+
+  solution:
+    solution_1: "3x3ビンゴボードで年間目標をシンプルに一望"
+    solution_2: "縦・横・斜めが揃った時の達成演出でゲーミフィケーション"
+    solution_3: "年度切り替え機能で過去との比較・振り返りが可能"
+
+  channels:
+    awareness:
+      - "検索エンジン（SEO: 年間目標、ビンゴ、新年の抱負）"
+      - "ProductHunt"
+      - "X（Twitter）での発信"
+    acquisition:
+      - "無料で使えるWeb版"
+      - "口コミ・SNSシェア"
+    retention:
+      - "週次のリマインドメール（オプトイン）"
+      - "ビンゴ達成通知"
+
+  revenue_streams:
+    primary:
+      model: "買い切り型"
+      price: "500円"
+      value: "広告非表示、複数ボード、テーマカスタマイズ、ウィジェット"
+    secondary:
+      model: "無料（広告最小限）"
+      value: "基本機能すべて利用可能"
+
+  cost_structure:
+    fixed:
+      - "ドメイン: 年間2,000円"
+      - "ホスティング（Vercel等）: 0-3,000円/月"
+    variable:
+      - "開発時間（自分の時間）"
+      - "マーケティング費用（初期は0）"
+    estimated_monthly: "0-3,000円"
+    break_even: "有料ユーザー6人/月（500円×6=3,000円）"
+
+  key_metrics:
+    acquisition:
+      - "新規登録数"
+      - "ボード作成数"
+    activation:
+      - "目標入力完了率"
+      - "初回達成マーク率"
+    retention:
+      - "30日継続率"
+      - "週間アクティブ率"
+    revenue:
+      - "有料転換率"
+      - "ARPU"
+    referral:
+      - "SNSシェア数"
+      - "紹介経由登録数"
+
+  unfair_advantage:
+    - "年度別×ビンゴ形式の組み合わせは競合不在"
+    - "個人開発による素早い意思決定と改善サイクル"
+    - "自分自身がターゲットユーザー（毎年抱負で挫折）"
+    - "Web版という競合が少ないプラットフォーム"

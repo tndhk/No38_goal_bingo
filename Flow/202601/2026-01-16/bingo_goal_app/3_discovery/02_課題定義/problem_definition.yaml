@@ -1,0 +1,131 @@
+problem_definition:
+  project: bingo_goal_app
+  version: "1.0"
+  date: "2026-01-16"
+
+  problems:
+    - id: PR001
+      title: "目標を忘れてしまう"
+      description: "年間目標を立てても、日常に埋もれて5月には忘れている"
+      persona: [PR001, PR002]
+      opportunity: [OP001, OP005]
+      severity: high
+      frequency: high
+      evidence:
+        - "42%が新年の抱負を忘れる（bondavi調査）"
+        - "5月以降に目標への意識が急低下（松井証券調査）"
+      root_causes:
+        - "目標に触れる機会がない"
+        - "日常のルーティンに組み込まれていない"
+        - "リマインドの仕組みがない"
+
+    - id: PR002
+      title: "既存アプリが複雑すぎる"
+      description: "9x9マンダラチャート等は81マスもあり、埋められずに挫折"
+      persona: [PR001, PR002]
+      opportunity: [OP002]
+      severity: high
+      frequency: high
+      evidence:
+        - "「複雑すぎて続かない」という顧客の声"
+        - "9x9マンダラチャートへの挫折体験"
+      root_causes:
+        - "マス数が多すぎる（81マス）"
+        - "入力項目が多い"
+        - "設計に時間がかかる"
+
+    - id: PR003
+      title: "達成感を感じられない"
+      description: "目標を達成しても「やった！」という感覚が薄い"
+      persona: [PR001, PR002]
+      opportunity: [OP003]
+      severity: medium
+      frequency: high
+      evidence:
+        - "離脱率52%の主因は『達成感がない』"
+        - "既存アプリは色/スタンプ変更のみ"
+      root_causes:
+        - "達成時の演出が地味"
+        - "進捗が見えにくい"
+        - "褒められる体験がない"
+
+    - id: PR004
+      title: "できなかったことが辛い"
+      description: "未達成の目標が可視化されると自己嫌悪に陥る"
+      persona: [PR002]
+      opportunity: [OP007]
+      severity: medium
+      frequency: medium
+      evidence:
+        - "「できなかった記録を見るのが辛い」という声"
+        - "完璧主義による挫折パターン"
+      root_causes:
+        - "連続日数の強調"
+        - "未達成マスの目立つ表示"
+        - "ネガティブな表現"
+
+    - id: PR005
+      title: "目標が曖昧で進捗が測れない"
+      description: "「痩せる」など漠然とした目標を立ててしまい、達成基準が不明確"
+      persona: [PR001, PR002]
+      opportunity: [OP010]
+      severity: medium
+      frequency: high
+      evidence:
+        - "「目標が曖昧」が達成できない最大の原因"
+        - "SMART理論の認知度は低い"
+      root_causes:
+        - "具体化の方法を知らない"
+        - "入力時のガイドがない"
+        - "例がないと書けない"
+
+    - id: PR006
+      title: "PCで使えない"
+      description: "スマホだけでなくPCでも目標を確認・編集したい"
+      persona: [PR001]
+      opportunity: [OP006]
+      severity: low
+      frequency: medium
+      evidence:
+        - "競合のほとんどがモバイルアプリのみ"
+        - "「PCで確認したい」という声"
+      root_causes:
+        - "競合がモバイル優先"
+        - "クロスプラットフォーム開発コスト"
+
+  problem_persona_matrix:
+    PR001_taro:
+      - problem: PR001
+        impact: high
+      - problem: PR002
+        impact: high
+      - problem: PR003
+        impact: medium
+      - problem: PR005
+        impact: low
+      - problem: PR006
+        impact: medium
+
+    PR002_hanako:
+      - problem: PR001
+        impact: medium
+      - problem: PR002
+        impact: high
+      - problem: PR003
+        impact: high
+      - problem: PR004
+        impact: high
+      - problem: PR005
+        impact: high
+
+  priority_matrix:
+    high_impact_high_frequency:
+      - PR001
+      - PR002
+    high_impact_low_frequency: []
+    low_impact_high_frequency:
+      - PR003
+      - PR005
+    low_impact_low_frequency:
+      - PR004
+      - PR006

@@ -1,0 +1,167 @@
+solution_map:
+  project: bingo_goal_app
+  version: "1.0"
+  date: "2026-01-16"
+
+  solutions:
+    - id: SL001
+      title: "3x3ビンゴボード作成"
+      description: "年間目標を3x3（9マス）のビンゴ形式で入力・表示"
+      problem: [PR001, PR002]
+      opportunity: [OP001, OP002]
+      priority: MVP
+      effort: medium
+      impact: high
+      features:
+        - "9マスのグリッド表示"
+        - "各マスへの目標テキスト入力"
+        - "達成/未達成の切り替え"
+        - "年度選択（2025, 2026, ...）"
+
+    - id: SL002
+      title: "ビンゴ達成演出"
+      description: "縦・横・斜めが揃った時にアニメーションで祝福"
+      problem: [PR003]
+      opportunity: [OP003]
+      priority: MVP
+      effort: medium
+      impact: high
+      features:
+        - "ビンゴ判定ロジック"
+        - "達成時のアニメーション表示"
+        - "祝福メッセージ"
+        - "達成ライン数のカウント"
+
+    - id: SL003
+      title: "ポジティブUI設計"
+      description: "達成マスを強調し、未達成マスは控えめに表示"
+      problem: [PR004]
+      opportunity: [OP007]
+      priority: MVP
+      effort: low
+      impact: medium
+      features:
+        - "達成マスの色付け/アイコン"
+        - "未達成マスはグレーアウト"
+        - "『あと○マスでビンゴ』表示"
+        - "進捗率の表示（◯/9達成）"
+
+    - id: SL004
+      title: "レスポンシブWebアプリ"
+      description: "PC/スマホ両対応のWebアプリとして開発"
+      problem: [PR006]
+      opportunity: [OP006]
+      priority: MVP
+      effort: medium
+      impact: medium
+      features:
+        - "モバイルファーストのUI"
+        - "PCでも使いやすいレイアウト"
+        - "PWA対応（オプション）"
+
+    - id: SL005
+      title: "SNSシェア機能"
+      description: "ビンゴ達成時の画面をSNSにシェア"
+      problem: [PR003]
+      opportunity: [OP003]
+      priority: v1.1
+      effort: low
+      impact: medium
+      features:
+        - "シェア用画像生成"
+        - "X/Instagram連携"
+        - "ハッシュタグ自動付与"
+
+    - id: SL006
+      title: "目標テンプレート"
+      description: "よくある目標の例を提供し、入力をサポート"
+      problem: [PR005]
+      opportunity: [OP010]
+      priority: v1.1
+      effort: low
+      impact: medium
+      features:
+        - "カテゴリ別テンプレート（健康/学習/趣味等）"
+        - "テンプレートからワンタップで追加"
+        - "カスタマイズ可能"
+
+    - id: SL007
+      title: "5x5ビンゴオプション"
+      description: "より多くの目標を管理したい人向けに5x5（25マス）を提供"
+      problem: [PR002]
+      opportunity: [OP002]
+      priority: v1.1
+      effort: medium
+      impact: low
+      features:
+        - "ボードサイズ選択（3x3 or 5x5）"
+        - "25マスのレイアウト"
+        - "中央をフリーマスにするオプション"
+
+    - id: SL008
+      title: "ウィジェット機能"
+      description: "ホーム画面に目標を常に表示"
+      problem: [PR001]
+      opportunity: [OP005]
+      priority: v1.2
+      effort: high
+      impact: medium
+      features:
+        - "iOSウィジェット"
+        - "Androidウィジェット"
+        - "進捗表示"
+
+    - id: SL009
+      title: "過去年度の振り返り"
+      description: "過去の年度のビンゴを一覧表示し、成長を実感"
+      problem: [PR001]
+      opportunity: [OP009]
+      priority: v1.2
+      effort: medium
+      impact: low
+      features:
+        - "年度一覧表示"
+        - "達成率の年度比較"
+        - "年間達成履歴グラフ"
+
+    - id: SL010
+      title: "有料版（買い切り）"
+      description: "広告非表示、複数ボード、テーマ等の追加機能"
+      problem: []
+      opportunity: [OP004]
+      priority: v2.0
+      effort: high
+      impact: medium
+      features:
+        - "広告非表示"
+        - "複数ボード作成"
+        - "テーマカスタマイズ"
+        - "ウィジェット解放"
+
+  priority_matrix:
+    MVP:
+      - SL001
+      - SL002
+      - SL003
+      - SL004
+    v1.1:
+      - SL005
+      - SL006
+      - SL007
+    v1.2:
+      - SL008
+      - SL009
+    v2.0:
+      - SL010
+
+  solution_problem_mapping:
+    SL001: [PR001, PR002]
+    SL002: [PR003]
+    SL003: [PR004]
+    SL004: [PR006]
+    SL005: [PR003]
+    SL006: [PR005]
+    SL007: [PR002]
+    SL008: [PR001]
+    SL009: [PR001]
+    SL010: []

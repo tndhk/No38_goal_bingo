@@ -1,0 +1,146 @@
+experience_map:
+  project: bingo_goal_app
+  version: "1.0"
+  date: "2026-01-16"
+
+  personas:
+    - id: PR001
+      name: 山田太郎
+      type: primary
+      short_description: "毎年抱負で挫折する32歳エンジニア"
+
+    - id: PR002
+      name: 佐藤花子
+      type: secondary
+      short_description: "81マスが多すぎて挫折した28歳会社員"
+
+  journey_stages:
+    - id: ST01
+      name: 認知
+      description: "bingo_goal_appの存在を知る"
+
+    - id: ST02
+      name: 検討
+      description: "使ってみようか考える"
+
+    - id: ST03
+      name: 初回利用
+      description: "初めてビンゴボードを作成"
+
+    - id: ST04
+      name: 継続利用
+      description: "定期的に進捗を記録"
+
+    - id: ST05
+      name: 達成
+      description: "ビンゴを揃える / 目標達成"
+
+    - id: ST06
+      name: 振り返り
+      description: "年末に1年を振り返る"
+
+  experience_details:
+    PR001:
+      ST01:
+        touchpoint: "X（Twitter）で目にする / Google検索"
+        action: "『年間目標 アプリ シンプル』で検索"
+        thinking: "今年こそ目標管理を続けたい"
+        feeling: "期待と不安が半々"
+        pain_point: "また続かないかも…"
+
+      ST02:
+        touchpoint: "Webサイト / App Store"
+        action: "機能一覧を確認、無料で試せるか確認"
+        thinking: "9マスならできそう。無料で試せるなら入れてみるか"
+        feeling: "少し期待感が上がる"
+        pain_point: "複雑だったら嫌だな"
+
+      ST03:
+        touchpoint: "アプリ / Webアプリ"
+        action: "3x3ビンゴを作成、9個の目標を入力"
+        thinking: "3分で入力できた。これならいけそう"
+        feeling: "達成感、わくわく"
+        pain_point: "入力がめんどくさいと離脱"
+
+      ST04:
+        touchpoint: "アプリ / Webアプリ"
+        action: "週末に進捗確認、達成マークをつける"
+        thinking: "あ、これ達成してた。チェックしよう"
+        feeling: "小さな達成感"
+        pain_point: "通知がないと忘れる"
+
+      ST05:
+        touchpoint: "アプリ"
+        action: "縦一列が揃う → BINGO!"
+        thinking: "揃った！嬉しい！"
+        feeling: "大きな達成感、承認欲求"
+        pain_point: "演出がしょぼいとがっかり"
+
+      ST06:
+        touchpoint: "アプリ"
+        action: "年末に2026年のボードを振り返る"
+        thinking: "6マス達成、去年より成長した"
+        feeling: "満足感、来年への意欲"
+        pain_point: "データが消えていたら最悪"
+
+    PR002:
+      ST01:
+        touchpoint: "Instagram / 友人からの紹介"
+        action: "友人の投稿でアプリを知る"
+        thinking: "これなら私でもできるかな"
+        feeling: "興味と不安"
+        pain_point: "また挫折したらどうしよう"
+
+      ST02:
+        touchpoint: "App Store / Webサイト"
+        action: "スクリーンショットを確認、デザインをチェック"
+        thinking: "デザインがかわいい。9マスなら私でも埋められそう"
+        feeling: "期待感"
+        pain_point: "ダサいアプリだったら使わない"
+
+      ST03:
+        touchpoint: "アプリ"
+        action: "3x3ビンゴを作成、悩みながら9個入力"
+        thinking: "9個でいいのは楽！でも何を書こう…"
+        feeling: "少し悩むが達成感"
+        pain_point: "目標例がないと迷う"
+
+      ST04:
+        touchpoint: "アプリ"
+        action: "達成したらすぐチェック、できなかったマスは見ない"
+        thinking: "できたことだけ見たい"
+        feeling: "ポジティブな気持ち"
+        pain_point: "できなかったことが強調されると辛い"
+
+      ST05:
+        touchpoint: "アプリ"
+        action: "ビンゴ達成 → スクショしてストーリーに投稿"
+        thinking: "揃った！みんなに見せたい！"
+        feeling: "承認欲求、達成感"
+        pain_point: "シェアしにくいUIだと残念"
+
+      ST06:
+        touchpoint: "アプリ"
+        action: "年末に振り返り、来年のボードを作成"
+        thinking: "今年は続けられた。来年も頑張ろう"
+        feeling: "自己肯定感UP"
+        pain_point: "振り返り機能がないと寂しい"
+
+  opportunity_mapping:
+    - stage: ST01
+      opportunities: []
+
+    - stage: ST02
+      opportunities: [OP001, OP002]
+
+    - stage: ST03
+      opportunities: [OP002, OP010]
+
+    - stage: ST04
+      opportunities: [OP005, OP007]
+
+    - stage: ST05
+      opportunities: [OP003]
+
+    - stage: ST06
+      opportunities: [OP009]

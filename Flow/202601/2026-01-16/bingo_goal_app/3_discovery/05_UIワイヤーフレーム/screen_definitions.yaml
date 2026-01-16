@@ -1,0 +1,146 @@
+screen_definitions:
+  project: bingo_goal_app
+  version: "1.0"
+  date: "2026-01-16"
+
+  screens:
+    - id: SC001
+      name: "ホーム画面（ビンゴボード）"
+      description: "メイン画面。3x3ビンゴボードを表示"
+      stories: [ST001, ST003, ST005, ST006, ST007]
+      url: "/"
+      components:
+        - id: CP001
+          name: "ヘッダー"
+          elements:
+            - "アプリロゴ/タイトル"
+            - "年度セレクター（ドロップダウン）"
+            - "設定アイコン"
+
+        - id: CP002
+          name: "ビンゴボード"
+          elements:
+            - "3x3グリッド"
+            - "各マス（目標テキスト表示）"
+            - "達成済みマス（色変化）"
+            - "ビンゴライン（揃った時のハイライト）"
+
+        - id: CP003
+          name: "進捗表示"
+          elements:
+            - "達成数（5/9 達成）"
+            - "ビンゴ数（2 BINGO!）"
+            - "ヒント（あと1マスでビンゴ！）"
+
+        - id: CP004
+          name: "フッター"
+          elements:
+            - "新規作成ボタン"
+            - "削除ボタン（オプション）"
+
+    - id: SC002
+      name: "目標入力モーダル"
+      description: "マスタップ時の目標入力画面"
+      stories: [ST005]
+      url: null
+      type: modal
+      components:
+        - id: CP005
+          name: "入力フォーム"
+          elements:
+            - "マス位置表示（左上、中央、など）"
+            - "テキスト入力フィールド（最大50文字）"
+            - "保存ボタン"
+            - "キャンセルボタン"
+            - "クリアボタン（入力済みの場合）"
+
+    - id: SC003
+      name: "ビンゴ達成オーバーレイ"
+      description: "ビンゴ達成時のアニメーション画面"
+      stories: [ST008, ST009]
+      url: null
+      type: overlay
+      components:
+        - id: CP006
+          name: "達成演出"
+          elements:
+            - "「BINGO!」テキスト（大きく表示）"
+            - "紙吹雪アニメーション"
+            - "光るエフェクト"
+            - "達成ライン数（ダブルビンゴ！等）"
+            - "閉じるボタン / タップで閉じる"
+
+    - id: SC004
+      name: "年度選択画面"
+      description: "ボード一覧 / 年度選択"
+      stories: [ST002, ST003]
+      url: "/boards"
+      components:
+        - id: CP007
+          name: "年度リスト"
+          elements:
+            - "年度カード（2026年、2025年...）"
+            - "各年度の達成状況サマリー"
+            - "新規作成ボタン"
+
+    - id: SC005
+      name: "削除確認ダイアログ"
+      description: "ボード削除時の確認"
+      stories: [ST004]
+      url: null
+      type: dialog
+      components:
+        - id: CP008
+          name: "確認メッセージ"
+          elements:
+            - "「削除しますか？」テキスト"
+            - "削除ボタン"
+            - "キャンセルボタン"
+
+  navigation_flow:
+    - from: SC001
+      to: SC002
+      trigger: "マスをタップ"
+
+    - from: SC001
+      to: SC003
+      trigger: "ビンゴ達成"
+
+    - from: SC001
+      to: SC004
+      trigger: "年度セレクターをタップ"
+
+    - from: SC001
+      to: SC005
+      trigger: "削除ボタンをタップ"
+
+    - from: SC004
+      to: SC001
+      trigger: "年度を選択"
+
+  responsive_breakpoints:
+    mobile: "375px - 767px"
+    tablet: "768px - 1023px"
+    desktop: "1024px+"
+
+  design_tokens:
+    colors:
+      primary: "#4F46E5"
+      secondary: "#10B981"
+      background: "#F9FAFB"
+      text: "#1F2937"
+      achieved: "#10B981"
+      unachieved: "#E5E7EB"
+      bingo_line: "#FBBF24"
+
+    typography:
+      heading: "24px, bold"
+      body: "16px, regular"
+      caption: "14px, regular"
+
+    spacing:
+      xs: "4px"
+      sm: "8px"
+      md: "16px"
+      lg: "24px"
+      xl: "32px"
