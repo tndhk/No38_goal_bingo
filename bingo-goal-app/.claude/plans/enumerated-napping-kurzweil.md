@@ -1,38 +1,30 @@
-# LP テキスト修正 - アプリ名 & プレビューラベル
+# 達成状態トグルボタンのラベル改善
 
 ## 概要
-- アプリ名を「Bingo Planner」から「BinGoal!」に変更
-- プレビューグリッド下のラベル（「サンプルボード」）を削除
+GoalInputModal の達成状態トグルボタンで「Not Achieved」という否定的な表現を、アクション指向の「Mark as Done」に変更する。
 
 ---
 
 ## 変更内容
 
-### 1. アプリ名変更
-「BinGoal!」= Bingo + Goal の造語
-
-| 箇所 | 変更前 | 変更後 |
+| 状態 | 変更前 | 変更後 |
 |------|--------|--------|
-| ヘッダー | Bingo Planner | BinGoal! |
-
-### 2. プレビューラベル削除
-デモグリッド下の「サンプルボード / Sample Board」ラベルを削除
+| 未達成 | Not Achieved | Mark as Done |
+| 達成済み | Achieved | Done (変更なし可) |
 
 ---
 
 ## 修正ファイル
 
-| ファイル | 修正内容 |
-|----------|----------|
-| `src/lib/components/landing/LandingPage.svelte:35` | `Bingo Planner` → `BinGoal!` |
-| `src/lib/components/landing/HeroSection.svelte:52` | preview-label 要素を削除 |
-| `src/lib/i18n/translations.ts:21,56-57,100-101` | `preview.label` プロパティを削除 |
+| ファイル | 行 | 修正内容 |
+|----------|-----|----------|
+| `src/lib/components/bingo/GoalInputModal.svelte:68` | 68 | `Not Achieved` → `Mark as Done` |
 
 ---
 
 ## 検証方法
 
 1. `npm run dev` で開発サーバー起動
-2. ヘッダーに「BinGoal!」と表示されることを確認
-3. デモグリッド下にラベルが表示されないことを確認
-4. JP/EN 切り替えで問題がないことを確認
+2. ボード上のセルをタップしてモーダルを開く
+3. 未達成状態で「Mark as Done」と表示されることを確認
+4. ボタンをタップして達成状態に切り替え、「Achieved」と表示されることを確認

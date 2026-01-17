@@ -65,7 +65,7 @@
 				<svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 					<circle cx="12" cy="12" r="10"/>
 				</svg>
-				<span>Not Achieved</span>
+				<span>Mark as Done</span>
 			{/if}
 		</button>
 
@@ -106,111 +106,115 @@
 
 	.textarea {
 		width: 100%;
-		padding: 1rem;
-		border: 1px solid var(--theme-border);
+		padding: 1.5rem;
+		border: 2px solid var(--theme-border); /* Thicker border */
 		border-radius: 1rem;
 		resize: none;
-		font-size: 1.125rem;
-		font-weight: 500;
+		font-size: 1.25rem;
+		font-weight: 600;
 		color: var(--theme-text);
-		background: rgba(0, 0, 0, 0.2);
-		transition: all 0.2s ease-out;
+		background: rgba(0, 0, 0, 0.5); /* Much more opaque */
+		transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 		font-family: var(--font-body);
-		line-height: 1.5;
+		line-height: 1.6;
 	}
 
 	.textarea::placeholder {
 		color: var(--theme-text-muted);
+		opacity: 0.8;
 	}
 
 	.textarea:focus {
 		outline: none;
 		border-color: var(--theme-primary);
-		background: rgba(0, 0, 0, 0.3);
-		box-shadow: 0 0 0 4px color-mix(in srgb, var(--theme-primary) 15%, transparent);
+		background: rgba(0, 0, 0, 0.6);
+		box-shadow: 0 0 0 4px color-mix(in srgb, var(--theme-primary) 30%, transparent);
 	}
 
 	.char-count {
 		text-align: right;
-		font-size: 0.875rem;
-		font-weight: 600;
-		margin-top: -1rem;
+		font-size: 1rem;
+		font-weight: 700;
+		margin-top: -1.25rem;
+		color: var(--theme-text-muted);
 	}
 
 	.char-count-current {
 		color: var(--theme-primary);
 	}
 
-	.char-count-separator {
-		color: var(--theme-text-muted);
-	}
-
-	.char-count-max {
-		color: var(--theme-text-muted);
-	}
-
 	.button-group {
-		display: flex;
-		gap: 0.75rem;
-		justify-content: flex-end;
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 1rem;
 		margin-top: 1rem;
 	}
 
 	.btn {
-		padding: 0.75rem 1.5rem;
-		border-radius: 0.75rem;
-		font-weight: 600;
-		font-size: 0.875rem;
-		border: none;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 3.5rem; /* Fixed height for all buttons */
+		padding: 0 1.5rem;
+		border-radius: 1rem;
+		font-weight: 700;
+		font-size: 1.125rem;
 		cursor: pointer;
-		transition: all 0.2s ease-out;
+		transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 		font-family: var(--font-body);
+		border: 2px solid transparent; /* Base border for height consistency */
 	}
 
 	.btn-primary {
+		grid-column: span 1;
 		background: var(--theme-primary);
 		color: var(--theme-text-on-primary);
-		box-shadow: 0 4px 15px var(--theme-glow);
+		box-shadow: 0 8px 20px -5px var(--theme-glow);
 	}
 
 	.btn-primary:hover {
 		transform: translateY(-2px);
-		box-shadow: 0 6px 20px var(--theme-glow);
+		box-shadow: 0 12px 25px -5px var(--theme-glow);
 	}
 
 	.btn-ghost {
-		background: transparent;
-		color: var(--theme-text-muted);
+		background: rgba(255, 255, 255, 0.05);
+		color: var(--theme-text);
+		border-color: var(--theme-border);
 	}
 
 	.btn-ghost:hover {
-		background: rgba(255, 255, 255, 0.05);
-		color: var(--theme-text);
+		background: rgba(255, 255, 255, 0.1);
+		border-color: var(--theme-primary);
 	}
 
 	.btn-danger {
-		background: transparent;
-		color: var(--theme-accent); /* Use accent or specific error color if defined, fallback to text */
+		grid-column: span 2; /* Full width danger button above others */
+		margin-bottom: 0.5rem;
+		background: rgba(239, 68, 68, 0.1);
+		color: #ef4444;
+		border-color: rgba(239, 68, 68, 0.3);
 	}
 
 	.btn-danger:hover {
-		background: rgba(255, 0, 0, 0.1);
-		color: #ef4444;
+		background: rgba(239, 68, 68, 0.2);
+		border-color: #ef4444;
 	}
 
 	.toggle-achieved-btn {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		gap: 0.75rem;
+		gap: 1rem;
 		width: 100%;
-		padding: 1rem;
-		border: 1px solid var(--theme-border);
-		border-radius: 1rem;
-		background: rgba(255, 255, 255, 0.03);
-		font-weight: 600;
-		font-size: 1rem;
-		color: var(--theme-text-muted);
+		height: 4rem; /* Prominent height */
+		padding: 0 1.5rem;
+		border: 2px solid var(--theme-border);
+		border-radius: 1.25rem;
+		background: rgba(255, 255, 255, 0.08);
+		font-weight: 700;
+		font-size: 1.125rem;
+		color: var(--theme-text);
 		cursor: pointer;
 		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 		font-family: var(--font-body);
@@ -218,19 +222,21 @@
 
 	.toggle-achieved-btn:hover {
 		border-color: var(--theme-primary);
-		background: rgba(255, 255, 255, 0.05);
+		background: rgba(255, 255, 255, 0.15);
+		transform: translateY(-2px);
 	}
 
 	.toggle-achieved-btn.achieved {
-		background: linear-gradient(135deg, var(--theme-achieved), var(--theme-achieved-dim));
+		background: linear-gradient(135deg, var(--theme-primary), var(--theme-secondary));
 		border-color: transparent;
-		color: white; /* Keep white for achieved because achieved color is always dark enough? Let's check. */
-		box-shadow: 0 4px 15px var(--theme-achieved-glow);
+		color: var(--theme-text-on-primary);
+		box-shadow: 0 10px 20px -5px var(--theme-glow);
 	}
 
 	.toggle-achieved-btn.achieved:hover {
-		transform: translateY(-1px);
-		box-shadow: 0 6px 20px var(--theme-achieved-glow);
+		transform: translateY(-3px);
+		box-shadow: 0 15px 30px -10px var(--theme-glow);
+		filter: brightness(1.1);
 	}
 
 	.toggle-icon {

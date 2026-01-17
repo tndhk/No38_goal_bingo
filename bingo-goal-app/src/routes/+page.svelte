@@ -560,9 +560,10 @@
 	.modal-backdrop {
 		position: fixed;
 		inset: 0;
-		z-index: 100;
-		background: rgba(0, 0, 0, 0.6);
-		backdrop-filter: blur(4px);
+		z-index: 1000;
+		background: rgba(0, 0, 0, 0.8); /* Much darker backdrop */
+		backdrop-filter: blur(12px);
+		-webkit-backdrop-filter: blur(12px);
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -573,72 +574,88 @@
 		width: 100%;
 		max-width: 24rem;
 		border-radius: 1.5rem;
-		padding: 2rem;
+		padding: 2.5rem;
 		display: flex;
 		flex-direction: column;
-		gap: 1.5rem;
+		gap: 2rem;
+		background: color-mix(in srgb, var(--theme-surface) 95%, black);
+		backdrop-filter: blur(24px);
+		-webkit-backdrop-filter: blur(24px);
+		border: 2px solid var(--theme-border);
+		box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 	}
 
 	.modal-title {
 		font-family: var(--font-display);
-		font-size: 1.5rem;
-		font-weight: 700;
+		font-size: 1.75rem;
+		font-weight: 800;
 		text-align: center;
+		color: var(--theme-text);
+		letter-spacing: -0.03em;
 	}
 
 	.text-input {
 		width: 100%;
-		background: rgba(0, 0, 0, 0.2);
+		background: rgba(0, 0, 0, 0.3);
 		border: 1px solid var(--theme-border);
-		padding: 1rem;
-		border-radius: 0.75rem;
+		padding: 1.25rem;
+		border-radius: 1rem;
 		color: var(--theme-text);
-		font-size: 1.125rem;
+		font-size: 1.25rem;
+		font-weight: 600;
 		text-align: center;
+		transition: all 0.2s;
 	}
 
 	.text-input:focus {
 		outline: none;
 		border-color: var(--theme-primary);
-		background: rgba(0, 0, 0, 0.3);
+		background: rgba(0, 0, 0, 0.4);
+		box-shadow: 0 0 0 4px color-mix(in srgb, var(--theme-primary) 20%, transparent);
 	}
 
 	.section-label {
 		display: block;
-		font-size: 0.875rem;
-		font-weight: 600;
-		color: var(--theme-text-muted);
-		margin-bottom: 0.75rem;
+		font-size: 0.9375rem;
+		font-weight: 700;
+		color: var(--theme-text);
+		margin-bottom: 1rem;
 		text-align: center;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
 	}
 
 	.grid-options {
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
-		gap: 0.75rem;
+		gap: 1rem;
 	}
 
 	.grid-option {
 		background: rgba(255, 255, 255, 0.05);
 		border: 1px solid var(--theme-border);
-		border-radius: 0.75rem;
-		padding: 0.75rem 0.25rem;
+		border-radius: 1rem;
+		padding: 1rem 0.5rem;
 		cursor: pointer;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		gap: 0.25rem;
-		transition: all 0.2s;
+		gap: 0.5rem;
+		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+		color: var(--theme-text);
 	}
 
 	.grid-option:hover {
 		background: rgba(255, 255, 255, 0.1);
+		border-color: var(--theme-primary);
+		transform: translateY(-2px);
 	}
 
 	.grid-option.selected {
 		background: var(--theme-primary);
 		border-color: transparent;
-		box-shadow: 0 0 15px var(--theme-glow);
+		color: var(--theme-text-on-primary);
+		box-shadow: 0 8px 15px var(--theme-glow);
 	}
 
 	.grid-size {
