@@ -2,8 +2,9 @@ import confetti from 'canvas-confetti';
 
 export type CelebrationType = 'bingo' | 'perfect';
 
-const BINGO_COLORS = ['#FBBF24', '#10B981', '#4F46E5'];
-const PERFECT_COLORS = ['#10B981', '#FBBF24', '#EC4899', '#8B5CF6'];
+// New playful geometric palette
+const BINGO_COLORS = ['#F59E0B', '#FBBF24', '#7C3AED', '#A78BFA'];
+const PERFECT_COLORS = ['#7C3AED', '#A78BFA', '#F472B6', '#60A5FA', '#34D399', '#FBBF24'];
 
 export function celebrateBingo(): void {
 	confetti({

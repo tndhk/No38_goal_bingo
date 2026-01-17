@@ -3,10 +3,10 @@ import { render, screen } from '@testing-library/svelte';
 import SaveIndicator from './SaveIndicator.svelte';
 
 describe('SaveIndicator', () => {
-	test('shows "保存中..." when isSaving is true', () => {
+	test('shows "Saving" when isSaving is true', () => {
 		render(SaveIndicator, { props: { isSaving: true } });
 
-		expect(screen.getByText('保存中...')).toBeTruthy();
+		expect(screen.getByText('Saving')).toBeTruthy();
 	});
 
 	test('is hidden when isSaving is false', () => {

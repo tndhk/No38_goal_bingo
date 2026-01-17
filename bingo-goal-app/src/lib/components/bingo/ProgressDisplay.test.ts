@@ -14,7 +14,7 @@ describe('ProgressDisplay', () => {
 			}
 		});
 
-		expect(screen.getByText('3/9 達成')).toBeTruthy();
+		expect(screen.getByText('3/9 achieved')).toBeTruthy();
 	});
 
 	test('displays Y BINGO! when bingoCount > 0', () => {
@@ -65,12 +65,12 @@ describe('ProgressDisplay', () => {
 				achieved: 2,
 				total: 9,
 				bingoCount: 0,
-				hint: 'あと1マスでビンゴ! (1ライン)',
+				hint: 'Almost there!',
 				isPerfect: false
 			}
 		});
 
-		expect(screen.getByText('あと1マスでビンゴ! (1ライン)')).toBeTruthy();
+		expect(screen.getByText('Almost there!')).toBeTruthy();
 	});
 
 	test('does not display hint when null', () => {
@@ -113,6 +113,6 @@ describe('ProgressDisplay', () => {
 			}
 		});
 
-		expect(screen.getByText('0/9 達成')).toBeTruthy();
+		expect(screen.getByText('0/9 achieved')).toBeTruthy();
 	});
 });

@@ -18,20 +18,20 @@ describe('BingoCell', () => {
 		expect(screen.getByText('Learn TypeScript')).toBeTruthy();
 	});
 
-	test('shows green background when achieved', () => {
+	test('shows achieved style when achieved', () => {
 		const cell = createCell({ isAchieved: true, goal: 'Done' });
 		const { container } = render(BingoCell, { props: { cell, ontap: vi.fn() } });
 
 		const button = container.querySelector('button');
-		expect(button?.classList.contains('bg-achieved')).toBe(true);
+		expect(button?.classList.contains('achieved')).toBe(true);
 	});
 
-	test('shows gray background when not achieved', () => {
+	test('shows pending style when not achieved', () => {
 		const cell = createCell({ isAchieved: false, goal: 'Not done' });
 		const { container } = render(BingoCell, { props: { cell, ontap: vi.fn() } });
 
 		const button = container.querySelector('button');
-		expect(button?.classList.contains('bg-unachieved')).toBe(true);
+		expect(button?.classList.contains('pending')).toBe(true);
 	});
 
 	test('calls ontap when tapped (quick press)', async () => {
@@ -69,7 +69,7 @@ describe('BingoCell', () => {
 		const cell = createCell({ goal: '' });
 		render(BingoCell, { props: { cell, ontap: vi.fn() } });
 
-		expect(screen.getByText('タップして入力')).toBeTruthy();
+		expect(screen.getByText('Goal')).toBeTruthy();
 	});
 
 	test('applies highlight style when isHighlighted is true', () => {
@@ -79,7 +79,7 @@ describe('BingoCell', () => {
 		});
 
 		const button = container.querySelector('button');
-		expect(button?.classList.contains('ring-bingo-line')).toBe(true);
+		expect(button?.classList.contains('bingo-highlight')).toBe(true);
 	});
 
 	test('does not apply highlight style by default', () => {
@@ -87,6 +87,6 @@ describe('BingoCell', () => {
 		const { container } = render(BingoCell, { props: { cell, ontap: vi.fn() } });
 
 		const button = container.querySelector('button');
-		expect(button?.classList.contains('ring-bingo-line')).toBe(false);
+		expect(button?.classList.contains('bingo-highlight')).toBe(false);
 	});
 });

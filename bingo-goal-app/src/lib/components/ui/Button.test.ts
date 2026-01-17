@@ -30,18 +30,18 @@ describe('Button', () => {
 	test('applies primary variant styles by default', () => {
 		render(Button);
 		const button = screen.getByRole('button');
-		expect(button).toHaveClass('bg-primary');
+		expect(button).toHaveClass('btn-primary');
 	});
 
 	test('applies secondary variant styles when specified', () => {
 		render(Button, { props: { variant: 'secondary' } });
 		const button = screen.getByRole('button');
-		expect(button).toHaveClass('bg-gray-200');
+		expect(button).toHaveClass('btn-secondary');
 	});
 
 	test('applies ghost variant styles when specified', () => {
 		render(Button, { props: { variant: 'ghost' } });
 		const button = screen.getByRole('button');
-		expect(button).toHaveClass('bg-transparent');
+		expect(button).toHaveClass('btn-ghost');
 	});
 });

@@ -24,8 +24,8 @@
 </script>
 
 <Modal {isOpen} onclose={oncancel} {title}>
-	<p class="text-gray-700 mb-6">{message}</p>
-	<div class="flex justify-end gap-3">
+	<p class="dialog-message">{message}</p>
+	<div class="dialog-actions">
 		<Button variant="secondary" onclick={oncancel}>
 			{cancelLabel}
 		</Button>
@@ -34,3 +34,17 @@
 		</Button>
 	</div>
 </Modal>
+
+<style>
+	.dialog-message {
+		color: #1E1B4B;
+		margin-bottom: 1.5rem;
+		line-height: 1.5;
+	}
+
+	.dialog-actions {
+		display: flex;
+		justify-content: flex-end;
+		gap: 0.75rem;
+	}
+</style>

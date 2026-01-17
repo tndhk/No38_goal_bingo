@@ -54,11 +54,9 @@
 	$effect(() => {
 		if (!progress) return;
 
-		// PERFECT達成時の演出（ビンゴより優先）
 		if (progress.isPerfect && prevIsPerfect === false) {
 			celebratePerfect();
 		}
-		// ビンゴ成立時の演出
 		else if (
 			prevBingoCount !== null &&
 			progress.bingoCount > prevBingoCount &&
@@ -123,38 +121,54 @@
 </script>
 
 <svelte:head>
-	<title>目標ビンゴ</title>
+	<title>Goal Bingo</title>
 </svelte:head>
 
-<div class="min-h-screen bg-gray-50">
-	<header class="bg-white shadow-sm">
-		<div class="max-w-md mx-auto px-4 py-4">
-			<div class="flex items-center justify-between">
-				<h1 class="text-xl font-bold text-gray-900">目標ビンゴ</h1>
-				<SaveIndicator {isSaving} />
-			</div>
+<div class="page">
+	<!-- Background decorations -->
+	<div class="bg-decoration bg-decoration-1"></div>
+	<div class="bg-decoration bg-decoration-2"></div>
+	<div class="bg-decoration bg-decoration-3"></div>
+
+	<header class="header">
+		<div class="header-content">
+			<h1 class="title">
+				<svg class="title-icon" fill="currentColor" viewBox="0 0 24 24">
+					<rect x="3" y="3" width="5" height="5" rx="1" />
+					<rect x="10" y="3" width="5" height="5" rx="1" />
+					<rect x="17" y="3" width="5" height="5" rx="1" />
+					<rect x="3" y="10" width="5" height="5" rx="1" />
+					<rect x="10" y="10" width="5" height="5" rx="1" />
+					<rect x="17" y="10" width="5" height="5" rx="1" />
+					<rect x="3" y="17" width="5" height="5" rx="1" />
+					<rect x="10" y="17" width="5" height="5" rx="1" />
+					<rect x="17" y="17" width="5" height="5" rx="1" />
+				</svg>
+				Goal Bingo
+			</h1>
+			<SaveIndicator {isSaving} />
 		</div>
 	</header>
 
-	<main class="max-w-md mx-auto px-4 py-6">
+	<main class="main">
 		{#if boards.length > 0}
-			<div class="mb-4 flex gap-2">
+			<div class="board-selector">
 				<select
-					class="flex-1 p-2 border border-gray-300 rounded-lg bg-white"
+					class="select"
 					onchange={handleYearChange}
 					value={board?.id ?? ''}
 				>
 					{#each boards as b (b.id)}
-						<option value={b.id}>{b.year}年の目標</option>
+						<option value={b.id}>{b.year} Goals</option>
 					{/each}
 				</select>
 				{#if availableYears().length > 0}
 					<button
 						type="button"
 						onclick={openYearDialog}
-						class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors text-sm"
+						class="btn-new"
 					>
-						+ 新規
+						+ New
 					</button>
 				{/if}
 			</div>
@@ -178,14 +192,19 @@
 				/>
 			{/if}
 		{:else}
-			<div class="text-center py-12">
-				<p class="text-gray-500 mb-4">ボードがありません</p>
+			<div class="empty-state">
+				<div class="empty-icon">
+					<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+					</svg>
+				</div>
+				<p class="empty-text">No boards yet</p>
 				<button
 					type="button"
 					onclick={openYearDialog}
-					class="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors"
+					class="btn-create"
 				>
-					ビンゴを作成
+					Create Bingo
 				</button>
 			</div>
 		{/if}
@@ -196,7 +215,7 @@
 	<!-- svelte-ignore a11y_click_events_have_key_events -->
 	<div
 		role="presentation"
-		class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+		class="dialog-backdrop"
 		onclick={() => (isYearDialogOpen = false)}
 	>
 		<!-- svelte-ignore a11y_click_events_have_key_events -->
@@ -204,32 +223,32 @@
 		<div
 			role="dialog"
 			aria-modal="true"
-			class="bg-white rounded-lg shadow-xl max-w-sm w-full mx-4 p-6"
+			class="dialog"
 			onclick={(e) => e.stopPropagation()}
 		>
-			<h2 class="text-lg font-semibold mb-4">年度を選択</h2>
+			<h2 class="dialog-title">Select Year</h2>
 			<select
 				bind:value={selectedYear}
-				class="w-full p-2 border border-gray-300 rounded-lg bg-white mb-4"
+				class="dialog-select"
 			>
 				{#each availableYears() as year (year)}
-					<option value={year}>{year}年</option>
+					<option value={year}>{year}</option>
 				{/each}
 			</select>
-			<div class="flex gap-3 justify-end">
+			<div class="dialog-actions">
 				<button
 					type="button"
 					onclick={() => (isYearDialogOpen = false)}
-					class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+					class="btn-ghost"
 				>
-					キャンセル
+					Cancel
 				</button>
 				<button
 					type="button"
 					onclick={handleCreateBoard}
-					class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors"
+					class="btn-primary"
 				>
-					作成
+					Create
 				</button>
 			</div>
 		</div>
@@ -248,209 +267,294 @@
 {/if}
 
 <style>
-	.min-h-screen {
+	.page {
 		min-height: 100vh;
+		background: linear-gradient(180deg, #FAF5FF 0%, #F3E8FF 50%, #E9D5FF 100%);
+		position: relative;
+		overflow: hidden;
 	}
 
-	.bg-gray-50 {
-		background-color: #f9fafb;
+	/* Background decorations */
+	.bg-decoration {
+		position: fixed;
+		border-radius: 50%;
+		z-index: 0;
+		pointer-events: none;
 	}
 
-	.bg-white {
-		background-color: white;
+	.bg-decoration-1 {
+		width: 300px;
+		height: 300px;
+		background: linear-gradient(135deg, rgba(244, 114, 182, 0.2), rgba(167, 139, 250, 0.2));
+		top: -100px;
+		right: -100px;
+		filter: blur(60px);
 	}
 
-	.shadow-sm {
-		box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+	.bg-decoration-2 {
+		width: 250px;
+		height: 250px;
+		background: linear-gradient(135deg, rgba(96, 165, 250, 0.2), rgba(52, 211, 153, 0.2));
+		bottom: 10%;
+		left: -80px;
+		filter: blur(50px);
 	}
 
-	.shadow-xl {
+	.bg-decoration-3 {
+		width: 200px;
+		height: 200px;
+		background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(244, 114, 182, 0.2));
+		bottom: 30%;
+		right: -60px;
+		filter: blur(40px);
+	}
+
+	/* Header */
+	.header {
+		background: linear-gradient(135deg, #7C3AED, #A78BFA);
 		box-shadow:
-			0 20px 25px -5px rgba(0, 0, 0, 0.1),
-			0 10px 10px -5px rgba(0, 0, 0, 0.04);
+			0 4px 20px rgba(124, 58, 237, 0.3),
+			inset 0 1px 0 rgba(255, 255, 255, 0.2);
+		position: relative;
+		z-index: 10;
 	}
 
-	.max-w-md {
+	.header-content {
 		max-width: 28rem;
-	}
-
-	.max-w-sm {
-		max-width: 24rem;
-	}
-
-	.mx-auto {
-		margin-left: auto;
-		margin-right: auto;
-	}
-
-	.px-4 {
-		padding-left: 1rem;
-		padding-right: 1rem;
-	}
-
-	.py-2 {
-		padding-top: 0.5rem;
-		padding-bottom: 0.5rem;
-	}
-
-	.py-4 {
-		padding-top: 1rem;
-		padding-bottom: 1rem;
-	}
-
-	.py-6 {
-		padding-top: 1.5rem;
-		padding-bottom: 1.5rem;
-	}
-
-	.py-12 {
-		padding-top: 3rem;
-		padding-bottom: 3rem;
-	}
-
-	.p-6 {
-		padding: 1.5rem;
-	}
-
-	.flex {
+		margin: 0 auto;
+		padding: 1rem;
 		display: flex;
-	}
-
-	.flex-1 {
-		flex: 1 1 0%;
-	}
-
-	.items-center {
 		align-items: center;
-	}
-
-	.justify-between {
 		justify-content: space-between;
 	}
 
-	.justify-center {
-		justify-content: center;
-	}
-
-	.justify-end {
-		justify-content: flex-end;
-	}
-
-	.gap-2 {
+	.title {
+		display: flex;
+		align-items: center;
 		gap: 0.5rem;
-	}
-
-	.gap-3 {
-		gap: 0.75rem;
-	}
-
-	.text-xl {
 		font-size: 1.25rem;
+		font-weight: 800;
+		color: white;
+		letter-spacing: -0.01em;
 	}
 
-	.text-lg {
-		font-size: 1.125rem;
+	.title-icon {
+		width: 1.5rem;
+		height: 1.5rem;
 	}
 
-	.font-bold {
-		font-weight: 700;
+	/* Main */
+	.main {
+		max-width: 28rem;
+		margin: 0 auto;
+		padding: 1.5rem 1rem;
+		position: relative;
+		z-index: 1;
 	}
 
-	.font-semibold {
-		font-weight: 600;
-	}
-
-	.text-gray-900 {
-		color: #111827;
-	}
-
-	.text-sm {
-		font-size: 0.875rem;
-	}
-
-	.text-gray-500 {
-		color: #6b7280;
-	}
-
-	.text-gray-600 {
-		color: #4b5563;
-	}
-
-	.mb-4 {
+	/* Board selector */
+	.board-selector {
+		display: flex;
+		gap: 0.5rem;
 		margin-bottom: 1rem;
 	}
 
-	.w-full {
-		width: 100%;
+	.select {
+		flex: 1;
+		padding: 0.75rem 1rem;
+		background: linear-gradient(145deg, #FFFFFF, #F5F3FF);
+		border: 2px solid rgba(124, 58, 237, 0.15);
+		border-radius: 9999px;
+		font-weight: 600;
+		color: #1E1B4B;
+		cursor: pointer;
+		transition: all 0.2s ease-out;
 	}
 
-	.p-2 {
-		padding: 0.5rem;
+	.select:focus {
+		outline: none;
+		border-color: #7C3AED;
+		box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
 	}
 
-	.border {
-		border-width: 1px;
-	}
-
-	.border-gray-300 {
-		border-color: #d1d5db;
-	}
-
-	.rounded-lg {
-		border-radius: 0.5rem;
-	}
-
-	.text-center {
-		text-align: center;
-	}
-
-	.px-6 {
-		padding-left: 1.5rem;
-		padding-right: 1.5rem;
-	}
-
-	.py-3 {
-		padding-top: 0.75rem;
-		padding-bottom: 0.75rem;
-	}
-
-	.bg-primary {
-		background-color: #4f46e5;
-	}
-
-	.text-white {
+	.btn-new {
+		padding: 0.75rem 1.25rem;
+		background: linear-gradient(135deg, #7C3AED, #A78BFA);
 		color: white;
+		border: none;
+		border-radius: 9999px;
+		font-weight: 700;
+		font-size: 0.875rem;
+		cursor: pointer;
+		transition: all 0.2s ease-out;
+		box-shadow: 0 4px 14px rgba(124, 58, 237, 0.25);
 	}
 
-	.hover\:bg-primary-dark:hover {
-		background-color: #4338ca;
+	.btn-new:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 6px 20px rgba(124, 58, 237, 0.35);
 	}
 
-	.hover\:bg-gray-100:hover {
-		background-color: #f3f4f6;
+	/* Empty state */
+	.empty-state {
+		text-align: center;
+		padding: 3rem 1rem;
 	}
 
-	.transition-colors {
-		transition-property: background-color, border-color, color;
-		transition-duration: 150ms;
+	.empty-icon {
+		width: 4rem;
+		height: 4rem;
+		margin: 0 auto 1rem;
+		background: linear-gradient(145deg, #FFFFFF, #F5F3FF);
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		box-shadow:
+			0 4px 12px rgba(124, 58, 237, 0.1),
+			inset 0 1px 0 rgba(255, 255, 255, 0.8);
 	}
 
-	.fixed {
+	.empty-icon svg {
+		width: 2rem;
+		height: 2rem;
+		color: #A78BFA;
+	}
+
+	.empty-text {
+		color: #6366F1;
+		font-weight: 500;
+		margin-bottom: 1.5rem;
+	}
+
+	.btn-create {
+		padding: 0.875rem 2rem;
+		background: linear-gradient(135deg, #7C3AED, #A78BFA);
+		color: white;
+		border: none;
+		border-radius: 9999px;
+		font-weight: 700;
+		cursor: pointer;
+		transition: all 0.2s ease-out;
+		box-shadow: 0 4px 14px rgba(124, 58, 237, 0.25);
+	}
+
+	.btn-create:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 6px 20px rgba(124, 58, 237, 0.35);
+	}
+
+	/* Dialog */
+	.dialog-backdrop {
 		position: fixed;
-	}
-
-	.inset-0 {
 		top: 0;
 		right: 0;
 		bottom: 0;
 		left: 0;
-	}
-
-	.z-50 {
 		z-index: 50;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background-color: rgba(30, 27, 75, 0.4);
+		backdrop-filter: blur(4px);
+		animation: fadeIn 0.2s ease-out;
 	}
 
-	.bg-black\/50 {
-		background-color: rgba(0, 0, 0, 0.5);
+	.dialog {
+		background: linear-gradient(145deg, #FFFFFF, #FAF5FF);
+		border-radius: 1.5rem;
+		box-shadow:
+			0 24px 48px rgba(124, 58, 237, 0.15),
+			0 8px 16px rgba(124, 58, 237, 0.1),
+			inset 0 1px 0 rgba(255, 255, 255, 0.9);
+		max-width: 24rem;
+		width: 100%;
+		margin: 0 1rem;
+		padding: 1.5rem;
+		animation: modalEnter 0.25s ease-out;
+		border: 1px solid rgba(124, 58, 237, 0.08);
+	}
+
+	.dialog-title {
+		font-size: 1.125rem;
+		font-weight: 700;
+		margin-bottom: 1rem;
+		background: linear-gradient(135deg, #7C3AED, #A78BFA);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+
+	.dialog-select {
+		width: 100%;
+		padding: 0.75rem 1rem;
+		background: linear-gradient(145deg, #FFFFFF, #F5F3FF);
+		border: 2px solid rgba(124, 58, 237, 0.15);
+		border-radius: 9999px;
+		font-weight: 600;
+		color: #1E1B4B;
+		margin-bottom: 1rem;
+	}
+
+	.dialog-select:focus {
+		outline: none;
+		border-color: #7C3AED;
+		box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+	}
+
+	.dialog-actions {
+		display: flex;
+		gap: 0.75rem;
+		justify-content: flex-end;
+	}
+
+	.btn-ghost {
+		padding: 0.625rem 1.25rem;
+		background: transparent;
+		color: #6366F1;
+		border: none;
+		border-radius: 9999px;
+		font-weight: 700;
+		font-size: 0.875rem;
+		cursor: pointer;
+		transition: all 0.2s ease-out;
+	}
+
+	.btn-ghost:hover {
+		background: rgba(124, 58, 237, 0.08);
+	}
+
+	.btn-primary {
+		padding: 0.625rem 1.25rem;
+		background: linear-gradient(135deg, #7C3AED, #A78BFA);
+		color: white;
+		border: none;
+		border-radius: 9999px;
+		font-weight: 700;
+		font-size: 0.875rem;
+		cursor: pointer;
+		transition: all 0.2s ease-out;
+		box-shadow: 0 4px 14px rgba(124, 58, 237, 0.25);
+	}
+
+	.btn-primary:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 6px 20px rgba(124, 58, 237, 0.35);
+	}
+
+	@keyframes fadeIn {
+		from { opacity: 0; }
+		to { opacity: 1; }
+	}
+
+	@keyframes modalEnter {
+		from {
+			opacity: 0;
+			transform: scale(0.95) translateY(10px);
+		}
+		to {
+			opacity: 1;
+			transform: scale(1) translateY(0);
+		}
 	}
 </style>

@@ -7,8 +7,13 @@
 </script>
 
 {#if isSaving}
-	<span class="save-indicator text-sm text-gray-500">
-		保存中...
+	<span class="save-indicator">
+		<span class="dots">
+			<span class="dot"></span>
+			<span class="dot"></span>
+			<span class="dot"></span>
+		</span>
+		<span class="label">Saving</span>
 	</span>
 {/if}
 
@@ -16,13 +21,53 @@
 	.save-indicator {
 		display: inline-flex;
 		align-items: center;
+		gap: 0.5rem;
+		padding: 0.375rem 0.75rem;
+		background: rgba(255, 255, 255, 0.2);
+		border-radius: 9999px;
+		backdrop-filter: blur(4px);
 	}
 
-	.text-sm {
-		font-size: 0.875rem;
+	.dots {
+		display: flex;
+		gap: 0.25rem;
 	}
 
-	.text-gray-500 {
-		color: #6b7280;
+	.dot {
+		width: 0.375rem;
+		height: 0.375rem;
+		background: white;
+		border-radius: 50%;
+		animation: bounce 1.4s ease-in-out infinite;
+	}
+
+	.dot:nth-child(1) {
+		animation-delay: 0s;
+	}
+
+	.dot:nth-child(2) {
+		animation-delay: 0.2s;
+	}
+
+	.dot:nth-child(3) {
+		animation-delay: 0.4s;
+	}
+
+	@keyframes bounce {
+		0%, 80%, 100% {
+			transform: translateY(0);
+			opacity: 0.5;
+		}
+		40% {
+			transform: translateY(-4px);
+			opacity: 1;
+		}
+	}
+
+	.label {
+		font-size: 0.75rem;
+		font-weight: 600;
+		color: rgba(255, 255, 255, 0.9);
+		letter-spacing: 0.025em;
 	}
 </style>

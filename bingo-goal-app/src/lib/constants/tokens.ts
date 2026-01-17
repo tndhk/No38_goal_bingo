@@ -1,13 +1,29 @@
 export const colors = {
-	primary: '#4F46E5',
-	primaryLight: '#6366F1',
-	primaryDark: '#4338CA',
+	// Primary: Violet
+	primary: '#7C3AED',
+	primaryLight: '#A78BFA',
+	primaryDark: '#5B21B6',
+	// Success/Achieved: Emerald
 	achieved: '#10B981',
-	achievedLight: '#34D399',
-	unachieved: '#E5E7EB',
-	unachievedDark: '#D1D5DB',
-	bingoLine: '#FBBF24',
-	bingoLineLight: '#FCD34D',
+	achievedLight: '#6EE7B7',
+	achievedGlow: '#34D399',
+	// Pending: Amber Light
+	pending: '#FEF3C7',
+	pendingBorder: '#FDE68A',
+	// Bingo: Amber
+	bingo: '#F59E0B',
+	bingoGlow: '#FBBF24',
+	// Background & Surface
+	background: '#FAF5FF',
+	surface: '#FFFFFF',
+	// Text: Indigo
+	text: '#1E1B4B',
+	textLight: '#6366F1',
+	// Accents
+	accentPink: '#F472B6',
+	accentBlue: '#60A5FA',
+	accentGreen: '#34D399',
+	accentYellow: '#FBBF24',
 } as const;
 
 export const spacing = {

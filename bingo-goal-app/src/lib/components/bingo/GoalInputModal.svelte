@@ -32,153 +32,142 @@
 	}
 </script>
 
-<Modal {isOpen} onclose={onClose} title="目標を入力">
-	<div class="space-y-4">
+<Modal {isOpen} onclose={onClose} title="Goal">
+	<div class="modal-body">
 		<textarea
 			bind:value={goalText}
 			maxlength={MAX_LENGTH}
-			placeholder="目標を入力してください"
+			placeholder="Enter your goal..."
 			rows="3"
-			class="w-full p-3 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+			class="textarea"
 		></textarea>
 
-		<div class="text-right text-sm text-gray-500">
-			{remainingChars}/{MAX_LENGTH}
+		<div class="char-count">
+			<span class="char-count-current">{goalText.length}</span>
+			<span class="char-count-separator">/</span>
+			<span class="char-count-max">{MAX_LENGTH}</span>
 		</div>
 
-		<div class="flex gap-3 justify-end">
+		<div class="button-group">
 			{#if currentGoal}
 				<button
 					type="button"
 					onclick={handleClear}
-					class="px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+					class="btn btn-danger"
 				>
-					クリア
+					Clear
 				</button>
 			{/if}
 			<button
 				type="button"
 				onclick={onClose}
-				class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+				class="btn btn-ghost"
 			>
-				キャンセル
+				Cancel
 			</button>
 			<button
 				type="button"
 				onclick={handleSave}
-				class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors"
+				class="btn btn-primary"
 			>
-				保存
+				Save
 			</button>
 		</div>
 	</div>
 </Modal>
 
 <style>
-	.space-y-4 > :not(:first-child) {
-		margin-top: 1rem;
-	}
-
-	.w-full {
-		width: 100%;
-	}
-
-	.p-3 {
-		padding: 0.75rem;
-	}
-
-	.border {
-		border-width: 1px;
-	}
-
-	.border-gray-300 {
-		border-color: #d1d5db;
-	}
-
-	.rounded-lg {
-		border-radius: 0.5rem;
-	}
-
-	.resize-none {
-		resize: none;
-	}
-
-	.focus\:outline-none:focus {
-		outline: none;
-	}
-
-	.focus\:ring-2:focus {
-		box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.5);
-	}
-
-	.focus\:ring-primary:focus {
-		--tw-ring-color: #4f46e5;
-	}
-
-	.text-right {
-		text-align: right;
-	}
-
-	.text-sm {
-		font-size: 0.875rem;
-	}
-
-	.text-gray-500 {
-		color: #6b7280;
-	}
-
-	.flex {
+	.modal-body {
 		display: flex;
+		flex-direction: column;
+		gap: 1rem;
 	}
 
-	.gap-3 {
+	.textarea {
+		width: 100%;
+		padding: 1rem;
+		border: 2px solid rgba(124, 58, 237, 0.15);
+		border-radius: 1rem;
+		resize: none;
+		font-size: 1rem;
+		font-weight: 500;
+		color: #1E1B4B;
+		background: linear-gradient(145deg, #FFFFFF, #FAF5FF);
+		transition: all 0.2s ease-out;
+	}
+
+	.textarea::placeholder {
+		color: #A78BFA;
+	}
+
+	.textarea:focus {
+		outline: none;
+		border-color: #7C3AED;
+		box-shadow:
+			0 0 0 3px rgba(124, 58, 237, 0.15),
+			0 4px 12px rgba(124, 58, 237, 0.1);
+	}
+
+	.char-count {
+		text-align: right;
+		font-size: 0.875rem;
+		font-weight: 600;
+	}
+
+	.char-count-current {
+		color: #7C3AED;
+	}
+
+	.char-count-separator {
+		color: #A78BFA;
+	}
+
+	.char-count-max {
+		color: #A78BFA;
+	}
+
+	.button-group {
+		display: flex;
 		gap: 0.75rem;
-	}
-
-	.justify-end {
 		justify-content: flex-end;
 	}
 
-	.px-4 {
-		padding-left: 1rem;
-		padding-right: 1rem;
+	.btn {
+		padding: 0.625rem 1.25rem;
+		border-radius: 9999px;
+		font-weight: 700;
+		font-size: 0.875rem;
+		border: none;
+		cursor: pointer;
+		transition: all 0.2s ease-out;
 	}
 
-	.py-2 {
-		padding-top: 0.5rem;
-		padding-bottom: 0.5rem;
-	}
-
-	.text-red-600 {
-		color: #dc2626;
-	}
-
-	.hover\:bg-red-50:hover {
-		background-color: #fef2f2;
-	}
-
-	.text-gray-600 {
-		color: #4b5563;
-	}
-
-	.hover\:bg-gray-100:hover {
-		background-color: #f3f4f6;
-	}
-
-	.bg-primary {
-		background-color: #4f46e5;
-	}
-
-	.text-white {
+	.btn-primary {
+		background: linear-gradient(135deg, #7C3AED, #A78BFA);
 		color: white;
+		box-shadow: 0 4px 14px rgba(124, 58, 237, 0.25);
 	}
 
-	.hover\:bg-primary-dark:hover {
-		background-color: #4338ca;
+	.btn-primary:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 6px 20px rgba(124, 58, 237, 0.35);
 	}
 
-	.transition-colors {
-		transition-property: background-color, border-color, color;
-		transition-duration: 150ms;
+	.btn-ghost {
+		background: transparent;
+		color: #6366F1;
+	}
+
+	.btn-ghost:hover {
+		background: rgba(124, 58, 237, 0.08);
+	}
+
+	.btn-danger {
+		background: transparent;
+		color: #F472B6;
+	}
+
+	.btn-danger:hover {
+		background: rgba(244, 114, 182, 0.1);
 	}
 </style>

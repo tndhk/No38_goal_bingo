@@ -32,7 +32,7 @@ describe('celebration utilities', () => {
 
 			expect(confetti).toHaveBeenCalledWith(
 				expect.objectContaining({
-					colors: expect.arrayContaining(['#FBBF24', '#10B981', '#4F46E5'])
+					colors: expect.arrayContaining(['#F59E0B', '#FBBF24', '#7C3AED', '#A78BFA'])
 				})
 			);
 		});
@@ -65,7 +65,7 @@ describe('celebration utilities', () => {
 
 			expect(confetti).toHaveBeenCalledWith(
 				expect.objectContaining({
-					colors: expect.arrayContaining(['#10B981', '#FBBF24', '#EC4899', '#8B5CF6'])
+					colors: expect.arrayContaining(['#7C3AED', '#A78BFA', '#F472B6', '#60A5FA', '#34D399', '#FBBF24'])
 				})
 			);
 		});

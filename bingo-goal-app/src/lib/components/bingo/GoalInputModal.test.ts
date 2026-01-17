@@ -29,12 +29,13 @@ describe('GoalInputModal', () => {
 		expect((textarea as HTMLTextAreaElement).maxLength).toBe(50);
 	});
 
-	test('displays remaining character count', async () => {
+	test('displays character count', async () => {
 		render(GoalInputModal, {
 			props: { ...defaultProps, currentGoal: 'Hello' }
 		});
 
-		expect(screen.getByText('45/50')).toBeTruthy();
+		expect(screen.getByText('5')).toBeTruthy();
+		expect(screen.getByText('50')).toBeTruthy();
 	});
 
 	test('calls onSave with goal when save button is clicked', async () => {
@@ -44,7 +45,7 @@ describe('GoalInputModal', () => {
 		const textarea = screen.getByRole('textbox');
 		await fireEvent.input(textarea, { target: { value: 'New goal' } });
 
-		const saveButton = screen.getByText('保存');
+		const saveButton = screen.getByText('Save');
 		await fireEvent.click(saveButton);
 
 		expect(onSave).toHaveBeenCalledWith('New goal');
@@ -54,7 +55,7 @@ describe('GoalInputModal', () => {
 		const onClose = vi.fn();
 		render(GoalInputModal, { props: { ...defaultProps, onClose } });
 
-		const cancelButton = screen.getByText('キャンセル');
+		const cancelButton = screen.getByText('Cancel');
 		await fireEvent.click(cancelButton);
 
 		expect(onClose).toHaveBeenCalledTimes(1);
@@ -66,7 +67,7 @@ describe('GoalInputModal', () => {
 			props: { ...defaultProps, currentGoal: 'Some goal', onClear }
 		});
 
-		const clearButton = screen.getByText('クリア');
+		const clearButton = screen.getByText('Clear');
 		await fireEvent.click(clearButton);
 
 		expect(onClear).toHaveBeenCalledTimes(1);
@@ -80,9 +81,9 @@ describe('GoalInputModal', () => {
 		expect(container.querySelector('[role="dialog"]')).toBeNull();
 	});
 
-	test('shows position label in title', () => {
+	test('shows title', () => {
 		render(GoalInputModal, { props: defaultProps });
 
-		expect(screen.getByText(/目標を入力/)).toBeTruthy();
+		expect(screen.getByText('Goal')).toBeTruthy();
 	});
 });
