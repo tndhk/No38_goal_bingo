@@ -5,28 +5,33 @@
 | 項目 | 内容 |
 |------|------|
 | プロジェクト名 | bingo_goal_app |
-| 概要 | 年度別目標ビンゴ管理Webアプリ |
-| MVPリリース | 2026-01-31 |
+| 概要 | 目標ビンゴ管理Webアプリ |
+| MVPリリース | 2026-01-31（完了） |
 | プラットフォーム | Web（レスポンシブ、モバイルファースト） |
-| フレームワーク | SvelteKit or Next.js（要決定） |
+| フレームワーク | SvelteKit v2.49.1 |
+| 現在のフェーズ | MVP + 認証/クラウド同期 完了 |
 
-## 2. 技術スタック（予定）
+## 2. 技術スタック
 
 ### フロントエンド
-- フレームワーク: SvelteKit / Next.js
-- スタイリング: Tailwind CSS
-- 状態管理: Svelte Store / React Context or Zustand
-- アニメーション: CSS Animations / Framer Motion
+- フレームワーク: SvelteKit v2.49.1
+- Svelte: v5.45.6
+- スタイリング: Tailwind CSS v4.1.18
+- 状態管理: Svelte Store（$state, $derived）
+- アニメーション: CSS Animations + canvas-confetti
 
-### データ永続化
-- MVP: LocalStorage
-- v1.1: クラウド同期（Supabase等）
+### バックエンド/データ永続化
+- 認証: Supabase Auth（Google OAuth）
+- データベース: Supabase PostgreSQL
+- ローカル: LocalStorage（未ログイン時）
 
 ### 開発環境
 - 言語: TypeScript
+- ビルド: Vite v7.2.6
+- テスト: Vitest v4.0.17 + Testing Library
 - Linter: ESLint
 - Formatter: Prettier
-- パッケージマネージャー: pnpm
+- パッケージマネージャー: npm
 
 ## 3. デザイントークン
 
@@ -116,6 +121,84 @@ interface AppState {
   }
 }
 ```
+
+### Supabaseスキーマ
+
+```sql
+-- boards テーブル
+CREATE TABLE boards (
+  id UUID PRIMARY KEY,
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  name TEXT NOT NULL,
+  size INTEGER NOT NULL DEFAULT 5,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- cells テーブル
+CREATE TABLE cells (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  board_id UUID NOT NULL REFERENCES boards(id) ON DELETE CASCADE,
+  position TEXT NOT NULL,
+  goal TEXT DEFAULT '',
+  is_achieved BOOLEAN DEFAULT FALSE,
+  UNIQUE(board_id, position)
+);
+
+-- インデックス
+CREATE INDEX idx_boards_user_id ON boards(user_id);
+CREATE INDEX idx_cells_board_id ON cells(board_id);
+
+-- RLS（Row Level Security）
+ALTER TABLE boards ENABLE ROW LEVEL SECURITY;
+ALTER TABLE cells ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users can manage own boards" ON boards
+  FOR ALL USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can manage cells of own boards" ON cells
+  FOR ALL USING (board_id IN (SELECT id FROM boards WHERE user_id = auth.uid()));
+```
+
+## 4.5. アーキテクチャ
+
+### ストレージアダプターパターン
+
+```
+StorageAdapter (interface)
+├── load(): Promise<AppState | null>
+├── save(state: AppState): Promise<void>
+├── saveBoard(board: BingoBoard): Promise<void>
+└── deleteBoard(boardId: string): Promise<void>
+
+実装:
+├── LocalStorageAdapter  # 未ログイン時
+└── SupabaseAdapter      # ログイン時
+```
+
+### 認証フロー
+
+```
+1. 未ログイン
+   └── LocalStorageAdapter でローカル保存
+
+2. Google ログイン
+   └── Supabase Auth で OAuth 認証
+
+3. ログイン成功
+   ├── SupabaseAdapter に切り替え
+   ├── ローカルデータとクラウドデータをマージ
+   └── マージ結果をクラウドに保存
+
+4. ログアウト
+   └── LocalStorageAdapter に戻す
+```
+
+### パフォーマンス最適化
+
+- N+1問題対策: `select('*, cells(*)')` でリレーション一括取得
+- バッチ保存: cells配列を一括upsert
+- デバウンス: 500msで自動保存をバッチ化
 
 ## 5. 画面仕様
 
@@ -328,25 +411,36 @@ function checkBingo(cells: Cell[]): BingoLine[] {
 
 ### MVP必須機能
 
-| 機能 | 受け入れ基準 |
-|------|------------|
-| ボード作成 | 年度を選んで3x3ボードを生成 |
-| 目標入力 | マスタップで50文字まで入力可能 |
-| 達成マーク | 長押しでトグル、色が変わる |
-| 進捗表示 | X/9達成、ヒント表示 |
-| ビンゴ演出 | 揃った時にアニメーション |
-| 自動保存 | 変更が即座にLocalStorageに保存 |
-| 年度切替 | 複数年度のボード管理 |
-| ボード削除 | 確認後に削除可能 |
+| 機能 | 受け入れ基準 | 状態 |
+|------|------------|------|
+| ボード作成 | 名前を入力して3x3/4x4/5x5ボードを生成 | 完了 |
+| 目標入力 | マスタップで50文字まで入力可能 | 完了 |
+| 達成マーク | 長押しでトグル、色が変わる | 完了 |
+| 進捗表示 | X/N達成、ヒント表示 | 完了 |
+| ビンゴ演出 | 揃った時にアニメーション | 完了 |
+| 自動保存 | 変更が即座にLocalStorageに保存 | 完了 |
+| ボード切替 | 複数ボードの管理 | 完了 |
+| ボード削除 | 確認後に削除可能 | 完了 |
+
+### 認証・クラウド同期機能
+
+| 機能 | 受け入れ基準 | 状態 |
+|------|------------|------|
+| Googleログイン | OAuth認証でログイン可能 | 完了 |
+| クラウド保存 | ログイン時はSupabaseに保存 | 完了 |
+| データマージ | ローカル/クラウドデータを統合 | 完了 |
+| アダプター切替 | 認証状態に応じて自動切替 | 完了 |
 
 ### 非機能要件
 
-| 項目 | 基準 |
-|------|------|
-| レスポンシブ | 375px〜1024px+対応 |
-| パフォーマンス | 初回ロード3秒以内 |
-| オフライン | LocalStorageで動作 |
-| アクセシビリティ | キーボード操作対応 |
+| 項目 | 基準 | 状態 |
+|------|------|------|
+| レスポンシブ | 375px〜1024px+対応 | 完了 |
+| パフォーマンス | 初回ロード3秒以内 | 完了 |
+| オフライン | LocalStorageで動作 | 完了 |
+| アクセシビリティ | キーボード操作対応 | 完了 |
+| N+1対策 | リレーション一括取得 | 完了 |
+| バッチ保存 | cells一括upsert | 完了 |
 
 ## 9. テスト観点
 

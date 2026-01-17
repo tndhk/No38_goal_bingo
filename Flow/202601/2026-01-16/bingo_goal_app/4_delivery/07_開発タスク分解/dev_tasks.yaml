@@ -418,6 +418,153 @@ dev_tasks:
                 - "「保存完了」表示"
               notes: "SaveIndicator.svelte isSaving状態表示、テスト3件合格"
 
+    # ========== EP005: 認証・クラウド同期 ==========
+    - id: EP005
+      title: "認証・クラウド同期"
+      stories:
+        # ST011: Googleでログインする
+        - id: ST011
+          title: "Googleでログインする"
+          status: completed
+          priority: 11
+          solution: SL005
+          screens: [SC001, SC006]
+          tasks:
+            - id: ST011-T1
+              title: "Supabase クライアント設定"
+              status: completed
+              estimate: 1h
+              depends_on: [FND001-T2]
+              acceptance:
+                - "Supabaseクライアント初期化"
+                - "環境変数から設定読み込み"
+                - "SSR/CSR両対応"
+              notes: "src/lib/supabase/client.ts + hooks.server.ts実装済み"
+
+            - id: ST011-T2
+              title: "認証ストア実装"
+              status: completed
+              estimate: 1h
+              depends_on: [ST011-T1]
+              acceptance:
+                - "user/session状態管理"
+                - "isAuthenticated派生状態"
+                - "認証状態変更の購読"
+              notes: "src/lib/stores/authStore.ts実装済み"
+
+            - id: ST011-T3
+              title: "AuthButtonコンポーネント"
+              status: completed
+              estimate: 1.5h
+              depends_on: [ST011-T2]
+              acceptance:
+                - "未ログイン時: Googleログインボタン"
+                - "ログイン時: ユーザー情報とログアウト"
+                - "ローディング状態表示"
+              notes: "src/lib/components/ui/AuthButton.svelte実装済み"
+
+            - id: ST011-T4
+              title: "OAuth コールバック処理"
+              status: completed
+              estimate: 1h
+              depends_on: [ST011-T1]
+              acceptance:
+                - "認証コールバックルート"
+                - "エラーハンドリング"
+                - "リダイレクト処理"
+              notes: "src/routes/auth/callback/+server.ts, auth/error/+page.svelte実装済み"
+
+        # ST012: データをクラウドに保存する
+        - id: ST012
+          title: "データをクラウドに保存する"
+          status: completed
+          priority: 12
+          solution: SL005
+          screens: [SC001]
+          tasks:
+            - id: ST012-T1
+              title: "StorageAdapterインターフェース"
+              status: completed
+              estimate: 30m
+              depends_on: [ST010-T1]
+              acceptance:
+                - "load/save/saveBoard/deleteBoardメソッド定義"
+                - "アダプターパターンで切り替え可能"
+              notes: "src/lib/utils/storageAdapter.ts実装済み"
+
+            - id: ST012-T2
+              title: "LocalStorageAdapter実装"
+              status: completed
+              estimate: 1h
+              depends_on: [ST012-T1]
+              acceptance:
+                - "既存storage.tsのアダプター化"
+                - "StorageAdapterインターフェース準拠"
+              notes: "src/lib/utils/localStorageAdapter.ts実装済み"
+
+            - id: ST012-T3
+              title: "SupabaseAdapter実装"
+              status: completed
+              estimate: 2h
+              depends_on: [ST012-T1, ST011-T1]
+              acceptance:
+                - "boards/cellsテーブルへのCRUD"
+                - "リレーション一括取得（N+1対策）"
+                - "バッチupsert（パフォーマンス最適化）"
+              notes: "src/lib/utils/supabaseAdapter.ts実装済み、select('*, cells(*)')で一括取得"
+
+            - id: ST012-T4
+              title: "Supabase型定義"
+              status: completed
+              estimate: 1h
+              depends_on: [ST012-T3]
+              acceptance:
+                - "Database型定義"
+                - "boards/cellsテーブルのRow/Insert/Update型"
+                - "Relationships定義"
+              notes: "src/lib/supabase/types.ts実装済み"
+
+            - id: ST012-T5
+              title: "boardStoreアダプター統合"
+              status: completed
+              estimate: 1.5h
+              depends_on: [ST012-T2, ST012-T3]
+              acceptance:
+                - "認証状態に応じたアダプター切り替え"
+                - "initializeWithAdapter関数"
+                - "アダプター切り替え時のデータ再読み込み"
+              notes: "boardStore.ts setStorageAdapter実装済み"
+
+        # ST013: ローカルとクラウドのデータをマージする
+        - id: ST013
+          title: "ローカルとクラウドのデータをマージする"
+          status: completed
+          priority: 13
+          solution: SL005
+          screens: [SC001]
+          tasks:
+            - id: ST013-T1
+              title: "データマージロジック"
+              status: completed
+              estimate: 1.5h
+              depends_on: [ST012-T5]
+              acceptance:
+                - "ローカルデータとクラウドデータの統合"
+                - "重複ボードの検出（ID/名前）"
+                - "updatedAtによる競合解決"
+              notes: "src/lib/utils/dataMerge.ts mergeAppStates実装済み"
+
+            - id: ST013-T2
+              title: "ログイン時マージフロー"
+              status: completed
+              estimate: 1h
+              depends_on: [ST013-T1]
+              acceptance:
+                - "ログイン成功後にマージ実行"
+                - "マージ結果をクラウドに保存"
+                - "ローカルデータのクリア"
+              notes: "+layout.svelte onAuthStateChangeでマージ実行"
+
   # 実装順序（依存関係考慮）
   implementation_order:
     phase_1:
@@ -445,24 +592,29 @@ dev_tasks:
       tasks: [ST002-T1, ST002-T2, ST003-T1, ST003-T2, ST004-T1, ST004-T2]
       milestone: "MVP完成"
 
+    phase_6:
+      name: "認証・クラウド同期"
+      tasks: [ST011-T1, ST011-T2, ST011-T3, ST011-T4, ST012-T1, ST012-T2, ST012-T3, ST012-T4, ST012-T5, ST013-T1, ST013-T2]
+      milestone: "認証・クラウド同期完成"
+
   # サマリー
   summary:
-    total_stories: 10
-    total_tasks: 32
-    estimated_total: "約25時間"
-    critical_path: [FND001, ST001, ST005, ST006, ST008]
+    total_stories: 13
+    total_tasks: 43
+    estimated_total: "約35時間"
+    critical_path: [FND001, ST001, ST005, ST006, ST008, ST011, ST012]
 
     # 2026-01-17 タスクリファイン結果
     completion_status:
-      stories_completed: 10
-      stories_total: 10
-      tasks_completed: 32
-      tasks_total: 32
+      stories_completed: 13
+      stories_total: 13
+      tasks_completed: 43
+      tasks_total: 43
       completion_rate: "100%"
 
     test_coverage:
-      test_files: 14
-      test_cases: 125
+      test_files: 15
+      test_cases: 155
       all_passing: true
 
     implementation_notes:
@@ -471,3 +623,7 @@ dev_tasks:
       - "canvas-confetti でビンゴ演出実装"
       - "LocalStorage + 500msデバウンスで自動保存"
       - "longPress action で長押し達成トグル"
+      - "Supabase Auth + PostgreSQL でクラウド同期"
+      - "StorageAdapterパターンでローカル/クラウド切り替え"
+      - "select('*, cells(*)')でN+1問題解消"
+      - "バッチupsertでパフォーマンス最適化"
