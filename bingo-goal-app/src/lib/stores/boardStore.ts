@@ -1,7 +1,16 @@
-import { writable, derived } from 'svelte/store';
+import { writable, derived, get } from 'svelte/store';
+import type { SupabaseClient } from '@supabase/supabase-js';
 import type { AppState, BingoBoard, CellPosition, BoardSize } from '$lib/types/bingo';
 import { createEmptyBoard } from '$lib/types/bingo';
-import { saveToStorage, loadFromStorage } from '$lib/utils/storage';
+import type { StorageAdapter } from '$lib/utils/storageAdapter';
+import {
+	createLocalStorageAdapter,
+	clearLocalStorage,
+	getLocalStorageData
+} from '$lib/utils/localStorageAdapter';
+import { createSupabaseAdapter } from '$lib/utils/supabaseAdapter';
+import { mergeLocalDataToCloud, getBoardsToUpload } from '$lib/utils/dataMerge';
+import type { Database } from '$lib/supabase/types';
 
 const DEBOUNCE_MS = 500;
 
@@ -13,6 +22,9 @@ const initialState: AppState = {
 
 let debounceTimer: ReturnType<typeof setTimeout> | null = null;
 let isInitialized = false;
+let currentAdapter: StorageAdapter = createLocalStorageAdapter();
+let supabaseClient: SupabaseClient<Database> | null = null;
+let currentUserId: string | null = null;
 
 function createBoardStore() {
 	const { subscribe, set, update } = writable<AppState>(initialState);
@@ -31,27 +43,93 @@ function createBoardStore() {
 
 export const boardStore = createBoardStore();
 
-function triggerAutoSave() {
+export function setSupabaseClient(
+	client: SupabaseClient<Database> | null,
+	userId: string | null
+): void {
+	supabaseClient = client;
+	const wasAuthenticated = currentUserId !== null;
+	const isNowAuthenticated = userId !== null;
+	currentUserId = userId;
+
+	if (isNowAuthenticated && client) {
+		currentAdapter = createSupabaseAdapter(client, userId);
+
+		if (!wasAuthenticated) {
+			handleLoginMerge();
+		} else {
+			reloadFromCloud();
+		}
+	} else {
+		currentAdapter = createLocalStorageAdapter();
+
+		if (wasAuthenticated && !isNowAuthenticated) {
+			handleLogout();
+		}
+	}
+}
+
+async function handleLoginMerge(): Promise<void> {
+	if (!supabaseClient || !currentUserId) return;
+
+	const localData = getLocalStorageData();
+	const cloudData = await currentAdapter.load();
+	const boardsToUpload = getBoardsToUpload(localData, cloudData);
+
+	if (boardsToUpload.length > 0) {
+		for (const board of boardsToUpload) {
+			await currentAdapter.saveBoard(board);
+		}
+	}
+
+	const mergedState = mergeLocalDataToCloud(localData, cloudData);
+	boardStore.set(mergedState);
+
+	clearLocalStorage();
+
+	isInitialized = true;
+}
+
+async function reloadFromCloud(): Promise<void> {
+	const cloudData = await currentAdapter.load();
+	if (cloudData) {
+		boardStore.set(cloudData);
+	}
+	isInitialized = true;
+}
+
+function handleLogout(): void {
+	clearLocalStorage();
+	boardStore.reset();
+	isInitialized = false;
+}
+
+async function triggerAutoSave(): Promise<void> {
 	if (debounceTimer) clearTimeout(debounceTimer);
 
 	boardStore.update((state) => ({ ...state, isSaving: true }));
 
-	debounceTimer = setTimeout(() => {
-		boardStore.update((state) => {
-			saveToStorage(state);
-			return { ...state, isSaving: false };
-		});
+	debounceTimer = setTimeout(async () => {
+		const state = get(boardStore);
+
+		try {
+			await currentAdapter.save(state);
+		} catch (error) {
+			console.error('Failed to save:', error);
+		}
+
+		boardStore.update((s) => ({ ...s, isSaving: false }));
 	}, DEBOUNCE_MS);
 }
 
-export function resetStore() {
+export function resetStore(): void {
 	boardStore.reset();
 }
 
-export function initializeStore(): void {
+export async function initializeStore(): Promise<void> {
 	if (isInitialized) return;
 
-	const stored = loadFromStorage();
+	const stored = await currentAdapter.load();
 	if (stored) {
 		boardStore.set(stored);
 	}
@@ -124,7 +202,9 @@ export function toggleAchieved(boardId: string, position: CellPosition): void {
 	triggerAutoSave();
 }
 
-export function deleteBoard(boardId: string): void {
+export async function deleteBoard(boardId: string): Promise<void> {
+	await currentAdapter.deleteBoard(boardId);
+
 	boardStore.update((state) => {
 		const filteredBoards = state.boards.filter((b) => b.id !== boardId);
 		const newCurrentBoardId = state.currentBoardId === boardId ? null : state.currentBoardId;

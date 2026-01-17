@@ -10,6 +10,7 @@
 		toggleAchieved
 	} from '$lib/stores/boardStore';
 	import { currentTheme } from '$lib/stores/themeStore';
+	import { isAuthLoading } from '$lib/stores/authStore';
 	import type { CellPosition, BoardSize } from '$lib/types/bingo';
 	import { getCellByPosition, generateBingoLines } from '$lib/types/bingo';
 	import BingoGrid from '$lib/components/bingo/BingoGrid.svelte';
@@ -19,6 +20,11 @@
 	import { getProgressSummary, getBingoLinePositions } from '$lib/utils/bingo';
 	import { celebrateBingo, celebratePerfect } from '$lib/utils/celebration';
 	import ThemeSelector from '$lib/components/ui/ThemeSelector.svelte';
+	import AuthButton from '$lib/components/ui/AuthButton.svelte';
+	import type { PageData } from './$types';
+
+	let { data }: { data: PageData } = $props();
+	const { supabase } = data;
 
 	let isModalOpen = $state(false);
 	let prevBingoCount = $state<number | null>(null);
@@ -40,6 +46,7 @@
 	const progress = $derived(board ? getProgressSummary(board.cells, bingoLines) : null);
 	const highlightedPositions = $derived(board ? getBingoLinePositions(board.cells, bingoLines) : []);
 	const themeIcon = $derived($currentTheme.icon);
+	const authLoading = $derived($isAuthLoading);
 
 	onMount(() => {
 		initializeStore();
@@ -142,6 +149,9 @@
 			<div class="header-actions">
 				<SaveIndicator {isSaving} />
 				<ThemeSelector />
+				{#if !authLoading}
+					<AuthButton {supabase} />
+				{/if}
 				<a href="/boards" class="boards-link" aria-label="View all boards">
 					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 						<path d="M4 6h16M4 10h16M4 14h16M4 18h16" />

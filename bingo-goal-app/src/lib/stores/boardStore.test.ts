@@ -90,28 +90,28 @@ describe('boardStore', () => {
 		expect(cellAfterToggle?.isAchieved).toBe(false);
 	});
 
-	test('deleteBoard() removes board from list', () => {
+	test('deleteBoard() removes board from list', async () => {
 		createBoard('2025 Goals');
 		createBoard('2026 Goals');
 		const state = get(boardStore);
 		expect(state.boards).toHaveLength(2);
 
 		const boardIdToDelete = state.boards[0].id;
-		deleteBoard(boardIdToDelete);
+		await deleteBoard(boardIdToDelete);
 
 		const updatedState = get(boardStore);
 		expect(updatedState.boards).toHaveLength(1);
 		expect(updatedState.boards.find((b) => b.id === boardIdToDelete)).toBeUndefined();
 	});
 
-	test('deleteBoard() clears currentBoardId when deleting current board', () => {
+	test('deleteBoard() clears currentBoardId when deleting current board', async () => {
 		createBoard('2025 Goals');
 		const state = get(boardStore);
 		const boardId = state.boards[0].id;
 
 		expect(state.currentBoardId).toBe(boardId);
 
-		deleteBoard(boardId);
+		await deleteBoard(boardId);
 
 		const updatedState = get(boardStore);
 		expect(updatedState.currentBoardId).toBeNull();
