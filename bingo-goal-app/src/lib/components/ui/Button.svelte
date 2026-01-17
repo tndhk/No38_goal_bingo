@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 
-	type ButtonVariant = 'primary' | 'secondary' | 'ghost';
+	type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger';
 
 	interface Props {
 		variant?: ButtonVariant;
@@ -111,6 +111,23 @@
 
 	.btn-ghost:active:not(:disabled) {
 		background: rgba(124, 58, 237, 0.12);
+	}
+
+	/* Danger */
+	.btn-danger {
+		background: linear-gradient(135deg, #EF4444, #F87171);
+		color: white;
+		box-shadow: 0 4px 14px rgba(239, 68, 68, 0.25);
+	}
+
+	.btn-danger:hover:not(:disabled) {
+		transform: translateY(-2px);
+		box-shadow: 0 6px 20px rgba(239, 68, 68, 0.35);
+	}
+
+	.btn-danger:active:not(:disabled) {
+		transform: translateY(0);
+		box-shadow: 0 2px 8px rgba(239, 68, 68, 0.2);
 	}
 
 	/* Spinner */

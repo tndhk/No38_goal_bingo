@@ -146,7 +146,14 @@
 				</svg>
 				Goal Bingo
 			</h1>
-			<SaveIndicator {isSaving} />
+			<div class="header-actions">
+				<SaveIndicator {isSaving} />
+				<a href="/boards" class="boards-link" aria-label="View all boards">
+					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+						<path d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+					</svg>
+				</a>
+			</div>
 		</div>
 	</header>
 
@@ -341,6 +348,32 @@
 	.title-icon {
 		width: 1.5rem;
 		height: 1.5rem;
+	}
+
+	.header-actions {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+	}
+
+	.boards-link {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 2.5rem;
+		height: 2.5rem;
+		border-radius: 0.75rem;
+		color: white;
+		transition: background 0.15s ease-out;
+	}
+
+	.boards-link:hover {
+		background: rgba(255, 255, 255, 0.15);
+	}
+
+	.boards-link svg {
+		width: 1.25rem;
+		height: 1.25rem;
 	}
 
 	/* Main */

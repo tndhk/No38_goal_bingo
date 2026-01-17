@@ -1,0 +1,209 @@
+<script lang="ts">
+	import type { BingoBoard } from '$lib/types/bingo';
+	import { getAchievedCount, getBingoCount } from '$lib/utils/bingo';
+
+	interface Props {
+		boards: BingoBoard[];
+		onSelectBoard: (boardId: string) => void;
+		onDeleteBoard: (boardId: string) => void;
+	}
+
+	let { boards, onSelectBoard, onDeleteBoard }: Props = $props();
+
+	const sortedBoards = $derived([...boards].sort((a, b) => b.year - a.year));
+
+	function getBoardSummary(board: BingoBoard) {
+		const achieved = getAchievedCount(board.cells);
+		const bingoCount = getBingoCount(board.cells);
+		const isPerfect = achieved === 9;
+		return { achieved, bingoCount, isPerfect };
+	}
+
+	function handleDeleteClick(event: MouseEvent, boardId: string) {
+		event.stopPropagation();
+		onDeleteBoard(boardId);
+	}
+</script>
+
+<div class="board-list" role="list">
+	{#each sortedBoards as board (board.id)}
+		{@const summary = getBoardSummary(board)}
+		<div class="board-card" role="listitem">
+			<button
+				type="button"
+				class="card-button"
+				onclick={() => onSelectBoard(board.id)}
+				aria-label="{board.year} Goals - {summary.achieved}/9 achieved"
+			>
+				<div class="card-content">
+					<div class="card-header">
+						<span class="year">{board.year}</span>
+						{#if summary.isPerfect}
+							<span class="badge badge-perfect">Perfect!</span>
+						{:else if summary.bingoCount > 0}
+							<span class="badge badge-bingo">{summary.bingoCount} Bingo</span>
+						{/if}
+					</div>
+					<div class="card-stats">
+						<div class="progress-bar">
+							<div
+								class="progress-fill"
+								style="width: {(summary.achieved / 9) * 100}%"
+							></div>
+						</div>
+						<span class="progress-text">{summary.achieved}/9 achieved</span>
+					</div>
+				</div>
+			</button>
+			<button
+				type="button"
+				class="delete-btn"
+				onclick={(e) => handleDeleteClick(e, board.id)}
+				aria-label="Delete {board.year} board"
+			>
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+				</svg>
+			</button>
+		</div>
+	{/each}
+</div>
+
+<style>
+	.board-list {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+	}
+
+	.board-card {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		background: linear-gradient(145deg, #FFFFFF, #F5F3FF);
+		border: 1px solid rgba(124, 58, 237, 0.1);
+		border-radius: 1rem;
+		transition: all 0.2s ease-out;
+		box-shadow:
+			0 2px 8px rgba(124, 58, 237, 0.08),
+			inset 0 1px 0 rgba(255, 255, 255, 0.9);
+		padding-right: 0.5rem;
+	}
+
+	.board-card:hover {
+		box-shadow:
+			0 6px 16px rgba(124, 58, 237, 0.15),
+			inset 0 1px 0 rgba(255, 255, 255, 0.9);
+		border-color: rgba(124, 58, 237, 0.2);
+	}
+
+	.card-button {
+		flex: 1;
+		display: flex;
+		align-items: center;
+		padding: 1rem;
+		background: transparent;
+		border: none;
+		cursor: pointer;
+		text-align: left;
+		border-radius: 1rem 0 0 1rem;
+		transition: background 0.15s ease-out;
+	}
+
+	.card-button:hover {
+		background: rgba(124, 58, 237, 0.03);
+	}
+
+	.card-button:active {
+		background: rgba(124, 58, 237, 0.06);
+	}
+
+	.card-content {
+		flex: 1;
+		min-width: 0;
+	}
+
+	.card-header {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.year {
+		font-size: 1.125rem;
+		font-weight: 700;
+		color: #1E1B4B;
+	}
+
+	.badge {
+		padding: 0.125rem 0.5rem;
+		border-radius: 9999px;
+		font-size: 0.75rem;
+		font-weight: 600;
+	}
+
+	.badge-perfect {
+		background: linear-gradient(135deg, #FBBF24, #F59E0B);
+		color: #78350F;
+	}
+
+	.badge-bingo {
+		background: linear-gradient(135deg, #10B981, #059669);
+		color: white;
+	}
+
+	.card-stats {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+	}
+
+	.progress-bar {
+		flex: 1;
+		height: 6px;
+		background: #E5E7EB;
+		border-radius: 9999px;
+		overflow: hidden;
+	}
+
+	.progress-fill {
+		height: 100%;
+		background: linear-gradient(90deg, #7C3AED, #A78BFA);
+		border-radius: 9999px;
+		transition: width 0.3s ease-out;
+	}
+
+	.progress-text {
+		font-size: 0.75rem;
+		color: #6366F1;
+		font-weight: 500;
+		white-space: nowrap;
+	}
+
+	.delete-btn {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 2.5rem;
+		height: 2.5rem;
+		padding: 0;
+		background: transparent;
+		border: none;
+		border-radius: 0.5rem;
+		color: #9CA3AF;
+		cursor: pointer;
+		transition: all 0.15s ease-out;
+		flex-shrink: 0;
+	}
+
+	.delete-btn:hover {
+		background: rgba(239, 68, 68, 0.1);
+		color: #EF4444;
+	}
+
+	.delete-btn svg {
+		width: 1.25rem;
+		height: 1.25rem;
+	}
+</style>

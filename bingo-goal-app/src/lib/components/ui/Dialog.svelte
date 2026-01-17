@@ -2,12 +2,15 @@
 	import Modal from './Modal.svelte';
 	import Button from './Button.svelte';
 
+	type DialogVariant = 'default' | 'danger';
+
 	interface Props {
 		isOpen: boolean;
 		title?: string;
 		message: string;
 		confirmLabel?: string;
 		cancelLabel?: string;
+		variant?: DialogVariant;
 		onconfirm: () => void;
 		oncancel: () => void;
 	}
@@ -18,9 +21,12 @@
 		message,
 		confirmLabel = 'OK',
 		cancelLabel = 'Cancel',
+		variant = 'default',
 		onconfirm,
 		oncancel
 	}: Props = $props();
+
+	const confirmButtonVariant = $derived(variant === 'danger' ? 'danger' : 'primary');
 </script>
 
 <Modal {isOpen} onclose={oncancel} {title}>
@@ -29,7 +35,7 @@
 		<Button variant="secondary" onclick={oncancel}>
 			{cancelLabel}
 		</Button>
-		<Button onclick={onconfirm}>
+		<Button variant={confirmButtonVariant} onclick={onconfirm}>
 			{confirmLabel}
 		</Button>
 	</div>
