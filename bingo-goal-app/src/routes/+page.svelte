@@ -9,8 +9,9 @@
 		setCurrentBoard,
 		toggleAchieved
 	} from '$lib/stores/boardStore';
-	import type { CellPosition } from '$lib/types/bingo';
-	import { getCellByPosition } from '$lib/types/bingo';
+	import { currentTheme } from '$lib/stores/themeStore';
+	import type { CellPosition, BoardSize } from '$lib/types/bingo';
+	import { getCellByPosition, generateBingoLines } from '$lib/types/bingo';
 	import BingoGrid from '$lib/components/bingo/BingoGrid.svelte';
 	import GoalInputModal from '$lib/components/bingo/GoalInputModal.svelte';
 	import SaveIndicator from '$lib/components/ui/SaveIndicator.svelte';
@@ -25,6 +26,7 @@
 	let selectedPosition = $state<CellPosition | null>(null);
 	let isNameDialogOpen = $state(false);
 	let newBoardName = $state('');
+	let selectedSize = $state<BoardSize>(3);
 
 	const board = $derived($currentBoard);
 	const boards = $derived($boardStore.boards);
@@ -34,8 +36,10 @@
 		board && selectedPosition ? getCellByPosition(board, selectedPosition) : null
 	);
 
-	const progress = $derived(board ? getProgressSummary(board.cells) : null);
-	const highlightedPositions = $derived(board ? getBingoLinePositions(board.cells) : []);
+	const bingoLines = $derived(board ? generateBingoLines(board.size) : []);
+	const progress = $derived(board ? getProgressSummary(board.cells, bingoLines) : null);
+	const highlightedPositions = $derived(board ? getBingoLinePositions(board.cells, bingoLines) : []);
+	const themeIcon = $derived($currentTheme.icon);
 
 	onMount(() => {
 		initializeStore();
@@ -93,8 +97,9 @@
 
 	function handleCreateBoard() {
 		const name = newBoardName.trim() || `${new Date().getFullYear()} Goals`;
-		createBoard(name);
+		createBoard(name, selectedSize);
 		newBoardName = '';
+		selectedSize = 3;
 		isNameDialogOpen = false;
 	}
 
@@ -105,6 +110,7 @@
 
 	function openNameDialog() {
 		newBoardName = '';
+		selectedSize = 3;
 		isNameDialogOpen = true;
 	}
 
@@ -121,15 +127,15 @@
 
 <div class="page">
 	<!-- Background decorations -->
-	<div class="bg-decoration bg-decoration-1"></div>
-	<div class="bg-decoration bg-decoration-2"></div>
-	<div class="bg-decoration bg-decoration-3"></div>
+	<div class="bg-decoration bg-decoration-1" style="clip-path: {themeIcon.clipPath}"></div>
+	<div class="bg-decoration bg-decoration-2" style="clip-path: {themeIcon.clipPath}"></div>
+	<div class="bg-decoration bg-decoration-3" style="clip-path: {themeIcon.clipPath}"></div>
 
 	<header class="header">
 		<div class="header-content">
 			<h1 class="title">
-				<svg class="title-icon" fill="currentColor" viewBox="0 0 24 24">
-					<path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 2,11.5 2,13.5C2,15.5 3.75,17.25 3.75,17.25C7,8 17,8 17,8Z"/>
+				<svg class="title-icon" fill="currentColor" viewBox={themeIcon.viewBox}>
+					<path d={themeIcon.svgPath}/>
 				</svg>
 				Bingo Planner
 			</h1>
@@ -226,6 +232,24 @@
 				placeholder={`${new Date().getFullYear()} Goals`}
 				class="dialog-input"
 			/>
+
+			<div class="size-selector">
+				<label class="size-label">Board Size</label>
+				<div class="size-options">
+					{#each [3, 4, 5] as size (size)}
+						<button
+							type="button"
+							class="size-option"
+							class:selected={selectedSize === size}
+							onclick={() => (selectedSize = size as BoardSize)}
+						>
+							{size}x{size}
+							<span class="size-count">({size * size} goals)</span>
+						</button>
+					{/each}
+				</div>
+			</div>
+
 			<div class="dialog-actions">
 				<button
 					type="button"
@@ -281,7 +305,6 @@
 		background: var(--theme-primary-light);
 		top: -50px;
 		right: -50px;
-		clip-path: polygon(50% 0%, 100% 50%, 80% 100%, 50% 80%, 20% 100%, 0% 50%);
 		transform: rotate(25deg);
 	}
 
@@ -291,7 +314,6 @@
 		background: var(--theme-primary);
 		bottom: 15%;
 		left: -40px;
-		clip-path: polygon(50% 0%, 100% 50%, 80% 100%, 50% 80%, 20% 100%, 0% 50%);
 		transform: rotate(-15deg);
 	}
 
@@ -301,7 +323,6 @@
 		background: var(--theme-achieved-light);
 		bottom: 40%;
 		right: -30px;
-		clip-path: polygon(50% 0%, 100% 50%, 80% 100%, 50% 80%, 20% 100%, 0% 50%);
 		transform: rotate(45deg);
 	}
 
@@ -531,6 +552,55 @@
 		outline: none;
 		border-color: var(--theme-primary-light);
 		box-shadow: 0 0 0 3px color-mix(in srgb, var(--theme-primary-light) 15%, transparent);
+	}
+
+	.size-selector {
+		margin-bottom: 1rem;
+	}
+
+	.size-label {
+		display: block;
+		font-weight: 600;
+		color: var(--theme-text);
+		margin-bottom: 0.5rem;
+		font-size: 0.875rem;
+		font-family: var(--theme-font-body);
+	}
+
+	.size-options {
+		display: flex;
+		gap: 0.5rem;
+	}
+
+	.size-option {
+		flex: 1;
+		padding: 0.75rem 0.5rem;
+		background: linear-gradient(145deg, var(--theme-background), var(--theme-pending));
+		border: 2px solid var(--theme-pending-border);
+		border-radius: 0.5rem;
+		font-weight: 600;
+		color: var(--theme-text);
+		cursor: pointer;
+		transition: all 0.2s ease-out;
+		text-align: center;
+		font-family: var(--theme-font-body);
+	}
+
+	.size-option:hover {
+		border-color: var(--theme-primary-light);
+	}
+
+	.size-option.selected {
+		border-color: var(--theme-primary);
+		background: color-mix(in srgb, var(--theme-primary) 10%, var(--theme-background));
+	}
+
+	.size-count {
+		display: block;
+		font-size: 0.75rem;
+		color: var(--theme-text-light);
+		font-weight: 400;
+		margin-top: 0.25rem;
 	}
 
 	.dialog-actions {

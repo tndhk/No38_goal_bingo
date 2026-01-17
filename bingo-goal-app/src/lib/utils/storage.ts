@@ -1,4 +1,4 @@
-import type { AppState, BingoBoard } from '$lib/types/bingo';
+import type { AppState, BingoBoard, CellPosition, BoardSize, Cell } from '$lib/types/bingo';
 
 export const STORAGE_KEY = 'bingo-goal-app-state';
 
@@ -18,6 +18,30 @@ type StoredState = {
 	currentBoardId: string | null;
 	isSaving: boolean;
 };
+
+// Legacy CellPosition format to new format mapping
+const LEGACY_POSITION_MAP: Record<string, CellPosition> = {
+	topLeft: 'cell_0_0',
+	topCenter: 'cell_0_1',
+	topRight: 'cell_0_2',
+	middleLeft: 'cell_1_0',
+	middleCenter: 'cell_1_1',
+	middleRight: 'cell_1_2',
+	bottomLeft: 'cell_2_0',
+	bottomCenter: 'cell_2_1',
+	bottomRight: 'cell_2_2'
+};
+
+function isLegacyPosition(position: string): boolean {
+	return position in LEGACY_POSITION_MAP;
+}
+
+function migrateCellPosition(position: string): CellPosition {
+	if (isLegacyPosition(position)) {
+		return LEGACY_POSITION_MAP[position];
+	}
+	return position as CellPosition;
+}
 
 export function saveToStorage(state: AppState): void {
 	try {
@@ -44,10 +68,20 @@ function migrateBoard(board: StoredBoard | LegacyStoredBoard): BingoBoard {
 	const name =
 		legacyBoard.name ?? (legacyBoard.year ? `${legacyBoard.year} Goals` : 'Untitled Board');
 
+	// Determine size: use existing size property or default to 3 for legacy boards
+	const size: BoardSize = (board as { size?: BoardSize }).size ?? 3;
+
+	// Migrate cell positions from legacy format to new format
+	const cells: Cell[] = board.cells.map((cell) => ({
+		...cell,
+		position: migrateCellPosition(cell.position as string)
+	}));
+
 	return {
 		id: board.id,
 		name,
-		cells: board.cells,
+		size,
+		cells,
 		createdAt: new Date(board.createdAt),
 		updatedAt: new Date(board.updatedAt)
 	};

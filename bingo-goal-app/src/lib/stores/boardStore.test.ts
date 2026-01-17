@@ -50,10 +50,10 @@ describe('boardStore', () => {
 		const state = get(boardStore);
 		const boardId = state.boards[0].id;
 
-		updateCell(boardId, 'topLeft', 'Learn TypeScript');
+		updateCell(boardId, 'cell_0_0', 'Learn TypeScript');
 
 		const updatedState = get(boardStore);
-		const cell = updatedState.boards[0].cells.find((c) => c.position === 'topLeft');
+		const cell = updatedState.boards[0].cells.find((c) => c.position === 'cell_0_0');
 		expect(cell?.goal).toBe('Learn TypeScript');
 	});
 
@@ -65,7 +65,7 @@ describe('boardStore', () => {
 
 		vi.useFakeTimers();
 		vi.advanceTimersByTime(1000);
-		updateCell(boardId, 'topLeft', 'New Goal');
+		updateCell(boardId, 'cell_0_0', 'New Goal');
 		vi.useRealTimers();
 
 		const updatedState = get(boardStore);
@@ -77,16 +77,16 @@ describe('boardStore', () => {
 		const state = get(boardStore);
 		const boardId = state.boards[0].id;
 
-		toggleAchieved(boardId, 'middleCenter');
+		toggleAchieved(boardId, 'cell_1_1');
 
 		const updatedState = get(boardStore);
-		const cell = updatedState.boards[0].cells.find((c) => c.position === 'middleCenter');
+		const cell = updatedState.boards[0].cells.find((c) => c.position === 'cell_1_1');
 		expect(cell?.isAchieved).toBe(true);
 
-		toggleAchieved(boardId, 'middleCenter');
+		toggleAchieved(boardId, 'cell_1_1');
 
 		const toggledBack = get(boardStore);
-		const cellAfterToggle = toggledBack.boards[0].cells.find((c) => c.position === 'middleCenter');
+		const cellAfterToggle = toggledBack.boards[0].cells.find((c) => c.position === 'cell_1_1');
 		expect(cellAfterToggle?.isAchieved).toBe(false);
 	});
 
@@ -150,5 +150,26 @@ describe('boardStore', () => {
 		const state = get(boardStore);
 
 		expect(state.boards).toHaveLength(2);
+	});
+
+	test('createBoard() creates 3x3 board by default', () => {
+		createBoard('Test');
+		const state = get(boardStore);
+		expect(state.boards[0].size).toBe(3);
+		expect(state.boards[0].cells).toHaveLength(9);
+	});
+
+	test('createBoard() creates 4x4 board when size=4', () => {
+		createBoard('Test', 4);
+		const state = get(boardStore);
+		expect(state.boards[0].size).toBe(4);
+		expect(state.boards[0].cells).toHaveLength(16);
+	});
+
+	test('createBoard() creates 5x5 board when size=5', () => {
+		createBoard('Test', 5);
+		const state = get(boardStore);
+		expect(state.boards[0].size).toBe(5);
+		expect(state.boards[0].cells).toHaveLength(25);
 	});
 });

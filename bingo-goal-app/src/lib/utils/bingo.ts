@@ -1,5 +1,4 @@
 import type { Cell, BingoLine, CellPosition } from '$lib/types/bingo';
-import { BINGO_LINES } from '$lib/types/bingo';
 
 export type ProgressSummary = {
 	achieved: number;
@@ -17,39 +16,40 @@ function getAchievedCountForLine(line: BingoLine, achievedPositions: Set<CellPos
 	return line.positions.filter((pos) => achievedPositions.has(pos)).length;
 }
 
-export function getCompletedLines(cells: Cell[]): BingoLine[] {
+export function getCompletedLines(cells: Cell[], bingoLines: BingoLine[]): BingoLine[] {
 	const achievedPositions = new Set(
 		cells.filter((c) => c.isAchieved).map((c) => c.position)
 	);
 
-	return BINGO_LINES.filter((line) => isLineCompleted(line, achievedPositions));
+	return bingoLines.filter((line) => isLineCompleted(line, achievedPositions));
 }
 
-export function getBingoCount(cells: Cell[]): number {
-	return getCompletedLines(cells).length;
+export function getBingoCount(cells: Cell[], bingoLines: BingoLine[]): number {
+	return getCompletedLines(cells, bingoLines).length;
 }
 
 export function getAchievedCount(cells: Cell[]): number {
 	return cells.filter((c) => c.isAchieved).length;
 }
 
-export function getNearBingoLines(cells: Cell[]): BingoLine[] {
+export function getNearBingoLines(cells: Cell[], bingoLines: BingoLine[]): BingoLine[] {
 	const achievedPositions = new Set(
 		cells.filter((c) => c.isAchieved).map((c) => c.position)
 	);
 
-	return BINGO_LINES.filter((line) => {
+	return bingoLines.filter((line) => {
+		const lineSize = line.positions.length;
 		const achievedCount = getAchievedCountForLine(line, achievedPositions);
-		return achievedCount === 2;
+		return achievedCount === lineSize - 1; // Exactly one away from bingo
 	});
 }
 
-export function getNearBingoPositions(cells: Cell[]): CellPosition[] {
+export function getNearBingoPositions(cells: Cell[], bingoLines: BingoLine[]): CellPosition[] {
 	const achievedPositions = new Set(
 		cells.filter((c) => c.isAchieved).map((c) => c.position)
 	);
 
-	const nearLines = getNearBingoLines(cells);
+	const nearLines = getNearBingoLines(cells, bingoLines);
 	const positions = new Set<CellPosition>();
 
 	for (const line of nearLines) {
@@ -62,8 +62,8 @@ export function getNearBingoPositions(cells: Cell[]): CellPosition[] {
 	return [...positions];
 }
 
-export function getBingoLinePositions(cells: Cell[]): CellPosition[] {
-	const completedLines = getCompletedLines(cells);
+export function getBingoLinePositions(cells: Cell[], bingoLines: BingoLine[]): CellPosition[] {
+	const completedLines = getCompletedLines(cells, bingoLines);
 	const positions = new Set<CellPosition>();
 
 	for (const line of completedLines) {
@@ -79,11 +79,11 @@ export function isPerfect(cells: Cell[]): boolean {
 	return cells.every((c) => c.isAchieved);
 }
 
-export function getProgressSummary(cells: Cell[]): ProgressSummary {
+export function getProgressSummary(cells: Cell[], bingoLines: BingoLine[]): ProgressSummary {
 	const achieved = getAchievedCount(cells);
-	const bingoCount = getBingoCount(cells);
+	const bingoCount = getBingoCount(cells, bingoLines);
 	const perfect = isPerfect(cells);
-	const nearBingoLines = getNearBingoLines(cells);
+	const nearBingoLines = getNearBingoLines(cells, bingoLines);
 
 	let hint: string | null = null;
 
@@ -94,7 +94,7 @@ export function getProgressSummary(cells: Cell[]): ProgressSummary {
 
 	return {
 		achieved,
-		total: 9,
+		total: cells.length, // Dynamic based on actual cell count
 		bingoCount,
 		isPerfect: perfect,
 		hint

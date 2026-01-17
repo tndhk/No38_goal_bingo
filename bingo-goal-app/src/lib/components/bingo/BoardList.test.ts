@@ -1,14 +1,20 @@
 import { describe, test, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/svelte';
 import BoardList from './BoardList.svelte';
-import type { BingoBoard } from '$lib/types/bingo';
-import { CELL_POSITIONS } from '$lib/types/bingo';
+import type { BingoBoard, BoardSize } from '$lib/types/bingo';
+import { generateCellPositions } from '$lib/types/bingo';
 
 describe('BoardList', () => {
-	const createBoard = (name: string, achievedCount: number = 0, createdAt?: Date): BingoBoard => ({
+	const createBoard = (
+		name: string,
+		achievedCount: number = 0,
+		createdAt?: Date,
+		size: BoardSize = 3
+	): BingoBoard => ({
 		id: `board-${name}`,
 		name,
-		cells: CELL_POSITIONS.map((position, index) => ({
+		size,
+		cells: generateCellPositions(size).map((position, index) => ({
 			position,
 			goal: `Goal ${position}`,
 			isAchieved: index < achievedCount
@@ -52,11 +58,11 @@ describe('BoardList', () => {
 	});
 
 	test('displays Bingo badge when bingo exists', () => {
-		// Create a board with top row completed (topLeft, topCenter, topRight)
+		// Create a board with top row completed (cell_0_0, cell_0_1, cell_0_2)
 		const board = createBoard('2025 Goals', 0);
-		board.cells[0].isAchieved = true; // topLeft
-		board.cells[1].isAchieved = true; // topCenter
-		board.cells[2].isAchieved = true; // topRight
+		board.cells[0].isAchieved = true; // cell_0_0
+		board.cells[1].isAchieved = true; // cell_0_1
+		board.cells[2].isAchieved = true; // cell_0_2
 
 		render(BoardList, {
 			props: { boards: [board], onSelectBoard: vi.fn(), onDeleteBoard: vi.fn() }
@@ -115,5 +121,14 @@ describe('BoardList', () => {
 
 		const cards = container.querySelectorAll('.board-card');
 		expect(cards).toHaveLength(0);
+	});
+
+	test('displays correct count for 4x4 board', () => {
+		const boards = [createBoard('Large Board', 10, undefined, 4)];
+		render(BoardList, {
+			props: { boards, onSelectBoard: vi.fn(), onDeleteBoard: vi.fn() }
+		});
+
+		expect(screen.getByText('10/16 achieved')).toBeTruthy();
 	});
 });

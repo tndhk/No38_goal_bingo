@@ -22,7 +22,7 @@
 	<div class="decoration decoration-2"></div>
 	<div class="decoration decoration-3"></div>
 
-	<div class="grid-container">
+	<div class="grid-container" style:--grid-size={board.size}>
 		{#each board.cells as cell (cell.position)}
 			<BingoCell
 				{cell}
@@ -45,7 +45,7 @@
 
 	.grid-container {
 		display: grid;
-		grid-template-columns: repeat(3, minmax(0, 1fr));
+		grid-template-columns: repeat(var(--grid-size, 3), minmax(0, 1fr));
 		gap: 0.75rem;
 		padding: 1rem;
 		background: linear-gradient(145deg, var(--theme-background), var(--theme-pending));

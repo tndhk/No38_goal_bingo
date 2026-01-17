@@ -1,5 +1,11 @@
 export type ThemeId = 'forest' | 'ocean' | 'sakura' | 'midnight';
 
+export interface ThemeIcon {
+	svgPath: string;
+	viewBox: string;
+	clipPath: string;
+}
+
 export interface ThemeColors {
 	primary: string;
 	primaryLight: string;
@@ -34,4 +40,5 @@ export interface Theme {
 	meta: ThemeMeta;
 	colors: ThemeColors;
 	fonts: ThemeFonts;
+	icon: ThemeIcon;
 }

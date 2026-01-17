@@ -29,6 +29,11 @@ export const themes: Record<ThemeId, Theme> = {
 			heading: "'Caveat', 'Zen Kurenaido', cursive",
 			googleFontsUrl:
 				'https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=M+PLUS+Rounded+1c:wght@400;500;700&family=Quicksand:wght@400;500;600;700&family=Zen+Kurenaido&display=swap'
+		},
+		icon: {
+			svgPath: 'M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 2,11.5 2,13.5C2,15.5 3.75,17.25 3.75,17.25C7,8 17,8 17,8Z',
+			viewBox: '0 0 24 24',
+			clipPath: 'polygon(50% 0%, 100% 50%, 80% 100%, 50% 80%, 20% 100%, 0% 50%)'
 		}
 	},
 	ocean: {
@@ -59,6 +64,11 @@ export const themes: Record<ThemeId, Theme> = {
 			heading: "'Playfair Display', 'Shippori Mincho', serif",
 			googleFontsUrl:
 				'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=Playfair+Display:wght@400;500;600;700&family=Shippori+Mincho:wght@400;500;700&display=swap'
+		},
+		icon: {
+			svgPath: 'M2 12c1.5-2 3-3 4.5-3s3 1 4.5 3c1.5 2 3 3 4.5 3s3-1 4.5-3M2 17c1.5-2 3-3 4.5-3s3 1 4.5 3c1.5 2 3 3 4.5 3s3-1 4.5-3M2 7c1.5-2 3-3 4.5-3s3 1 4.5 3c1.5 2 3 3 4.5 3s3-1 4.5-3',
+			viewBox: '0 0 24 24',
+			clipPath: 'polygon(0% 30%, 25% 0%, 50% 30%, 75% 0%, 100% 30%, 100% 100%, 0% 100%)'
 		}
 	},
 	sakura: {
@@ -89,6 +99,11 @@ export const themes: Record<ThemeId, Theme> = {
 			heading: "'Shippori Mincho', 'Noto Serif JP', serif",
 			googleFontsUrl:
 				'https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700&family=Noto+Serif+JP:wght@400;500;700&family=Shippori+Mincho:wght@400;500;700&family=Zen+Maru+Gothic:wght@400;500;700&display=swap'
+		},
+		icon: {
+			svgPath: 'M12 2C12 2 9 5 9 8c0 1.5 1 3 3 3s3-1.5 3-3c0-3-3-6-3-6zm-5.5 5c0 0-2.5 1.5-2.5 4 0 1.2.8 2.5 2.5 2.5s2.5-1.3 2.5-2.5c0-2.5-2.5-4-2.5-4zm11 0c0 0-2.5 1.5-2.5 4 0 1.2.8 2.5 2.5 2.5s2.5-1.3 2.5-2.5c0-2.5-2.5-4-2.5-4zM7 15c0 0-3 1.5-3 4 0 1.2.8 2.5 2.5 2.5S9 20.2 9 19c0-2.5-2-4-2-4zm10 0c0 0-2 1.5-2 4 0 1.2.8 2.5 2.5 2.5s2.5-1.3 2.5-2.5c0-2.5-3-4-3-4z',
+			viewBox: '0 0 24 24',
+			clipPath: 'polygon(50% 5%, 65% 35%, 95% 25%, 80% 55%, 95% 85%, 50% 70%, 5% 85%, 20% 55%, 5% 25%, 35% 35%)'
 		}
 	},
 	midnight: {
@@ -119,6 +134,11 @@ export const themes: Record<ThemeId, Theme> = {
 			heading: "'Space Grotesk', 'Noto Sans JP', sans-serif",
 			googleFontsUrl:
 				'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=M+PLUS+1+Code:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap'
+		},
+		icon: {
+			svgPath: 'M12 2l2.4 7.4h7.6l-6 4.6 2.3 7-6.3-4.6-6.3 4.6 2.3-7-6-4.6h7.6z',
+			viewBox: '0 0 24 24',
+			clipPath: 'polygon(50% 0%, 56% 44%, 100% 50%, 56% 56%, 50% 100%, 44% 56%, 0% 50%, 44% 44%)'
 		}
 	}
 };
@@ -135,4 +155,4 @@ export function isValidThemeId(id: string): id is ThemeId {
 	return themeIds.includes(id as ThemeId);
 }
 
-export type { Theme, ThemeId, ThemeMeta, ThemeColors, ThemeFonts } from './types';
+export type { Theme, ThemeId, ThemeMeta, ThemeColors, ThemeFonts, ThemeIcon } from './types';

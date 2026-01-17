@@ -1,5 +1,27 @@
-// Phase 2: Cell position as string literal for 3x3 grid
-export type CellPosition =
+// Board size type for variable grid sizes
+export type BoardSize = 3 | 4 | 5;
+
+// Cell position as template literal for dynamic grid sizes
+export type CellPosition = `cell_${number}_${number}`;
+
+// Generate a cell position string from row and column
+export function generateCellPosition(row: number, col: number): CellPosition {
+	return `cell_${row}_${col}`;
+}
+
+// Generate all cell positions for a given board size
+export function generateCellPositions(size: BoardSize): CellPosition[] {
+	const positions: CellPosition[] = [];
+	for (let row = 0; row < size; row++) {
+		for (let col = 0; col < size; col++) {
+			positions.push(generateCellPosition(row, col));
+		}
+	}
+	return positions;
+}
+
+// Legacy cell positions for backward compatibility
+export type LegacyCellPosition =
 	| 'topLeft'
 	| 'topCenter'
 	| 'topRight'
@@ -10,17 +32,7 @@ export type CellPosition =
 	| 'bottomCenter'
 	| 'bottomRight';
 
-export const CELL_POSITIONS: CellPosition[] = [
-	'topLeft',
-	'topCenter',
-	'topRight',
-	'middleLeft',
-	'middleCenter',
-	'middleRight',
-	'bottomLeft',
-	'bottomCenter',
-	'bottomRight'
-];
+export const CELL_POSITIONS: CellPosition[] = generateCellPositions(3);
 
 export type Cell = {
 	position: CellPosition;
@@ -33,23 +45,48 @@ export type BingoLine = {
 	positions: CellPosition[];
 };
 
-export const BINGO_LINES: BingoLine[] = [
+// Generate bingo lines dynamically based on board size
+export function generateBingoLines(size: BoardSize): BingoLine[] {
+	const lines: BingoLine[] = [];
+
 	// Rows
-	{ type: 'row', positions: ['topLeft', 'topCenter', 'topRight'] },
-	{ type: 'row', positions: ['middleLeft', 'middleCenter', 'middleRight'] },
-	{ type: 'row', positions: ['bottomLeft', 'bottomCenter', 'bottomRight'] },
+	for (let row = 0; row < size; row++) {
+		lines.push({
+			type: 'row',
+			positions: Array.from({ length: size }, (_, col) => generateCellPosition(row, col))
+		});
+	}
+
 	// Columns
-	{ type: 'column', positions: ['topLeft', 'middleLeft', 'bottomLeft'] },
-	{ type: 'column', positions: ['topCenter', 'middleCenter', 'bottomCenter'] },
-	{ type: 'column', positions: ['topRight', 'middleRight', 'bottomRight'] },
-	// Diagonals
-	{ type: 'diagonal', positions: ['topLeft', 'middleCenter', 'bottomRight'] },
-	{ type: 'diagonal', positions: ['topRight', 'middleCenter', 'bottomLeft'] }
-];
+	for (let col = 0; col < size; col++) {
+		lines.push({
+			type: 'column',
+			positions: Array.from({ length: size }, (_, row) => generateCellPosition(row, col))
+		});
+	}
+
+	// Diagonal (top-left to bottom-right)
+	lines.push({
+		type: 'diagonal',
+		positions: Array.from({ length: size }, (_, i) => generateCellPosition(i, i))
+	});
+
+	// Diagonal (top-right to bottom-left)
+	lines.push({
+		type: 'diagonal',
+		positions: Array.from({ length: size }, (_, i) => generateCellPosition(i, size - 1 - i))
+	});
+
+	return lines;
+}
+
+// Legacy BINGO_LINES for backward compatibility
+export const BINGO_LINES: BingoLine[] = generateBingoLines(3);
 
 export type BingoBoard = {
 	id: string;
 	name: string;
+	size: BoardSize;
 	cells: Cell[];
 	createdAt: Date;
 	updatedAt: Date;
@@ -62,11 +99,12 @@ export type AppState = {
 };
 
 // Helper function to create empty board
-export function createEmptyBoard(name: string): BingoBoard {
+export function createEmptyBoard(name: string, size: BoardSize = 3): BingoBoard {
 	return {
 		id: crypto.randomUUID(),
 		name,
-		cells: CELL_POSITIONS.map((position) => ({
+		size,
+		cells: generateCellPositions(size).map((position) => ({
 			position,
 			goal: '',
 			isAchieved: false

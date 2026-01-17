@@ -5,7 +5,7 @@ import type { Cell } from '$lib/types/bingo';
 
 describe('BingoCell', () => {
 	const createCell = (overrides: Partial<Cell> = {}): Cell => ({
-		position: 'topLeft',
+		position: 'cell_0_0',
 		goal: '',
 		isAchieved: false,
 		...overrides

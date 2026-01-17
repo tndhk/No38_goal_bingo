@@ -1,5 +1,5 @@
 import { writable, derived } from 'svelte/store';
-import type { AppState, BingoBoard, CellPosition } from '$lib/types/bingo';
+import type { AppState, BingoBoard, CellPosition, BoardSize } from '$lib/types/bingo';
 import { createEmptyBoard } from '$lib/types/bingo';
 import { saveToStorage, loadFromStorage } from '$lib/utils/storage';
 
@@ -58,9 +58,9 @@ export function initializeStore(): void {
 	isInitialized = true;
 }
 
-export function createBoard(name: string): void {
+export function createBoard(name: string, size: BoardSize = 3): void {
 	boardStore.update((state) => {
-		const newBoard = createEmptyBoard(name);
+		const newBoard = createEmptyBoard(name, size);
 		return {
 			...state,
 			boards: [...state.boards, newBoard],

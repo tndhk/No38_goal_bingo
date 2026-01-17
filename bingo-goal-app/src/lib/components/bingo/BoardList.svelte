@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { BingoBoard } from '$lib/types/bingo';
+	import { generateBingoLines } from '$lib/types/bingo';
 	import { getAchievedCount, getBingoCount } from '$lib/utils/bingo';
 
 	interface Props {
@@ -15,10 +16,12 @@
 	);
 
 	function getBoardSummary(board: BingoBoard) {
+		const bingoLines = generateBingoLines(board.size);
 		const achieved = getAchievedCount(board.cells);
-		const bingoCount = getBingoCount(board.cells);
-		const isPerfect = achieved === 9;
-		return { achieved, bingoCount, isPerfect };
+		const bingoCount = getBingoCount(board.cells, bingoLines);
+		const total = board.cells.length;
+		const isPerfect = achieved === total;
+		return { achieved, bingoCount, isPerfect, total };
 	}
 
 	function handleDeleteClick(event: MouseEvent, boardId: string) {
@@ -35,7 +38,7 @@
 				type="button"
 				class="card-button"
 				onclick={() => onSelectBoard(board.id)}
-				aria-label="{board.name} - {summary.achieved}/9 achieved"
+				aria-label="{board.name} - {summary.achieved}/{summary.total} achieved"
 			>
 				<div class="card-content">
 					<div class="card-header">
@@ -50,10 +53,10 @@
 						<div class="progress-bar">
 							<div
 								class="progress-fill"
-								style="width: {(summary.achieved / 9) * 100}%"
+								style="width: {(summary.achieved / summary.total) * 100}%"
 							></div>
 						</div>
-						<span class="progress-text">{summary.achieved}/9 achieved</span>
+						<span class="progress-text">{summary.achieved}/{summary.total} achieved</span>
 					</div>
 				</div>
 			</button>
