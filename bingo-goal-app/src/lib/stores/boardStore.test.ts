@@ -25,17 +25,17 @@ describe('boardStore', () => {
 	});
 
 	test('createBoard() creates new board with 9 cells', () => {
-		createBoard(2025);
+		createBoard('2025 Goals');
 		const state = get(boardStore);
 
 		expect(state.boards).toHaveLength(1);
-		expect(state.boards[0].year).toBe(2025);
+		expect(state.boards[0].name).toBe('2025 Goals');
 		expect(state.boards[0].cells).toHaveLength(9);
 		expect(state.currentBoardId).toBe(state.boards[0].id);
 	});
 
 	test('createBoard() initializes cells with empty goals', () => {
-		createBoard(2025);
+		createBoard('2025 Goals');
 		const state = get(boardStore);
 		const board = state.boards[0];
 
@@ -46,7 +46,7 @@ describe('boardStore', () => {
 	});
 
 	test('updateCell() updates goal text for specified position', () => {
-		createBoard(2025);
+		createBoard('2025 Goals');
 		const state = get(boardStore);
 		const boardId = state.boards[0].id;
 
@@ -58,7 +58,7 @@ describe('boardStore', () => {
 	});
 
 	test('updateCell() updates updatedAt timestamp', () => {
-		createBoard(2025);
+		createBoard('2025 Goals');
 		const state = get(boardStore);
 		const boardId = state.boards[0].id;
 		const originalUpdatedAt = state.boards[0].updatedAt;
@@ -73,7 +73,7 @@ describe('boardStore', () => {
 	});
 
 	test('toggleAchieved() toggles isAchieved for cell', () => {
-		createBoard(2025);
+		createBoard('2025 Goals');
 		const state = get(boardStore);
 		const boardId = state.boards[0].id;
 
@@ -91,8 +91,8 @@ describe('boardStore', () => {
 	});
 
 	test('deleteBoard() removes board from list', () => {
-		createBoard(2025);
-		createBoard(2026);
+		createBoard('2025 Goals');
+		createBoard('2026 Goals');
 		const state = get(boardStore);
 		expect(state.boards).toHaveLength(2);
 
@@ -105,7 +105,7 @@ describe('boardStore', () => {
 	});
 
 	test('deleteBoard() clears currentBoardId when deleting current board', () => {
-		createBoard(2025);
+		createBoard('2025 Goals');
 		const state = get(boardStore);
 		const boardId = state.boards[0].id;
 
@@ -118,8 +118,8 @@ describe('boardStore', () => {
 	});
 
 	test('setCurrentBoard() sets currentBoardId', () => {
-		createBoard(2025);
-		createBoard(2026);
+		createBoard('2025 Goals');
+		createBoard('2026 Goals');
 		const state = get(boardStore);
 		const secondBoardId = state.boards[1].id;
 
@@ -130,13 +130,13 @@ describe('boardStore', () => {
 	});
 
 	test('currentBoard derived store returns current board', () => {
-		createBoard(2025);
+		createBoard('2025 Goals');
 		const state = get(boardStore);
 		const boardId = state.boards[0].id;
 
 		const board = get(currentBoard);
 		expect(board?.id).toBe(boardId);
-		expect(board?.year).toBe(2025);
+		expect(board?.name).toBe('2025 Goals');
 	});
 
 	test('currentBoard returns null when no board selected', () => {
@@ -144,11 +144,11 @@ describe('boardStore', () => {
 		expect(board).toBeNull();
 	});
 
-	test('prevents duplicate year boards', () => {
-		createBoard(2025);
-		createBoard(2025);
+	test('allows multiple boards with same name', () => {
+		createBoard('2025 Goals');
+		createBoard('2025 Goals');
 		const state = get(boardStore);
 
-		expect(state.boards).toHaveLength(1);
+		expect(state.boards).toHaveLength(2);
 	});
 });

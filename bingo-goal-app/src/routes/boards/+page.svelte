@@ -12,22 +12,11 @@
 	import Dialog from '$lib/components/ui/Dialog.svelte';
 
 	let isDeleteDialogOpen = $state(false);
-	let boardToDelete = $state<{ id: string; year: number } | null>(null);
-	let isYearDialogOpen = $state(false);
-	let selectedYear = $state(new Date().getFullYear());
+	let boardToDelete = $state<{ id: string; name: string } | null>(null);
+	let isNameDialogOpen = $state(false);
+	let newBoardName = $state('');
 
 	const boards = $derived($boardStore.boards);
-
-	const availableYears = $derived(() => {
-		const currentYear = new Date().getFullYear();
-		const years: number[] = [];
-		for (let y = currentYear - 2; y <= currentYear + 1; y++) {
-			if (!boards.some((b) => b.year === y)) {
-				years.push(y);
-			}
-		}
-		return years;
-	});
 
 	onMount(() => {
 		initializeStore();
@@ -41,7 +30,7 @@
 	function handleDeleteRequest(boardId: string) {
 		const board = boards.find((b) => b.id === boardId);
 		if (board) {
-			boardToDelete = { id: board.id, year: board.year };
+			boardToDelete = { id: board.id, name: board.name };
 			isDeleteDialogOpen = true;
 		}
 	}
@@ -59,17 +48,16 @@
 		isDeleteDialogOpen = false;
 	}
 
-	function openYearDialog() {
-		const years = availableYears();
-		if (years.length > 0) {
-			selectedYear = years[0];
-		}
-		isYearDialogOpen = true;
+	function openNameDialog() {
+		newBoardName = '';
+		isNameDialogOpen = true;
 	}
 
 	function handleCreateBoard() {
-		createBoard(selectedYear);
-		isYearDialogOpen = false;
+		const name = newBoardName.trim() || `${new Date().getFullYear()} Goals`;
+		createBoard(name);
+		newBoardName = '';
+		isNameDialogOpen = false;
 	}
 </script>
 
@@ -100,13 +88,11 @@
 				onSelectBoard={handleSelectBoard}
 				onDeleteBoard={handleDeleteRequest}
 			/>
-			{#if availableYears().length > 0}
-				<div class="new-board-section">
-					<button type="button" class="btn-new" onclick={openYearDialog}>
-						+ Create New Board
-					</button>
-				</div>
-			{/if}
+			<div class="new-board-section">
+				<button type="button" class="btn-new" onclick={openNameDialog}>
+					+ Create New Board
+				</button>
+			</div>
 		{:else}
 			<div class="empty-state">
 				<div class="empty-icon">
@@ -115,7 +101,7 @@
 					</svg>
 				</div>
 				<p class="empty-text">No boards yet</p>
-				<button type="button" class="btn-create" onclick={openYearDialog}>
+				<button type="button" class="btn-create" onclick={openNameDialog}>
 					Create Your First Board
 				</button>
 			</div>
@@ -126,7 +112,7 @@
 <Dialog
 	isOpen={isDeleteDialogOpen}
 	title="Delete Board"
-	message="{boardToDelete?.year}年のボードを削除しますか? この操作は取り消せません。"
+	message="「{boardToDelete?.name}」を削除しますか? この操作は取り消せません。"
 	confirmLabel="Delete"
 	cancelLabel="Cancel"
 	variant="danger"
@@ -134,12 +120,12 @@
 	oncancel={handleDeleteCancel}
 />
 
-{#if isYearDialogOpen}
+{#if isNameDialogOpen}
 	<!-- svelte-ignore a11y_click_events_have_key_events -->
 	<div
 		role="presentation"
 		class="dialog-backdrop"
-		onclick={() => (isYearDialogOpen = false)}
+		onclick={() => (isNameDialogOpen = false)}
 	>
 		<!-- svelte-ignore a11y_click_events_have_key_events -->
 		<!-- svelte-ignore a11y_interactive_supports_focus -->
@@ -149,16 +135,17 @@
 			class="dialog"
 			onclick={(e) => e.stopPropagation()}
 		>
-			<h2 class="dialog-title">Select Year</h2>
-			<select bind:value={selectedYear} class="dialog-select">
-				{#each availableYears() as year (year)}
-					<option value={year}>{year}</option>
-				{/each}
-			</select>
+			<h2 class="dialog-title">New Board</h2>
+			<input
+				type="text"
+				bind:value={newBoardName}
+				placeholder={`${new Date().getFullYear()} Goals`}
+				class="dialog-input"
+			/>
 			<div class="dialog-actions">
 				<button
 					type="button"
-					onclick={() => (isYearDialogOpen = false)}
+					onclick={() => (isNameDialogOpen = false)}
 					class="btn-ghost"
 				>
 					Cancel
@@ -378,7 +365,7 @@
 		background-clip: text;
 	}
 
-	.dialog-select {
+	.dialog-input {
 		width: 100%;
 		padding: 0.75rem 1rem;
 		background: linear-gradient(145deg, #FFFFFF, #F5F3FF);
@@ -389,7 +376,11 @@
 		margin-bottom: 1rem;
 	}
 
-	.dialog-select:focus {
+	.dialog-input::placeholder {
+		color: #A78BFA;
+	}
+
+	.dialog-input:focus {
 		outline: none;
 		border-color: #7C3AED;
 		box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);

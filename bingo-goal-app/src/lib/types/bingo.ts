@@ -49,7 +49,7 @@ export const BINGO_LINES: BingoLine[] = [
 
 export type BingoBoard = {
 	id: string;
-	year: number;
+	name: string;
 	cells: Cell[];
 	createdAt: Date;
 	updatedAt: Date;
@@ -62,10 +62,10 @@ export type AppState = {
 };
 
 // Helper function to create empty board
-export function createEmptyBoard(year: number): BingoBoard {
+export function createEmptyBoard(name: string): BingoBoard {
 	return {
 		id: crypto.randomUUID(),
-		year,
+		name,
 		cells: CELL_POSITIONS.map((position) => ({
 			position,
 			goal: '',

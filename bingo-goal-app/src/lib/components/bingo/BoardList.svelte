@@ -10,7 +10,9 @@
 
 	let { boards, onSelectBoard, onDeleteBoard }: Props = $props();
 
-	const sortedBoards = $derived([...boards].sort((a, b) => b.year - a.year));
+	const sortedBoards = $derived(
+		[...boards].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+	);
 
 	function getBoardSummary(board: BingoBoard) {
 		const achieved = getAchievedCount(board.cells);
@@ -33,11 +35,11 @@
 				type="button"
 				class="card-button"
 				onclick={() => onSelectBoard(board.id)}
-				aria-label="{board.year} Goals - {summary.achieved}/9 achieved"
+				aria-label="{board.name} - {summary.achieved}/9 achieved"
 			>
 				<div class="card-content">
 					<div class="card-header">
-						<span class="year">{board.year}</span>
+						<span class="board-name">{board.name}</span>
 						{#if summary.isPerfect}
 							<span class="badge badge-perfect">Perfect!</span>
 						{:else if summary.bingoCount > 0}
@@ -59,7 +61,7 @@
 				type="button"
 				class="delete-btn"
 				onclick={(e) => handleDeleteClick(e, board.id)}
-				aria-label="Delete {board.year} board"
+				aria-label="Delete {board.name}"
 			>
 				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 					<path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -130,10 +132,14 @@
 		margin-bottom: 0.5rem;
 	}
 
-	.year {
+	.board-name {
 		font-size: 1.125rem;
 		font-weight: 700;
 		color: #1E1B4B;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		max-width: 12rem;
 	}
 
 	.badge {

@@ -7,8 +7,14 @@ type StoredBoard = Omit<BingoBoard, 'createdAt' | 'updatedAt'> & {
 	updatedAt: string;
 };
 
+// Legacy type for migration (year-based boards)
+type LegacyStoredBoard = Omit<StoredBoard, 'name'> & {
+	year?: number;
+	name?: string;
+};
+
 type StoredState = {
-	boards: StoredBoard[];
+	boards: (StoredBoard | LegacyStoredBoard)[];
 	currentBoardId: string | null;
 	isSaving: boolean;
 };
@@ -30,6 +36,23 @@ export function saveToStorage(state: AppState): void {
 	}
 }
 
+// Migrate legacy board (year-based) to new format (name-based)
+function migrateBoard(board: StoredBoard | LegacyStoredBoard): BingoBoard {
+	const legacyBoard = board as LegacyStoredBoard;
+
+	// If board has year but no name, migrate it
+	const name =
+		legacyBoard.name ?? (legacyBoard.year ? `${legacyBoard.year} Goals` : 'Untitled Board');
+
+	return {
+		id: board.id,
+		name,
+		cells: board.cells,
+		createdAt: new Date(board.createdAt),
+		updatedAt: new Date(board.updatedAt)
+	};
+}
+
 export function loadFromStorage(): AppState | null {
 	try {
 		const stored = localStorage.getItem(STORAGE_KEY);
@@ -38,11 +61,7 @@ export function loadFromStorage(): AppState | null {
 		const parsed: StoredState = JSON.parse(stored);
 
 		const state: AppState = {
-			boards: parsed.boards.map((board) => ({
-				...board,
-				createdAt: new Date(board.createdAt),
-				updatedAt: new Date(board.updatedAt)
-			})),
+			boards: parsed.boards.map(migrateBoard),
 			currentBoardId: parsed.currentBoardId,
 			isSaving: false
 		};

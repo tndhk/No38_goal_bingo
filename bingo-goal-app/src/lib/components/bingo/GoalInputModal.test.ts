@@ -8,9 +8,11 @@ describe('GoalInputModal', () => {
 		isOpen: true,
 		position: 'topLeft' as CellPosition,
 		currentGoal: '',
+		isAchieved: false,
 		onSave: vi.fn(),
 		onClear: vi.fn(),
-		onClose: vi.fn()
+		onClose: vi.fn(),
+		onToggleAchieved: vi.fn()
 	};
 
 	test('displays current goal text in textarea', () => {
@@ -85,5 +87,31 @@ describe('GoalInputModal', () => {
 		render(GoalInputModal, { props: defaultProps });
 
 		expect(screen.getByText('Goal')).toBeTruthy();
+	});
+
+	test('displays Not Achieved button when isAchieved is false', () => {
+		render(GoalInputModal, { props: defaultProps });
+
+		expect(screen.getByText('Not Achieved')).toBeTruthy();
+	});
+
+	test('displays Achieved button when isAchieved is true', () => {
+		render(GoalInputModal, {
+			props: { ...defaultProps, isAchieved: true }
+		});
+
+		expect(screen.getByText('Achieved')).toBeTruthy();
+	});
+
+	test('calls onToggleAchieved when achieved button is clicked', async () => {
+		const onToggleAchieved = vi.fn();
+		render(GoalInputModal, {
+			props: { ...defaultProps, onToggleAchieved }
+		});
+
+		const toggleButton = screen.getByText('Not Achieved');
+		await fireEvent.click(toggleButton);
+
+		expect(onToggleAchieved).toHaveBeenCalledTimes(1);
 	});
 });

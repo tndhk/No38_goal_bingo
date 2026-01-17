@@ -7,7 +7,7 @@ import { CELL_POSITIONS } from '$lib/types/bingo';
 describe('BingoGrid', () => {
 	const createBoard = (): BingoBoard => ({
 		id: 'test-board-id',
-		year: 2025,
+		name: '2025 Goals',
 		cells: CELL_POSITIONS.map((position) => ({
 			position,
 			goal: `Goal ${position}`,

@@ -58,14 +58,9 @@ export function initializeStore(): void {
 	isInitialized = true;
 }
 
-export function createBoard(year: number): void {
+export function createBoard(name: string): void {
 	boardStore.update((state) => {
-		// Prevent duplicate year
-		if (state.boards.some((b) => b.year === year)) {
-			return state;
-		}
-
-		const newBoard = createEmptyBoard(year);
+		const newBoard = createEmptyBoard(name);
 		return {
 			...state,
 			boards: [...state.boards, newBoard],

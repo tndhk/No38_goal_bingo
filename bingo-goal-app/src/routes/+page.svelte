@@ -22,8 +22,8 @@
 	let prevBingoCount = $state<number | null>(null);
 	let prevIsPerfect = $state<boolean | null>(null);
 	let selectedPosition = $state<CellPosition | null>(null);
-	let isYearDialogOpen = $state(false);
-	let selectedYear = $state(new Date().getFullYear());
+	let isNameDialogOpen = $state(false);
+	let newBoardName = $state('');
 
 	const board = $derived($currentBoard);
 	const boards = $derived($boardStore.boards);
@@ -35,17 +35,6 @@
 
 	const progress = $derived(board ? getProgressSummary(board.cells) : null);
 	const highlightedPositions = $derived(board ? getBingoLinePositions(board.cells) : []);
-
-	const availableYears = $derived(() => {
-		const currentYear = new Date().getFullYear();
-		const years: number[] = [];
-		for (let y = currentYear - 2; y <= currentYear + 1; y++) {
-			if (!boards.some((b) => b.year === y)) {
-				years.push(y);
-			}
-		}
-		return years;
-	});
 
 	onMount(() => {
 		initializeStore();
@@ -102,21 +91,26 @@
 	}
 
 	function handleCreateBoard() {
-		createBoard(selectedYear);
-		isYearDialogOpen = false;
+		const name = newBoardName.trim() || `${new Date().getFullYear()} Goals`;
+		createBoard(name);
+		newBoardName = '';
+		isNameDialogOpen = false;
 	}
 
-	function handleYearChange(event: Event) {
+	function handleBoardChange(event: Event) {
 		const select = event.target as HTMLSelectElement;
 		setCurrentBoard(select.value);
 	}
 
-	function openYearDialog() {
-		const years = availableYears();
-		if (years.length > 0) {
-			selectedYear = years[0];
+	function openNameDialog() {
+		newBoardName = '';
+		isNameDialogOpen = true;
+	}
+
+	function handleToggleAchieved() {
+		if (board && selectedPosition) {
+			toggleAchieved(board.id, selectedPosition);
 		}
-		isYearDialogOpen = true;
 	}
 </script>
 
@@ -162,22 +156,20 @@
 			<div class="board-selector">
 				<select
 					class="select"
-					onchange={handleYearChange}
+					onchange={handleBoardChange}
 					value={board?.id ?? ''}
 				>
 					{#each boards as b (b.id)}
-						<option value={b.id}>{b.year} Goals</option>
+						<option value={b.id}>{b.name}</option>
 					{/each}
 				</select>
-				{#if availableYears().length > 0}
-					<button
-						type="button"
-						onclick={openYearDialog}
-						class="btn-new"
-					>
-						+ New
-					</button>
-				{/if}
+				<button
+					type="button"
+					onclick={openNameDialog}
+					class="btn-new"
+				>
+					+ New
+				</button>
 			</div>
 		{/if}
 
@@ -208,7 +200,7 @@
 				<p class="empty-text">No boards yet</p>
 				<button
 					type="button"
-					onclick={openYearDialog}
+					onclick={openNameDialog}
 					class="btn-create"
 				>
 					Create Bingo
@@ -218,12 +210,12 @@
 	</main>
 </div>
 
-{#if isYearDialogOpen}
+{#if isNameDialogOpen}
 	<!-- svelte-ignore a11y_click_events_have_key_events -->
 	<div
 		role="presentation"
 		class="dialog-backdrop"
-		onclick={() => (isYearDialogOpen = false)}
+		onclick={() => (isNameDialogOpen = false)}
 	>
 		<!-- svelte-ignore a11y_click_events_have_key_events -->
 		<!-- svelte-ignore a11y_interactive_supports_focus -->
@@ -233,19 +225,17 @@
 			class="dialog"
 			onclick={(e) => e.stopPropagation()}
 		>
-			<h2 class="dialog-title">Select Year</h2>
-			<select
-				bind:value={selectedYear}
-				class="dialog-select"
-			>
-				{#each availableYears() as year (year)}
-					<option value={year}>{year}</option>
-				{/each}
-			</select>
+			<h2 class="dialog-title">New Board</h2>
+			<input
+				type="text"
+				bind:value={newBoardName}
+				placeholder={`${new Date().getFullYear()} Goals`}
+				class="dialog-input"
+			/>
 			<div class="dialog-actions">
 				<button
 					type="button"
-					onclick={() => (isYearDialogOpen = false)}
+					onclick={() => (isNameDialogOpen = false)}
 					class="btn-ghost"
 				>
 					Cancel
@@ -267,9 +257,11 @@
 		isOpen={isModalOpen}
 		position={selectedPosition}
 		currentGoal={selectedCell?.goal ?? ''}
+		isAchieved={selectedCell?.isAchieved ?? false}
 		onSave={handleSave}
 		onClear={handleClear}
 		onClose={handleClose}
+		onToggleAchieved={handleToggleAchieved}
 	/>
 {/if}
 
@@ -518,7 +510,7 @@
 		background-clip: text;
 	}
 
-	.dialog-select {
+	.dialog-input {
 		width: 100%;
 		padding: 0.75rem 1rem;
 		background: linear-gradient(145deg, #FFFFFF, #F5F3FF);
@@ -529,7 +521,11 @@
 		margin-bottom: 1rem;
 	}
 
-	.dialog-select:focus {
+	.dialog-input::placeholder {
+		color: #A78BFA;
+	}
+
+	.dialog-input:focus {
 		outline: none;
 		border-color: #7C3AED;
 		box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);

@@ -33,7 +33,7 @@ describe('storage', () => {
 			boards: [
 				{
 					id: 'test-id',
-					year: 2025,
+					name: '2025 Goals',
 					cells: [],
 					createdAt: new Date('2025-01-01'),
 					updatedAt: new Date('2025-01-01')
@@ -48,7 +48,7 @@ describe('storage', () => {
 		expect(mockLocalStorage.setItem).toHaveBeenCalledWith(STORAGE_KEY, expect.any(String));
 		const savedData = JSON.parse(mockLocalStorage.setItem.mock.calls[0][1]);
 		expect(savedData.boards).toHaveLength(1);
-		expect(savedData.boards[0].year).toBe(2025);
+		expect(savedData.boards[0].name).toBe('2025 Goals');
 	});
 
 	test('loadFromStorage() loads data from localStorage', () => {
@@ -56,7 +56,7 @@ describe('storage', () => {
 			boards: [
 				{
 					id: 'test-id',
-					year: 2025,
+					name: '2025 Goals',
 					cells: [],
 					createdAt: '2025-01-01T00:00:00.000Z',
 					updatedAt: '2025-01-01T00:00:00.000Z'
@@ -71,7 +71,7 @@ describe('storage', () => {
 
 		expect(result).not.toBeNull();
 		expect(result?.boards).toHaveLength(1);
-		expect(result?.boards[0].year).toBe(2025);
+		expect(result?.boards[0].name).toBe('2025 Goals');
 	});
 
 	test('loadFromStorage() returns null when localStorage is empty', () => {
@@ -95,7 +95,7 @@ describe('storage', () => {
 			boards: [
 				{
 					id: 'test-id',
-					year: 2025,
+					name: '2025 Goals',
 					cells: [],
 					createdAt: '2025-01-01T00:00:00.000Z',
 					updatedAt: '2025-01-02T00:00:00.000Z'
@@ -110,6 +110,28 @@ describe('storage', () => {
 
 		expect(result?.boards[0].createdAt).toBeInstanceOf(Date);
 		expect(result?.boards[0].updatedAt).toBeInstanceOf(Date);
+	});
+
+	test('loadFromStorage() migrates legacy year-based boards to name-based', () => {
+		const storedData = {
+			boards: [
+				{
+					id: 'test-id',
+					year: 2025,
+					cells: [],
+					createdAt: '2025-01-01T00:00:00.000Z',
+					updatedAt: '2025-01-01T00:00:00.000Z'
+				}
+			],
+			currentBoardId: 'test-id',
+			isSaving: false
+		};
+		mockLocalStorage.getItem.mockReturnValueOnce(JSON.stringify(storedData));
+
+		const result = loadFromStorage();
+
+		expect(result).not.toBeNull();
+		expect(result?.boards[0].name).toBe('2025 Goals');
 	});
 
 	test('saveToStorage() excludes isSaving from persistence', () => {
