@@ -63,8 +63,8 @@
 
 	/* Primary */
 	.btn-primary {
-		background: linear-gradient(135deg, var(--theme-primary-light), var(--theme-primary));
-		color: white;
+		background: linear-gradient(135deg, var(--theme-primary-dim), var(--theme-primary));
+		color: var(--theme-text-on-primary);
 		box-shadow: 0 4px 14px color-mix(in srgb, var(--theme-primary) 25%, transparent);
 	}
 

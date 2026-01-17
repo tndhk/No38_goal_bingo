@@ -679,7 +679,7 @@
 		padding: 0.875rem;
 		background: transparent;
 		border: none;
-		color: var(--theme-text-muted);
+		color: var(--theme-text);
 		font-weight: 600;
 		cursor: pointer;
 	}
@@ -694,7 +694,7 @@
 		background: var(--theme-primary);
 		border: none;
 		border-radius: 0.75rem;
-		color: white;
+		color: var(--theme-text-on-primary);
 		font-weight: 600;
 		cursor: pointer;
 		box-shadow: 0 4px 15px var(--theme-glow);

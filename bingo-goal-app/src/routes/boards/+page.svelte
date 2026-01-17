@@ -225,7 +225,7 @@
 	}
 
 	.header {
-		background: linear-gradient(135deg, var(--theme-primary-light), var(--theme-primary));
+		background: linear-gradient(135deg, var(--theme-primary-dim), var(--theme-primary));
 		box-shadow:
 			0 4px 20px color-mix(in srgb, var(--theme-primary) 30%, transparent),
 			inset 0 1px 0 rgba(255, 255, 255, 0.15);
@@ -249,7 +249,7 @@
 		width: 2.5rem;
 		height: 2.5rem;
 		border-radius: 0.5rem;
-		color: white;
+		color: var(--theme-text-on-primary);
 		transition: background 0.15s ease-out;
 	}
 
@@ -265,7 +265,7 @@
 	.title {
 		font-size: 1.5rem;
 		font-weight: 600;
-		color: white;
+		color: var(--theme-text-on-primary);
 		letter-spacing: -0.01em;
 		font-family: var(--theme-font-heading);
 	}
@@ -286,8 +286,8 @@
 
 	.btn-new {
 		padding: 0.75rem 1.5rem;
-		background: linear-gradient(135deg, var(--theme-primary-light), var(--theme-primary));
-		color: white;
+		background: linear-gradient(135deg, var(--theme-primary-dim), var(--theme-primary));
+		color: var(--theme-text-on-primary);
 		border: none;
 		border-radius: 0.75rem;
 		font-weight: 600;
@@ -337,8 +337,8 @@
 
 	.btn-create {
 		padding: 0.875rem 2rem;
-		background: linear-gradient(135deg, var(--theme-primary-light), var(--theme-primary));
-		color: white;
+		background: linear-gradient(135deg, var(--theme-primary-dim), var(--theme-primary));
+		color: var(--theme-text-on-primary);
 		border: none;
 		border-radius: 0.75rem;
 		font-weight: 600;
@@ -487,8 +487,8 @@
 
 	.btn-primary {
 		padding: 0.625rem 1.25rem;
-		background: linear-gradient(135deg, var(--theme-primary-light), var(--theme-primary));
-		color: white;
+		background: linear-gradient(135deg, var(--theme-primary-dim), var(--theme-primary));
+		color: var(--theme-text-on-primary);
 		border: none;
 		border-radius: 0.75rem;
 		font-weight: 600;

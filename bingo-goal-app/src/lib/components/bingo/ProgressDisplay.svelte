@@ -98,7 +98,7 @@
 
 	.progress-fill {
 		height: 100%;
-		background: linear-gradient(90deg, var(--theme-primary), var(--theme-primary-light), var(--theme-achieved-light));
+		background: linear-gradient(90deg, var(--theme-primary), var(--theme-primary-dim), var(--theme-accent));
 		border-radius: 9999px;
 		transition: width 0.5s ease-out;
 		box-shadow: 0 2px 8px color-mix(in srgb, var(--theme-primary) 30%, transparent);
@@ -129,19 +129,19 @@
 	}
 
 	.badge-bingo {
-		background: linear-gradient(135deg, var(--theme-bingo), var(--theme-bingo-glow));
-		color: white;
+		background: linear-gradient(135deg, var(--theme-primary), var(--theme-secondary));
+		color: var(--theme-text-on-primary);
 		box-shadow:
-			0 4px 12px color-mix(in srgb, var(--theme-bingo) 30%, transparent),
+			0 4px 12px color-mix(in srgb, var(--theme-primary) 30%, transparent),
 			inset 0 1px 0 rgba(255, 255, 255, 0.2);
 		animation: badge-pop 0.3s ease-out;
 	}
 
 	.badge-perfect {
-		background: linear-gradient(135deg, var(--theme-primary), var(--theme-primary-light), var(--theme-achieved-light), var(--theme-bingo), var(--theme-achieved));
+		background: linear-gradient(135deg, var(--theme-primary), var(--theme-primary-dim), var(--theme-accent), var(--theme-secondary));
 		background-size: 300% 300%;
 		animation: rainbow-shift 3s ease infinite, badge-pop 0.3s ease-out;
-		color: white;
+		color: var(--theme-text-on-primary);
 		box-shadow:
 			0 4px 16px color-mix(in srgb, var(--theme-primary) 40%, transparent),
 			inset 0 1px 0 rgba(255, 255, 255, 0.2);

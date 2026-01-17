@@ -122,7 +122,7 @@
 	/* Achieved (達成) */
 	.achieved {
 		background: linear-gradient(135deg, var(--theme-primary), var(--theme-secondary));
-		color: white;
+		color: var(--theme-text-on-primary);
 		border: 1px solid transparent;
 		box-shadow: 0 4px 15px var(--theme-glow);
 	}
@@ -226,7 +226,7 @@
 	.check-icon svg {
 		width: 1rem;
 		height: 1rem;
-		color: white;
+		color: var(--theme-text-on-primary);
 	}
 
 	@keyframes pop-in {

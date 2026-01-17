@@ -154,12 +154,12 @@
 
 	.badge-perfect {
 		background: linear-gradient(135deg, var(--theme-bingo), var(--theme-bingo-glow));
-		color: white;
+		color: black; /* Bingo is amber-like, black usually better */
 	}
 
 	.badge-bingo {
-		background: linear-gradient(135deg, var(--theme-primary-light), var(--theme-primary));
-		color: white;
+		background: linear-gradient(135deg, var(--theme-primary-dim), var(--theme-primary));
+		color: var(--theme-text-on-primary);
 	}
 
 	.card-stats {
@@ -178,7 +178,7 @@
 
 	.progress-fill {
 		height: 100%;
-		background: linear-gradient(90deg, var(--theme-primary), var(--theme-primary-light));
+		background: linear-gradient(90deg, var(--theme-primary), var(--theme-primary-dim));
 		border-radius: 9999px;
 		transition: width 0.3s ease-out;
 	}
