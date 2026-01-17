@@ -369,7 +369,10 @@
 	}
 
 	.dialog {
-		background: linear-gradient(145deg, var(--theme-background), var(--theme-pending));
+		/* 明るいテーマでも見やすい背景 */
+		background: color-mix(in srgb, var(--theme-surface) 98%, white);
+		backdrop-filter: blur(20px);
+		-webkit-backdrop-filter: blur(20px);
 		border-radius: 1rem;
 		box-shadow:
 			0 24px 48px rgba(0, 0, 0, 0.12),
@@ -380,22 +383,23 @@
 		margin: 0 1rem;
 		padding: 1.5rem;
 		animation: modalEnter 0.25s ease-out;
-		border: 1px solid var(--theme-pending-border);
+		border: 2px solid var(--theme-border);
 	}
 
 	.dialog-title {
 		font-size: 1.5rem;
 		font-weight: 600;
 		margin-bottom: 1rem;
-		color: var(--theme-primary);
+		color: var(--theme-text); /* 常にテーマのテキストカラーを使用 */
 		font-family: var(--theme-font-heading);
 	}
 
 	.dialog-input {
 		width: 100%;
 		padding: 0.75rem 1rem;
-		background: linear-gradient(145deg, var(--theme-background), var(--theme-pending));
-		border: 2px solid var(--theme-pending-border);
+		/* テーマに応じた背景 */
+		background: color-mix(in srgb, var(--theme-surface) 70%, var(--theme-text) 5%);
+		border: 2px solid var(--theme-border);
 		border-radius: 0.75rem;
 		font-weight: 500;
 		color: var(--theme-text);
@@ -434,8 +438,9 @@
 	.size-option {
 		flex: 1;
 		padding: 0.75rem 0.5rem;
-		background: linear-gradient(145deg, var(--theme-background), var(--theme-pending));
-		border: 2px solid var(--theme-pending-border);
+		/* テーマに応じた背景 */
+		background: color-mix(in srgb, var(--theme-surface) 60%, var(--theme-text) 3%);
+		border: 2px solid var(--theme-border);
 		border-radius: 0.5rem;
 		font-weight: 600;
 		color: var(--theme-text);
@@ -446,12 +451,15 @@
 	}
 
 	.size-option:hover {
-		border-color: var(--theme-primary-light);
+		border-color: var(--theme-primary);
+		background: color-mix(in srgb, var(--theme-surface) 70%, var(--theme-text) 5%);
 	}
 
 	.size-option.selected {
 		border-color: var(--theme-primary);
-		background: color-mix(in srgb, var(--theme-primary) 10%, var(--theme-background));
+		background: var(--theme-primary);
+		color: var(--theme-text-on-primary);
+		box-shadow: 0 4px 12px var(--theme-glow);
 	}
 
 	.size-count {

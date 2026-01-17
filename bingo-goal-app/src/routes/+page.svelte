@@ -578,7 +578,8 @@
 		display: flex;
 		flex-direction: column;
 		gap: 2rem;
-		background: color-mix(in srgb, var(--theme-surface) 95%, black);
+		/* より不透明で、白を混ぜることでCandyテーマでも見やすく */
+		background: color-mix(in srgb, var(--theme-surface) 98%, white);
 		backdrop-filter: blur(24px);
 		-webkit-backdrop-filter: blur(24px);
 		border: 2px solid var(--theme-border);
@@ -596,8 +597,9 @@
 
 	.text-input {
 		width: 100%;
-		background: rgba(0, 0, 0, 0.3);
-		border: 1px solid var(--theme-border);
+		/* テーマによって適切な背景色を使用 */
+		background: color-mix(in srgb, var(--theme-surface) 70%, var(--theme-text) 5%);
+		border: 2px solid var(--theme-border);
 		padding: 1.25rem;
 		border-radius: 1rem;
 		color: var(--theme-text);
@@ -610,7 +612,7 @@
 	.text-input:focus {
 		outline: none;
 		border-color: var(--theme-primary);
-		background: rgba(0, 0, 0, 0.4);
+		background: color-mix(in srgb, var(--theme-surface) 80%, var(--theme-text) 8%);
 		box-shadow: 0 0 0 4px color-mix(in srgb, var(--theme-primary) 20%, transparent);
 	}
 
