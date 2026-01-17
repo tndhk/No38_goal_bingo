@@ -12,7 +12,8 @@
 		toggleAchieved
 	} from '$lib/stores/boardStore';
 	import { currentTheme } from '$lib/stores/themeStore';
-	import { isAuthLoading } from '$lib/stores/authStore';
+	import { isAuthLoading, isAuthenticated } from '$lib/stores/authStore';
+	import LandingPage from '$lib/components/landing/LandingPage.svelte';
 	import type { CellPosition, BoardSize } from '$lib/types/bingo';
 	import { getCellByPosition, generateBingoLines } from '$lib/types/bingo';
 	import BingoGrid from '$lib/components/bingo/BingoGrid.svelte';
@@ -49,6 +50,8 @@
 	const highlightedPositions = $derived(board ? getBingoLinePositions(board.cells, bingoLines) : []);
 	const themeIcon = $derived($currentTheme.meta.icon);
 	const authLoading = $derived($isAuthLoading);
+	const authenticated = $derived($isAuthenticated);
+	const showLanding = $derived(!authenticated && boards.length === 0 && !authLoading);
 
 	onMount(() => {
 		initializeStore();
@@ -134,6 +137,9 @@
 	<title>Bingo Planner</title>
 </svelte:head>
 
+{#if showLanding}
+	<LandingPage {supabase} onCreateBoard={openNameDialog} />
+{:else}
 <div class="page-container">
 	<!-- Ambient Background -->
 	<div class="ambient-bg">
@@ -244,6 +250,7 @@
 		</main>
 	</div>
 </div>
+{/if}
 
 {#if isNameDialogOpen}
 	<div
