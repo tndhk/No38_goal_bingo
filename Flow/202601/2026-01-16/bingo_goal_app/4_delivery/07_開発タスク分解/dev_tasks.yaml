@@ -2,50 +2,56 @@ dev_tasks:
   project: bingo_goal_app
   version: "1.0"
   date: "2026-01-16"
+  updated: "2026-01-17"
   mvp_target: "2026-01-31"
+  mvp_status: completed
 
   # 技術基盤タスク（ストーリー横断）
   foundation:
     - id: FND001
       title: "プロジェクト初期設定"
-      status: pending
+      status: completed
       priority: 0
       tasks:
         - id: FND001-T1
           title: "技術選定（SvelteKit or Next.js）"
-          status: pending
+          status: completed
           estimate: 1h
           acceptance:
             - "フレームワーク決定と理由を文書化"
             - "プロジェクト初期化完了"
+          notes: "SvelteKit v2.49.1 + Svelte 5を採用"
 
         - id: FND001-T2
           title: "ディレクトリ構成とコーディング規約"
-          status: pending
+          status: completed
           estimate: 1h
           depends_on: [FND001-T1]
           acceptance:
             - "src/配下の構成が決定"
             - "ESLint/Prettier設定"
             - "TypeScript設定"
+          notes: "src/lib/{components,stores,utils,types,constants,actions}構成"
 
         - id: FND001-T3
           title: "デザイントークン/テーマ設定"
-          status: pending
+          status: completed
           estimate: 1h
           depends_on: [FND001-T2]
           acceptance:
             - "colors, typography, spacingの定数化"
             - "Tailwind or CSS変数で実装"
+          notes: "src/lib/constants/tokens.ts実装済み"
 
         - id: FND001-T4
           title: "共通コンポーネント基盤"
-          status: pending
+          status: completed
           estimate: 2h
           depends_on: [FND001-T3]
           acceptance:
             - "Button, Modal, Dialog等の基礎コンポーネント"
             - "レスポンシブ対応確認"
+          notes: "Button, Modal, Dialog, SaveIndicator実装済み"
 
   # Epic別ストーリー・タスク
   epics:
@@ -56,49 +62,53 @@ dev_tasks:
         # ST001: 新しいビンゴボードを作成する
         - id: ST001
           title: "新しいビンゴボードを作成する"
-          status: pending
+          status: completed
           priority: 1
           solution: SL001
           screens: [SC001, SC004]
           tasks:
             - id: ST001-T1
               title: "BingoBoard型定義"
-              status: pending
+              status: completed
               estimate: 30m
               depends_on: [FND001-T2]
               acceptance:
                 - "Board, Cell, Yearの型定義"
                 - "9マスの位置enum（topLeft, topCenter, ...）"
+              notes: "src/lib/types/bingo.ts実装済み"
 
             - id: ST001-T2
               title: "ビンゴボード状態管理"
-              status: pending
+              status: completed
               estimate: 1h
               depends_on: [ST001-T1]
               acceptance:
                 - "boards配列の状態管理"
                 - "currentBoardIdの管理"
                 - "CRUD操作関数"
+              notes: "src/lib/stores/boardStore.ts実装済み"
 
             - id: ST001-T3
               title: "BingoGridコンポーネント"
-              status: pending
+              status: completed
               estimate: 2h
               depends_on: [ST001-T1, FND001-T4]
               acceptance:
                 - "3x3グリッドレイアウト"
                 - "モバイル対応（タッチ操作）"
                 - "マス要素のスタイリング"
+              notes: "BingoGrid + BingoCell実装済み"
 
             - id: ST001-T4
               title: "新規作成ボタンとフロー"
-              status: pending
+              status: completed
               estimate: 1h
               depends_on: [ST001-T2, ST001-T3]
               acceptance:
                 - "新規作成ボタン表示"
                 - "年度選択UI"
                 - "ボード生成処理"
+              notes: "+page.svelteに年度選択ダイアログ実装済み"
 
         # ST002: ビンゴボードを一覧で見る
         - id: ST002
@@ -117,6 +127,7 @@ dev_tasks:
                 - "年度順のボード一覧表示"
                 - "各ボードの達成状況サマリー"
                 - "タップで詳細画面遷移"
+              notes: "BoardList.svelte実装済み、テスト8件合格"
 
             - id: ST002-T2
               title: "/boardsルート実装"
@@ -126,6 +137,7 @@ dev_tasks:
               acceptance:
                 - "ボード一覧ページ"
                 - "ホーム画面との遷移"
+              notes: "routes/boards/+page.svelte実装済み"
 
         # ST003: 年度を切り替える
         - id: ST003
@@ -144,6 +156,7 @@ dev_tasks:
                 - "ドロップダウンUI"
                 - "年度リスト（過去〜未来）"
                 - "選択時のボード切り替え"
+              notes: "+page.svelteにセレクトボックスとして実装"
 
             - id: ST003-T2
               title: "存在しない年度の処理"
@@ -153,6 +166,7 @@ dev_tasks:
               acceptance:
                 - "新規作成を促すUI"
                 - "ワンタップで作成可能"
+              notes: "availableYears derived + 新規作成ダイアログ"
 
         # ST004: ビンゴボードを削除する
         - id: ST004
@@ -171,6 +185,7 @@ dev_tasks:
                 - "確認メッセージ表示"
                 - "削除/キャンセルボタン"
                 - "誤操作防止"
+              notes: "Dialog.svelte + boards/+page.svelte実装済み"
 
             - id: ST004-T2
               title: "削除処理とリダイレクト"
@@ -181,6 +196,7 @@ dev_tasks:
                 - "ボード削除処理"
                 - "一覧画面へリダイレクト"
                 - "ストレージからも削除"
+              notes: "deleteBoard関数 + autoSave実装済み"
 
     # ========== EP002: 目標管理 ==========
     - id: EP002
@@ -189,94 +205,101 @@ dev_tasks:
         # ST005: マスに目標を入力する
         - id: ST005
           title: "マスに目標を入力する"
-          status: pending
+          status: completed
           priority: 4
           solution: SL001
           screens: [SC001, SC002]
           tasks:
             - id: ST005-T1
               title: "GoalInputModalコンポーネント"
-              status: pending
+              status: completed
               estimate: 1.5h
               depends_on: [FND001-T4, ST001-T3]
               acceptance:
                 - "マス位置表示"
                 - "テキスト入力（50文字制限）"
                 - "保存/キャンセル/クリアボタン"
+              notes: "GoalInputModal.svelte実装済み、テスト8件合格"
 
             - id: ST005-T2
               title: "マスタップ→モーダル表示"
-              status: pending
+              status: completed
               estimate: 30m
               depends_on: [ST005-T1]
               acceptance:
                 - "タップイベント処理"
                 - "モーダル開閉状態管理"
+              notes: "BingoCell onTapハンドラ + isModalOpen状態"
 
             - id: ST005-T3
               title: "目標保存処理"
-              status: pending
+              status: completed
               estimate: 30m
               depends_on: [ST005-T2, ST001-T2]
               acceptance:
                 - "状態更新"
                 - "マスに目標テキスト表示"
+              notes: "updateCell関数 + autoSave実装済み"
 
         # ST006: 目標を達成済みにする
         - id: ST006
           title: "目標を達成済みにする"
-          status: pending
+          status: completed
           priority: 5
           solution: SL001
           screens: [SC001]
           tasks:
             - id: ST006-T1
               title: "達成トグル機能"
-              status: pending
+              status: completed
               estimate: 1h
               depends_on: [ST005-T3]
               acceptance:
                 - "長押しで達成/未達成切り替え"
                 - "視覚的フィードバック"
                 - "状態永続化"
+              notes: "longPress action + toggleAchieved関数実装済み"
 
             - id: ST006-T2
               title: "達成マスのスタイリング"
-              status: pending
+              status: completed
               estimate: 1h
               depends_on: [ST006-T1]
               acceptance:
                 - "達成色（#10B981）適用"
                 - "未達成色（#E5E7EB）適用"
                 - "トランジションアニメーション"
+              notes: "BingoCell achievedスタイル実装済み"
 
         # ST007: 進捗を確認する
         - id: ST007
           title: "進捗を確認する"
-          status: pending
+          status: completed
           priority: 6
           solution: SL003
           screens: [SC001]
           tasks:
             - id: ST007-T1
               title: "進捗計算ロジック"
-              status: pending
+              status: completed
               estimate: 30m
               depends_on: [ST006-T1]
               acceptance:
                 - "達成数カウント"
                 - "達成率計算"
                 - "ビンゴまでの残りマス判定"
+              notes: "bingo.ts getProgressSummary実装済み、テスト31件合格"
 
             - id: ST007-T2
               title: "ProgressDisplayコンポーネント"
-              status: pending
+              status: completed
               estimate: 1h
               depends_on: [ST007-T1]
               acceptance:
                 - "「5/9 達成」表示"
                 - "達成率パーセント表示"
                 - "「あと1マスでビンゴ！」ヒント"
+              notes: "ProgressDisplay.svelte実装済み、テスト8件合格"
 
     # ========== EP003: 達成演出 ==========
     - id: EP003
@@ -285,14 +308,14 @@ dev_tasks:
         # ST008: ビンゴ達成でアニメーションを見る
         - id: ST008
           title: "ビンゴ達成でアニメーションを見る"
-          status: pending
+          status: completed
           priority: 7
           solution: SL002
           screens: [SC001, SC003]
           tasks:
             - id: ST008-T1
               title: "ビンゴ判定ロジック"
-              status: pending
+              status: completed
               estimate: 1h
               depends_on: [ST006-T1]
               acceptance:
@@ -300,19 +323,21 @@ dev_tasks:
                 - "横3行の判定"
                 - "斜め2本の判定"
                 - "達成ライン配列を返す"
+              notes: "bingo.ts getCompletedLines + BINGO_LINES定数"
 
             - id: ST008-T2
               title: "ビンゴラインハイライト"
-              status: pending
+              status: completed
               estimate: 1h
               depends_on: [ST008-T1]
               acceptance:
                 - "揃ったラインを強調表示（#FBBF24）"
                 - "複数ライン同時対応"
+              notes: "BingoCell isHighlighted prop + bingoGlowスタイル"
 
             - id: ST008-T3
               title: "BingoCelebrationオーバーレイ"
-              status: pending
+              status: completed
               estimate: 2h
               depends_on: [ST008-T1]
               acceptance:
@@ -320,32 +345,35 @@ dev_tasks:
                 - "紙吹雪アニメーション"
                 - "光るエフェクト"
                 - "タップで閉じる"
+              notes: "celebration.ts canvas-confetti実装、テスト6件合格"
 
         # ST009: 複数ビンゴの達成を見る
         - id: ST009
           title: "複数ビンゴの達成を見る"
-          status: pending
+          status: completed
           priority: 9
           solution: SL002
           screens: [SC003]
           tasks:
             - id: ST009-T1
               title: "複数ビンゴ表示"
-              status: pending
+              status: completed
               estimate: 1h
               depends_on: [ST008-T3]
               acceptance:
                 - "「ダブルビンゴ達成！」等の表示"
                 - "達成ライン数カウント表示"
+              notes: "ProgressDisplay bingoCount表示対応"
 
             - id: ST009-T2
               title: "全マス達成（パーフェクト）演出"
-              status: pending
+              status: completed
               estimate: 1h
               depends_on: [ST009-T1]
               acceptance:
                 - "9/9達成時の特別演出"
                 - "「PERFECT!」表示"
+              notes: "celebratePerfect() 3秒間の両サイド紙吹雪演出"
 
     # ========== EP004: データ永続化 ==========
     - id: EP004
@@ -354,38 +382,41 @@ dev_tasks:
         # ST010: データを自動保存する
         - id: ST010
           title: "データを自動保存する"
-          status: pending
+          status: completed
           priority: 10
           solution: SL004
           screens: [SC001]
           tasks:
             - id: ST010-T1
               title: "LocalStorage永続化層"
-              status: pending
+              status: completed
               estimate: 1h
               depends_on: [ST001-T2]
               acceptance:
                 - "保存/読み込み関数"
                 - "JSON形式でのシリアライズ"
                 - "エラーハンドリング"
+              notes: "storage.ts saveToStorage/loadFromStorage、テスト6件合格"
 
             - id: ST010-T2
               title: "自動保存トリガー"
-              status: pending
+              status: completed
               estimate: 30m
               depends_on: [ST010-T1]
               acceptance:
                 - "状態変更時の自動保存"
                 - "デバウンス処理"
+              notes: "boardStore triggerAutoSave 500msデバウンス"
 
             - id: ST010-T3
               title: "保存状態インジケータ"
-              status: pending
+              status: completed
               estimate: 30m
               depends_on: [ST010-T2]
               acceptance:
                 - "「保存中...」表示"
                 - "「保存完了」表示"
+              notes: "SaveIndicator.svelte isSaving状態表示、テスト3件合格"
 
   # 実装順序（依存関係考慮）
   implementation_order:
@@ -420,3 +451,23 @@ dev_tasks:
     total_tasks: 32
     estimated_total: "約25時間"
     critical_path: [FND001, ST001, ST005, ST006, ST008]
+
+    # 2026-01-17 タスクリファイン結果
+    completion_status:
+      stories_completed: 10
+      stories_total: 10
+      tasks_completed: 32
+      tasks_total: 32
+      completion_rate: "100%"
+
+    test_coverage:
+      test_files: 14
+      test_cases: 125
+      all_passing: true
+
+    implementation_notes:
+      - "SvelteKit v2.49.1 + Svelte 5 採用"
+      - "Vitest v4.0.17 + Testing Library でテスト環境構築"
+      - "canvas-confetti でビンゴ演出実装"
+      - "LocalStorage + 500msデバウンスで自動保存"
+      - "longPress action で長押し達成トグル"
