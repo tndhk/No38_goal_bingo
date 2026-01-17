@@ -106,12 +106,17 @@
 	}
 
 	.sign-in {
-		background: rgba(255, 255, 255, 0.15);
-		color: white;
+		background: rgba(255, 255, 255, 0.1);
+		border: 1px solid var(--theme-border);
+		color: var(--theme-text);
+		backdrop-filter: blur(4px);
 	}
 
 	.sign-in:hover:not(:disabled) {
 		background: rgba(255, 255, 255, 0.25);
+		border-color: var(--theme-primary);
+		box-shadow: 0 0 10px var(--theme-glow);
+		transform: translateY(-1px);
 	}
 
 	.signed-in {

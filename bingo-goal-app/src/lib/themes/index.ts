@@ -1,151 +1,149 @@
 import type { Theme, ThemeId } from './types';
 
 export const themes: Record<ThemeId, Theme> = {
-	forest: {
+	aurora: {
 		meta: {
-			id: 'forest',
-			name: 'Forest',
-			description: '森の中の静けさ、自然との調和',
-			icon: '🌲'
+			id: 'aurora',
+			name: 'Aurora',
+			description: 'Deep cosmic vibes',
+			icon: '🌌'
 		},
 		colors: {
-			primary: '#2D5016',
-			primaryLight: '#4A7C23',
-			primaryDark: '#1F3A0F',
-			achieved: '#C2410C',
-			achievedLight: '#EA580C',
-			achievedGlow: '#FB923C',
-			pending: '#F5F0E6',
-			pendingBorder: '#D4C4B0',
-			bingo: '#B45309',
-			bingoGlow: '#D97706',
-			background: '#FDFBF7',
-			surface: '#FAF7F2',
-			text: '#3D3024',
-			textLight: '#6B5C4C'
+			primary: '#818cf8',
+			primaryLight: '#c084fc', // Secondary in CSS
+			primaryDark: '#4338ca',
+			achieved: '#d946ef',
+			achievedLight: '#f0abfc',
+			achievedGlow: '#a21caf',
+			pending: 'rgba(15, 23, 42, 0.6)', // Surface
+			pendingBorder: 'rgba(148, 163, 184, 0.1)',
+			bingo: '#f59e0b',
+			bingoGlow: '#fcd34d',
+			background: '#020617',
+			surface: 'rgba(15, 23, 42, 0.6)',
+			text: '#f8fafc',
+			textLight: '#94a3b8'
 		},
 		fonts: {
-			body: "'Quicksand', 'M PLUS Rounded 1c', sans-serif",
-			heading: "'Caveat', 'Zen Kurenaido', cursive",
+			body: "'Inter', system-ui, sans-serif",
+			heading: "'Outfit', 'Plus Jakarta Sans', sans-serif",
 			googleFontsUrl:
-				'https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=M+PLUS+Rounded+1c:wght@400;500;700&family=Quicksand:wght@400;500;600;700&family=Zen+Kurenaido&display=swap'
+				'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap'
 		},
 		icon: {
-			svgPath: 'M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 2,11.5 2,13.5C2,15.5 3.75,17.25 3.75,17.25C7,8 17,8 17,8Z',
+			svgPath: 'M12 2L2 7l10 5 10-5-10-5zm0 9l2.5-1.25L12 12l-2.5-2.25L12 11zm0 2.5l-5-2.5-5 2.5L12 22l10-8.5-5-2.5-5 2.5z',
 			viewBox: '0 0 24 24',
-			clipPath: 'polygon(50% 0%, 100% 50%, 80% 100%, 50% 80%, 20% 100%, 0% 50%)'
+			clipPath: 'circle(50% at 50% 50%)'
 		}
 	},
-	ocean: {
+	neon: {
 		meta: {
-			id: 'ocean',
-			name: 'Ocean',
-			description: '深い海の静寂、波のリズム',
-			icon: '🌊'
+			id: 'neon',
+			name: 'Neon',
+			description: 'Cyberpunk night',
+			icon: '⚡'
 		},
 		colors: {
-			primary: '#1E3A5F',
-			primaryLight: '#2563EB',
-			primaryDark: '#1E3A8A',
-			achieved: '#059669',
-			achievedLight: '#10B981',
-			achievedGlow: '#34D399',
-			pending: '#E0F2FE',
-			pendingBorder: '#BAE6FD',
-			bingo: '#0891B2',
-			bingoGlow: '#22D3EE',
-			background: '#F0F9FF',
-			surface: '#E0F2FE',
-			text: '#0C4A6E',
-			textLight: '#0369A1'
+			primary: '#22d3ee',
+			primaryLight: '#e879f9',
+			primaryDark: '#0891b2',
+			achieved: '#e879f9',
+			achievedLight: '#f0abfc',
+			achievedGlow: '#d946ef',
+			pending: 'rgba(24, 24, 27, 0.8)',
+			pendingBorder: 'rgba(34, 211, 238, 0.2)',
+			bingo: '#facc15',
+			bingoGlow: '#fef08a',
+			background: '#09090b',
+			surface: 'rgba(24, 24, 27, 0.8)',
+			text: '#ffffff',
+			textLight: '#a1a1aa'
 		},
 		fonts: {
-			body: "'Inter', 'Noto Sans JP', sans-serif",
-			heading: "'Playfair Display', 'Shippori Mincho', serif",
-			googleFontsUrl:
-				'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=Playfair+Display:wght@400;500;600;700&family=Shippori+Mincho:wght@400;500;700&display=swap'
+			body: "'Inter', system-ui, sans-serif",
+			heading: "'Outfit', sans-serif",
+			googleFontsUrl: ''
 		},
 		icon: {
-			svgPath: 'M2 12c1.5-2 3-3 4.5-3s3 1 4.5 3c1.5 2 3 3 4.5 3s3-1 4.5-3M2 17c1.5-2 3-3 4.5-3s3 1 4.5 3c1.5 2 3 3 4.5 3s3-1 4.5-3M2 7c1.5-2 3-3 4.5-3s3 1 4.5 3c1.5 2 3 3 4.5 3s3-1 4.5-3',
+			svgPath: 'M13 2L3 14h9l-1 8 10-12h-9l1-8z',
 			viewBox: '0 0 24 24',
-			clipPath: 'polygon(0% 30%, 25% 0%, 50% 30%, 75% 0%, 100% 30%, 100% 100%, 0% 100%)'
-		}
-	},
-	sakura: {
-		meta: {
-			id: 'sakura',
-			name: 'Sakura',
-			description: '日本の春、桜の花びら',
-			icon: '🌸'
-		},
-		colors: {
-			primary: '#9D174D',
-			primaryLight: '#DB2777',
-			primaryDark: '#831843',
-			achieved: '#7C3AED',
-			achievedLight: '#8B5CF6',
-			achievedGlow: '#A78BFA',
-			pending: '#FDF2F8',
-			pendingBorder: '#FBCFE8',
-			bingo: '#C026D3',
-			bingoGlow: '#E879F9',
-			background: '#FFF1F5',
-			surface: '#FDF2F8',
-			text: '#831843',
-			textLight: '#BE185D'
-		},
-		fonts: {
-			body: "'Zen Maru Gothic', 'M PLUS Rounded 1c', sans-serif",
-			heading: "'Shippori Mincho', 'Noto Serif JP', serif",
-			googleFontsUrl:
-				'https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700&family=Noto+Serif+JP:wght@400;500;700&family=Shippori+Mincho:wght@400;500;700&family=Zen+Maru+Gothic:wght@400;500;700&display=swap'
-		},
-		icon: {
-			svgPath: 'M12 2C12 2 9 5 9 8c0 1.5 1 3 3 3s3-1.5 3-3c0-3-3-6-3-6zm-5.5 5c0 0-2.5 1.5-2.5 4 0 1.2.8 2.5 2.5 2.5s2.5-1.3 2.5-2.5c0-2.5-2.5-4-2.5-4zm11 0c0 0-2.5 1.5-2.5 4 0 1.2.8 2.5 2.5 2.5s2.5-1.3 2.5-2.5c0-2.5-2.5-4-2.5-4zM7 15c0 0-3 1.5-3 4 0 1.2.8 2.5 2.5 2.5S9 20.2 9 19c0-2.5-2-4-2-4zm10 0c0 0-2 1.5-2 4 0 1.2.8 2.5 2.5 2.5s2.5-1.3 2.5-2.5c0-2.5-3-4-3-4z',
-			viewBox: '0 0 24 24',
-			clipPath: 'polygon(50% 5%, 65% 35%, 95% 25%, 80% 55%, 95% 85%, 50% 70%, 5% 85%, 20% 55%, 5% 25%, 35% 35%)'
+			clipPath: 'polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)'
 		}
 	},
 	midnight: {
 		meta: {
 			id: 'midnight',
 			name: 'Midnight',
-			description: '夜空の神秘、集中と内省',
-			icon: '🌙'
+			description: 'Minimalist dark',
+			icon: '🌑'
 		},
 		colors: {
-			primary: '#6366F1',
-			primaryLight: '#818CF8',
-			primaryDark: '#4F46E5',
-			achieved: '#10B981',
-			achievedLight: '#34D399',
-			achievedGlow: '#6EE7B7',
-			pending: '#1E293B',
-			pendingBorder: '#334155',
-			bingo: '#F59E0B',
-			bingoGlow: '#FBBF24',
-			background: '#0F172A',
-			surface: '#1E293B',
-			text: '#E2E8F0',
-			textLight: '#94A3B8'
+			primary: '#f8fafc',
+			primaryLight: '#94a3b8',
+			primaryDark: '#cbd5e1',
+			achieved: '#f8fafc',
+			achievedLight: '#ffffff',
+			achievedGlow: '#e2e8f0',
+			pending: 'rgba(38, 38, 38, 0.7)',
+			pendingBorder: 'rgba(255, 255, 255, 0.15)',
+			bingo: '#ffffff',
+			bingoGlow: '#f8fafc',
+			background: '#000000',
+			surface: 'rgba(38, 38, 38, 0.7)',
+			text: '#f5f5f5',
+			textLight: '#737373'
 		},
 		fonts: {
-			body: "'JetBrains Mono', 'M PLUS 1 Code', monospace",
-			heading: "'Space Grotesk', 'Noto Sans JP', sans-serif",
-			googleFontsUrl:
-				'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=M+PLUS+1+Code:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap'
+			body: "'Inter', sans-serif",
+			heading: "'Outfit', sans-serif",
+			googleFontsUrl: ''
 		},
 		icon: {
-			svgPath: 'M12 2l2.4 7.4h7.6l-6 4.6 2.3 7-6.3-4.6-6.3 4.6 2.3-7-6-4.6h7.6z',
+			svgPath: 'M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z',
 			viewBox: '0 0 24 24',
-			clipPath: 'polygon(50% 0%, 56% 44%, 100% 50%, 56% 56%, 50% 100%, 44% 56%, 0% 50%, 44% 44%)'
+			clipPath: 'circle(50% at 50% 50%)'
+		}
+	},
+	glass: {
+		meta: {
+			id: 'glass',
+			name: 'Candy',
+			description: 'Sweet & Pop',
+			icon: '🍬'
+		},
+		colors: {
+			primary: '#ec4899',
+			primaryLight: '#f472b6',
+			primaryDark: '#db2777',
+			achieved: '#8b5cf6',
+			achievedLight: '#a78bfa',
+			achievedGlow: '#7c3aed',
+			pending: 'rgba(255, 255, 255, 0.85)',
+			pendingBorder: 'rgba(236, 72, 153, 0.2)',
+			bingo: '#f59e0b',
+			bingoGlow: '#fbbf24',
+			background: '#fff0f5',
+			surface: 'rgba(255, 255, 255, 0.85)',
+			text: '#831843',
+			textLight: '#9d174d'
+		},
+		fonts: {
+			body: "'M PLUS Rounded 1c', 'Quicksand', sans-serif",
+			heading: "'M PLUS Rounded 1c', 'Quicksand', sans-serif",
+			googleFontsUrl:
+				'https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700&family=Quicksand:wght@400;500;600;700&display=swap'
+		},
+		icon: {
+			svgPath: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z M12.57 6.6c-.36-.08-.73-.08-1.12 0-1.72.4-1.63 2.15-2.88 2.58-.69.23-1.42-.03-2-.37-.62-.35-1.57-.42-2.12.3-.53.7.1 1.63.38 2.27.52 1.18-.32 1.34-.33 1.73-.01.55.57 1.11 1.25 1.58.55.39.29 1.16.58 1.83.27.65 1.05 1.2 1.93.99 1.35-.32 1.9-1.99 3.25-1.99 1.35 0 1.9 1.67 3.25 1.99.88.21 1.66-.34 1.93-.99.29-.67.03-1.44.58-1.83.68-.47 1.26-1.03 1.25-1.58-.01-.39-.85-.56-.33-1.73.28-.64.91-1.57.38-2.27-.55-.72-1.5-.65-2.12-.3-.58.34-1.31.6-2 .37-1.25-.43-1.16-2.18-2.88-2.58z', // Candy swirl-ish / Flower
+			viewBox: '0 0 24 24',
+			clipPath: 'circle(50% at 50% 50%)'
 		}
 	}
 };
 
-export const themeIds: ThemeId[] = ['forest', 'ocean', 'sakura', 'midnight'];
+export const themeIds: ThemeId[] = ['aurora', 'neon', 'midnight', 'glass'];
 
-export const defaultThemeId: ThemeId = 'forest';
+export const defaultThemeId: ThemeId = 'aurora';
 
 export function getTheme(id: ThemeId): Theme {
 	return themes[id];

@@ -1,4 +1,4 @@
-export type ThemeId = 'forest' | 'ocean' | 'sakura' | 'midnight';
+export type ThemeId = 'aurora' | 'neon' | 'midnight' | 'glass';
 
 export interface ThemeIcon {
 	svgPath: string;

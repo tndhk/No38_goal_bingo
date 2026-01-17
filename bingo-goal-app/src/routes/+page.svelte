@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { fade, fly, scale } from 'svelte/transition';
+	import { cubicOut } from 'svelte/easing';
 	import {
 		boardStore,
 		currentBoard,
@@ -45,7 +47,7 @@
 	const bingoLines = $derived(board ? generateBingoLines(board.size) : []);
 	const progress = $derived(board ? getProgressSummary(board.cells, bingoLines) : null);
 	const highlightedPositions = $derived(board ? getBingoLinePositions(board.cells, bingoLines) : []);
-	const themeIcon = $derived($currentTheme.icon);
+	const themeIcon = $derived($currentTheme.meta.icon);
 	const authLoading = $derived($isAuthLoading);
 
 	onMount(() => {
@@ -132,139 +134,166 @@
 	<title>Bingo Planner</title>
 </svelte:head>
 
-<div class="page">
-	<!-- Background decorations -->
-	<div class="bg-decoration bg-decoration-1" style="clip-path: {themeIcon.clipPath}"></div>
-	<div class="bg-decoration bg-decoration-2" style="clip-path: {themeIcon.clipPath}"></div>
-	<div class="bg-decoration bg-decoration-3" style="clip-path: {themeIcon.clipPath}"></div>
+<div class="page-container">
+	<!-- Ambient Background -->
+	<div class="ambient-bg">
+		<div class="orb orb-1"></div>
+		<div class="orb orb-2"></div>
+		<div class="orb orb-3"></div>
+	</div>
 
-	<header class="header">
-		<div class="header-content">
-			<h1 class="title">
-				<svg class="title-icon" fill="currentColor" viewBox={themeIcon.viewBox}>
-					<path d={themeIcon.svgPath}/>
-				</svg>
-				Bingo Planner
-			</h1>
-			<div class="header-actions">
-				<SaveIndicator {isSaving} />
-				<ThemeSelector />
-				{#if !authLoading}
-					<AuthButton {supabase} />
-				{/if}
-				<a href="/boards" class="boards-link" aria-label="View all boards">
-					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-						<path d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-					</svg>
-				</a>
-			</div>
-		</div>
-	</header>
-
-	<main class="main">
-		{#if boards.length > 0}
-			<div class="board-selector">
-				<select
-					class="select"
-					onchange={handleBoardChange}
-					value={board?.id ?? ''}
-				>
-					{#each boards as b (b.id)}
-						<option value={b.id}>{b.name}</option>
-					{/each}
-				</select>
-				<button
-					type="button"
-					onclick={openNameDialog}
-					class="btn-new"
-				>
-					+ New
-				</button>
-			</div>
-		{/if}
-
-		{#if board}
-			<BingoGrid
-				{board}
-				onCellTap={handleCellTap}
-				onCellLongPress={handleCellLongPress}
-				{highlightedPositions}
-			/>
-
-			{#if progress}
-				<ProgressDisplay
-					achieved={progress.achieved}
-					total={progress.total}
-					bingoCount={progress.bingoCount}
-					hint={progress.hint}
-					isPerfect={progress.isPerfect}
-				/>
-			{/if}
-		{:else}
-			<div class="empty-state">
-				<div class="empty-icon">
-					<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-					</svg>
+	<div class="content-wrapper">
+		<header class="header glass-panel">
+			<div class="header-inner">
+				<h1 class="brand">
+					<span class="brand-icon">{themeIcon}</span>
+					<span class="brand-text">Bingo Planner</span>
+				</h1>
+				<div class="actions">
+					<SaveIndicator {isSaving} />
+					<div class="divider"></div>
+					<ThemeSelector />
+					{#if !authLoading}
+						<AuthButton {supabase} />
+					{/if}
 				</div>
-				<p class="empty-text">No boards yet</p>
-				<button
-					type="button"
-					onclick={openNameDialog}
-					class="btn-create"
-				>
-					Create Bingo
-				</button>
 			</div>
-		{/if}
-	</main>
+		</header>
+
+		<main class="main-content">
+			{#if boards.length > 0}
+				<div class="controls glass-panel" in:fly={{ y: 20, duration: 400, delay: 100 }}>
+					<div class="board-select-wrapper">
+						<select
+							class="board-select"
+							onchange={handleBoardChange}
+							value={board?.id ?? ''}
+							aria-label="Select Board"
+						>
+							{#each boards as b (b.id)}
+								<option value={b.id}>{b.name}</option>
+							{/each}
+						</select>
+						<div class="select-icon">
+							<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<path d="M6 9l6 6 6-6"/>
+							</svg>
+						</div>
+					</div>
+					
+					<button
+						type="button"
+						onclick={openNameDialog}
+						class="btn-icon"
+						aria-label="New Board"
+					>
+						<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<path d="M12 5v14M5 12h14"/>
+						</svg>
+					</button>
+
+					<a href="/boards" class="btn-icon" aria-label="Manage Boards">
+						<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<path d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+						</svg>
+					</a>
+				</div>
+			{/if}
+
+			<div class="board-area">
+				{#if board}
+					<div in:scale={{ duration: 400, start: 0.95, easing: cubicOut }}>
+						<BingoGrid
+							{board}
+							onCellTap={handleCellTap}
+							onCellLongPress={handleCellLongPress}
+							{highlightedPositions}
+						/>
+					</div>
+
+					{#if progress}
+						<div class="progress-section" in:fly={{ y: 20, duration: 400, delay: 200 }}>
+							<ProgressDisplay
+								achieved={progress.achieved}
+								total={progress.total}
+								bingoCount={progress.bingoCount}
+								hint={progress.hint}
+								isPerfect={progress.isPerfect}
+							/>
+						</div>
+					{/if}
+				{:else}
+					<div class="empty-state glass-panel" in:scale={{ duration: 300, start: 0.9 }}>
+						<div class="empty-icon-wrapper">
+							<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+								<path d="M12 4v16m8-8H4" />
+							</svg>
+						</div>
+						<h2 class="empty-title">Start Your Journey</h2>
+						<p class="empty-desc">Create your first bingo board to track your goals.</p>
+						<button
+							type="button"
+							onclick={openNameDialog}
+							class="btn-primary-lg"
+						>
+							Create Board
+						</button>
+					</div>
+				{/if}
+			</div>
+		</main>
+	</div>
 </div>
 
 {#if isNameDialogOpen}
-	<!-- svelte-ignore a11y_click_events_have_key_events -->
 	<div
 		role="presentation"
-		class="dialog-backdrop"
+		class="modal-backdrop"
+		transition:fade={{ duration: 200 }}
 		onclick={() => (isNameDialogOpen = false)}
 	>
-		<!-- svelte-ignore a11y_click_events_have_key_events -->
-		<!-- svelte-ignore a11y_interactive_supports_focus -->
 		<div
 			role="dialog"
 			aria-modal="true"
-			class="dialog"
+			tabindex="-1"
+			class="modal-card glass-panel"
+			transition:fly={{ y: 20, duration: 300, easing: cubicOut }}
 			onclick={(e) => e.stopPropagation()}
+			onkeydown={(e) => e.key === 'Escape' && (isNameDialogOpen = false)}
 		>
-			<h2 class="dialog-title">New Board</h2>
-			<input
-				type="text"
-				bind:value={newBoardName}
-				placeholder={`${new Date().getFullYear()} Goals`}
-				class="dialog-input"
-			/>
+			<h2 class="modal-title">New Board</h2>
+			
+			<div class="input-group">
+				<input
+					type="text"
+					bind:value={newBoardName}
+					placeholder={`${new Date().getFullYear()} Goals`}
+					class="text-input"
+				/>
+			</div>
 
-			<div class="size-selector">
-				<label class="size-label">Board Size</label>
-				<div class="size-options">
+			<div class="size-selector" role="group" aria-labelledby="grid-size-label">
+				<span id="grid-size-label" class="section-label">Grid Size</span>
+				<div class="grid-options">
 					{#each [3, 4, 5] as size (size)}
 						<button
 							type="button"
-							class="size-option"
+							class="grid-option"
 							class:selected={selectedSize === size}
 							onclick={() => (selectedSize = size as BoardSize)}
 						>
-							{size}x{size}
-							<span class="size-count">({size * size} goals)</span>
+							<span class="grid-size">{size}x{size}</span>
+							<span class="grid-count">{size * size} goals</span>
 						</button>
 					{/each}
 				</div>
 			</div>
 
-			<div class="dialog-actions">
+			<div class="modal-actions">
 				<button
 					type="button"
 					onclick={() => (isNameDialogOpen = false)}
-					class="btn-ghost"
+					class="btn-text"
 				>
 					Cancel
 				</button>
@@ -273,7 +302,7 @@
 					onclick={handleCreateBoard}
 					class="btn-primary"
 				>
-					Create
+					Create Board
 				</button>
 			</div>
 		</div>
@@ -294,380 +323,362 @@
 {/if}
 
 <style>
-	.page {
+	/* Layout & Container */
+	.page-container {
 		min-height: 100vh;
-		background: linear-gradient(180deg, var(--theme-background) 0%, color-mix(in srgb, var(--theme-background) 95%, var(--theme-pending)) 50%, var(--theme-pending) 100%);
 		position: relative;
+		overflow-x: hidden;
+		color: var(--theme-text); /* Fallback */
+	}
+
+	.content-wrapper {
+		position: relative;
+		z-index: 10;
+		display: flex;
+		flex-direction: column;
+		min-height: 100vh;
+	}
+
+	/* Ambient Background */
+	.ambient-bg {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 0;
+		background: radial-gradient(circle at 50% 0%, var(--theme-bg-grad-end), var(--theme-bg-grad-start));
 		overflow: hidden;
 	}
 
-	/* Background decorations */
-	.bg-decoration {
-		position: fixed;
-		z-index: 0;
-		pointer-events: none;
-		opacity: 0.08;
+	.orb {
+		position: absolute;
+		border-radius: 50%;
+		filter: blur(80px);
+		opacity: 0.6;
+		animation: float 10s ease-in-out infinite;
 	}
 
-	.bg-decoration-1 {
+	.orb-1 {
+		width: 400px;
+		height: 400px;
+		background: var(--theme-primary);
+		top: -100px;
+		right: -100px;
+		animation-delay: 0s;
+	}
+
+	.orb-2 {
+		width: 300px;
+		height: 300px;
+		background: var(--theme-secondary);
+		bottom: 10%;
+		left: -50px;
+		animation-delay: -2s;
+	}
+
+	.orb-3 {
 		width: 200px;
 		height: 200px;
-		background: var(--theme-primary-light);
-		top: -50px;
-		right: -50px;
-		transform: rotate(25deg);
-	}
-
-	.bg-decoration-2 {
-		width: 150px;
-		height: 150px;
-		background: var(--theme-primary);
-		bottom: 15%;
-		left: -40px;
-		transform: rotate(-15deg);
-	}
-
-	.bg-decoration-3 {
-		width: 120px;
-		height: 120px;
-		background: var(--theme-achieved-light);
-		bottom: 40%;
-		right: -30px;
-		transform: rotate(45deg);
+		background: var(--theme-accent);
+		top: 40%;
+		right: 20%;
+		animation-delay: -5s;
 	}
 
 	/* Header */
 	.header {
-		background: linear-gradient(135deg, var(--theme-primary-light), var(--theme-primary));
-		box-shadow:
-			0 4px 20px color-mix(in srgb, var(--theme-primary) 30%, transparent),
-			inset 0 1px 0 rgba(255, 255, 255, 0.15);
-		position: relative;
-		z-index: 10;
+		position: sticky;
+		top: 1rem;
+		margin: 0 1rem;
+		border-radius: 1rem;
+		padding: 0.75rem 1.25rem;
+		margin-bottom: 2rem;
+		z-index: 50;
 	}
 
-	.header-content {
-		max-width: 28rem;
-		margin: 0 auto;
-		padding: 1rem;
+	.header-inner {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
+		max-width: 64rem;
+		margin: 0 auto;
 	}
 
-	.title {
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
-		font-size: 1.5rem;
-		font-weight: 600;
-		color: white;
-		letter-spacing: -0.01em;
-		font-family: var(--theme-font-heading);
-	}
-
-	.title-icon {
-		width: 1.5rem;
-		height: 1.5rem;
-	}
-
-	.header-actions {
+	.brand {
 		display: flex;
 		align-items: center;
 		gap: 0.75rem;
+		font-family: var(--font-display);
+		font-size: 1.25rem;
+		font-weight: 700;
+		color: var(--theme-text);
 	}
 
-	.boards-link {
+	.actions {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+	}
+
+	.divider {
+		width: 1px;
+		height: 1.5rem;
+		background: var(--theme-border);
+	}
+
+	/* Main Content */
+	.main-content {
+		flex: 1;
+		width: 100%;
+		max-width: 32rem;
+		margin: 0 auto;
+		padding: 0 1rem 3rem;
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+	}
+
+	/* Controls Bar */
+	.controls {
+		display: flex;
+		gap: 0.75rem;
+		padding: 0.5rem;
+		border-radius: 1rem;
+	}
+
+	.board-select-wrapper {
+		position: relative;
+		flex: 1;
+	}
+
+	.board-select {
+		width: 100%;
+		appearance: none;
+		background: transparent;
+		border: none;
+		padding: 0.75rem 1rem;
+		padding-right: 2.5rem;
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: 1rem;
+		color: var(--theme-text);
+		cursor: pointer;
+	}
+	
+	.board-select:focus {
+		outline: none;
+	}
+
+	.select-icon {
+		position: absolute;
+		right: 1rem;
+		top: 50%;
+		transform: translateY(-50%);
+		pointer-events: none;
+		opacity: 0.7;
+	}
+
+	.btn-icon {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		width: 2.5rem;
-		height: 2.5rem;
-		border-radius: 0.5rem;
-		color: white;
-		transition: background 0.15s ease-out;
+		width: 3rem;
+		border-radius: 0.75rem;
+		background: rgba(255, 255, 255, 0.05);
+		border: 1px solid transparent;
+		color: var(--theme-text);
+		cursor: pointer;
+		transition: all 0.2s;
 	}
 
-	.boards-link:hover {
-		background: rgba(255, 255, 255, 0.15);
+	.btn-icon:hover {
+		background: rgba(255, 255, 255, 0.1);
+		transform: translateY(-1px);
 	}
 
-	.boards-link svg {
-		width: 1.25rem;
-		height: 1.25rem;
-	}
-
-	/* Main */
-	.main {
-		max-width: 28rem;
-		margin: 0 auto;
-		padding: 1.5rem 1rem;
-		position: relative;
-		z-index: 1;
-	}
-
-	/* Board selector */
-	.board-selector {
+	/* Empty State */
+	.empty-state {
+		text-align: center;
+		padding: 3rem 2rem;
+		border-radius: 1.5rem;
 		display: flex;
-		gap: 0.5rem;
+		flex-direction: column;
+		align-items: center;
+		gap: 1rem;
+	}
+
+	.empty-icon-wrapper {
+		width: 5rem;
+		height: 5rem;
+		border-radius: 50%;
+		background: linear-gradient(135deg, var(--theme-primary), var(--theme-primary-dim));
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-bottom: 0.5rem;
+		box-shadow: 0 10px 30px -10px var(--theme-primary);
+	}
+
+	.empty-title {
+		font-family: var(--font-display);
+		font-size: 1.5rem;
+		font-weight: 700;
+	}
+
+	.empty-desc {
+		color: var(--theme-text-muted);
 		margin-bottom: 1rem;
 	}
 
-	.select {
-		flex: 1;
-		padding: 0.75rem 1rem;
-		background: linear-gradient(145deg, var(--theme-background), var(--theme-pending));
-		border: 2px solid var(--theme-pending-border);
-		border-radius: 0.75rem;
+	.btn-primary-lg {
+		padding: 1rem 2.5rem;
+		background: linear-gradient(135deg, var(--theme-primary), var(--theme-primary-dim));
+		border: none;
+		border-radius: 1rem;
+		color: white;
 		font-weight: 600;
-		color: var(--theme-text);
+		font-size: 1.125rem;
 		cursor: pointer;
-		transition: all 0.2s ease-out;
-		font-family: var(--theme-font-heading);
+		box-shadow: 0 4px 20px color-mix(in srgb, var(--theme-primary) 40%, transparent);
+		transition: transform 0.2s, box-shadow 0.2s;
+	}
+
+	.btn-primary-lg:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 8px 30px color-mix(in srgb, var(--theme-primary) 50%, transparent);
+	}
+
+	/* Modal Styles */
+	.modal-backdrop {
+		position: fixed;
+		inset: 0;
+		z-index: 100;
+		background: rgba(0, 0, 0, 0.6);
+		backdrop-filter: blur(4px);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 1rem;
+	}
+
+	.modal-card {
+		width: 100%;
+		max-width: 24rem;
+		border-radius: 1.5rem;
+		padding: 2rem;
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+	}
+
+	.modal-title {
+		font-family: var(--font-display);
+		font-size: 1.5rem;
+		font-weight: 700;
+		text-align: center;
+	}
+
+	.text-input {
+		width: 100%;
+		background: rgba(0, 0, 0, 0.2);
+		border: 1px solid var(--theme-border);
+		padding: 1rem;
+		border-radius: 0.75rem;
+		color: var(--theme-text);
+		font-size: 1.125rem;
+		text-align: center;
+	}
+
+	.text-input:focus {
+		outline: none;
+		border-color: var(--theme-primary);
+		background: rgba(0, 0, 0, 0.3);
+	}
+
+	.section-label {
+		display: block;
+		font-size: 0.875rem;
+		font-weight: 600;
+		color: var(--theme-text-muted);
+		margin-bottom: 0.75rem;
+		text-align: center;
+	}
+
+	.grid-options {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 0.75rem;
+	}
+
+	.grid-option {
+		background: rgba(255, 255, 255, 0.05);
+		border: 1px solid var(--theme-border);
+		border-radius: 0.75rem;
+		padding: 0.75rem 0.25rem;
+		cursor: pointer;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.25rem;
+		transition: all 0.2s;
+	}
+
+	.grid-option:hover {
+		background: rgba(255, 255, 255, 0.1);
+	}
+
+	.grid-option.selected {
+		background: var(--theme-primary);
+		border-color: transparent;
+		box-shadow: 0 0 15px var(--theme-glow);
+	}
+
+	.grid-size {
+		font-weight: 700;
 		font-size: 1.125rem;
 	}
 
-	.select:focus {
-		outline: none;
-		border-color: var(--theme-primary-light);
-		box-shadow: 0 0 0 3px color-mix(in srgb, var(--theme-primary-light) 15%, transparent);
-	}
-
-	.btn-new {
-		padding: 0.75rem 1.25rem;
-		background: linear-gradient(135deg, var(--theme-primary-light), var(--theme-primary));
-		color: white;
-		border: none;
-		border-radius: 0.75rem;
-		font-weight: 600;
-		font-size: 0.875rem;
-		cursor: pointer;
-		transition: all 0.2s ease-out;
-		box-shadow: 0 4px 14px color-mix(in srgb, var(--theme-primary) 25%, transparent);
-		font-family: var(--theme-font-body);
-	}
-
-	.btn-new:hover {
-		transform: translateY(-2px);
-		box-shadow: 0 6px 20px color-mix(in srgb, var(--theme-primary) 35%, transparent);
-	}
-
-	/* Empty state */
-	.empty-state {
-		text-align: center;
-		padding: 3rem 1rem;
-	}
-
-	.empty-icon {
-		width: 4rem;
-		height: 4rem;
-		margin: 0 auto 1rem;
-		background: linear-gradient(145deg, var(--theme-background), var(--theme-pending));
-		border-radius: 50%;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		box-shadow:
-			0 4px 12px rgba(0, 0, 0, 0.08),
-			inset 0 1px 0 rgba(255, 255, 255, 0.8);
-		border: 1px solid var(--theme-pending-border);
-	}
-
-	.empty-icon svg {
-		width: 2rem;
-		height: 2rem;
-		color: var(--theme-text-light);
-	}
-
-	.empty-text {
-		color: var(--theme-text-light);
-		font-weight: 500;
-		margin-bottom: 1.5rem;
-	}
-
-	.btn-create {
-		padding: 0.875rem 2rem;
-		background: linear-gradient(135deg, var(--theme-primary-light), var(--theme-primary));
-		color: white;
-		border: none;
-		border-radius: 0.75rem;
-		font-weight: 600;
-		cursor: pointer;
-		transition: all 0.2s ease-out;
-		box-shadow: 0 4px 14px color-mix(in srgb, var(--theme-primary) 25%, transparent);
-		font-family: var(--theme-font-body);
-	}
-
-	.btn-create:hover {
-		transform: translateY(-2px);
-		box-shadow: 0 6px 20px color-mix(in srgb, var(--theme-primary) 35%, transparent);
-	}
-
-	/* Dialog */
-	.dialog-backdrop {
-		position: fixed;
-		top: 0;
-		right: 0;
-		bottom: 0;
-		left: 0;
-		z-index: 50;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		background-color: color-mix(in srgb, var(--theme-text) 40%, transparent);
-		backdrop-filter: blur(4px);
-		animation: fadeIn 0.2s ease-out;
-	}
-
-	.dialog {
-		background: linear-gradient(145deg, var(--theme-background), var(--theme-pending));
-		border-radius: 1rem;
-		box-shadow:
-			0 24px 48px rgba(0, 0, 0, 0.12),
-			0 8px 16px rgba(0, 0, 0, 0.08),
-			inset 0 1px 0 rgba(255, 255, 255, 0.9);
-		max-width: 24rem;
-		width: 100%;
-		margin: 0 1rem;
-		padding: 1.5rem;
-		animation: modalEnter 0.25s ease-out;
-		border: 1px solid var(--theme-pending-border);
-	}
-
-	.dialog-title {
-		font-size: 1.5rem;
-		font-weight: 600;
-		margin-bottom: 1rem;
-		color: var(--theme-primary);
-		font-family: var(--theme-font-heading);
-	}
-
-	.dialog-input {
-		width: 100%;
-		padding: 0.75rem 1rem;
-		background: linear-gradient(145deg, var(--theme-background), var(--theme-pending));
-		border: 2px solid var(--theme-pending-border);
-		border-radius: 0.75rem;
-		font-weight: 500;
-		color: var(--theme-text);
-		margin-bottom: 1rem;
-		font-family: var(--theme-font-body);
-	}
-
-	.dialog-input::placeholder {
-		color: var(--theme-text-light);
-	}
-
-	.dialog-input:focus {
-		outline: none;
-		border-color: var(--theme-primary-light);
-		box-shadow: 0 0 0 3px color-mix(in srgb, var(--theme-primary-light) 15%, transparent);
-	}
-
-	.size-selector {
-		margin-bottom: 1rem;
-	}
-
-	.size-label {
-		display: block;
-		font-weight: 600;
-		color: var(--theme-text);
-		margin-bottom: 0.5rem;
-		font-size: 0.875rem;
-		font-family: var(--theme-font-body);
-	}
-
-	.size-options {
-		display: flex;
-		gap: 0.5rem;
-	}
-
-	.size-option {
-		flex: 1;
-		padding: 0.75rem 0.5rem;
-		background: linear-gradient(145deg, var(--theme-background), var(--theme-pending));
-		border: 2px solid var(--theme-pending-border);
-		border-radius: 0.5rem;
-		font-weight: 600;
-		color: var(--theme-text);
-		cursor: pointer;
-		transition: all 0.2s ease-out;
-		text-align: center;
-		font-family: var(--theme-font-body);
-	}
-
-	.size-option:hover {
-		border-color: var(--theme-primary-light);
-	}
-
-	.size-option.selected {
-		border-color: var(--theme-primary);
-		background: color-mix(in srgb, var(--theme-primary) 10%, var(--theme-background));
-	}
-
-	.size-count {
-		display: block;
+	.grid-count {
 		font-size: 0.75rem;
-		color: var(--theme-text-light);
-		font-weight: 400;
-		margin-top: 0.25rem;
+		opacity: 0.8;
 	}
 
-	.dialog-actions {
+	.modal-actions {
 		display: flex;
-		gap: 0.75rem;
-		justify-content: flex-end;
+		gap: 1rem;
+		margin-top: 0.5rem;
 	}
 
-	.btn-ghost {
-		padding: 0.625rem 1.25rem;
+	.btn-text {
+		flex: 1;
+		padding: 0.875rem;
 		background: transparent;
-		color: var(--theme-text-light);
 		border: none;
-		border-radius: 0.75rem;
+		color: var(--theme-text-muted);
 		font-weight: 600;
-		font-size: 0.875rem;
 		cursor: pointer;
-		transition: all 0.2s ease-out;
-		font-family: var(--theme-font-body);
 	}
 
-	.btn-ghost:hover {
-		background: color-mix(in srgb, var(--theme-primary) 8%, transparent);
+	.btn-text:hover {
+		color: var(--theme-text);
 	}
 
 	.btn-primary {
-		padding: 0.625rem 1.25rem;
-		background: linear-gradient(135deg, var(--theme-primary-light), var(--theme-primary));
-		color: white;
+		flex: 1;
+		padding: 0.875rem;
+		background: var(--theme-primary);
 		border: none;
 		border-radius: 0.75rem;
+		color: white;
 		font-weight: 600;
-		font-size: 0.875rem;
 		cursor: pointer;
-		transition: all 0.2s ease-out;
-		box-shadow: 0 4px 14px color-mix(in srgb, var(--theme-primary) 25%, transparent);
-		font-family: var(--theme-font-body);
+		box-shadow: 0 4px 15px var(--theme-glow);
+		transition: all 0.2s;
 	}
 
 	.btn-primary:hover {
-		transform: translateY(-2px);
-		box-shadow: 0 6px 20px color-mix(in srgb, var(--theme-primary) 35%, transparent);
-	}
-
-	@keyframes fadeIn {
-		from { opacity: 0; }
-		to { opacity: 1; }
-	}
-
-	@keyframes modalEnter {
-		from {
-			opacity: 0;
-			transform: scale(0.95) translateY(10px);
-		}
-		to {
-			opacity: 1;
-			transform: scale(1) translateY(0);
-		}
+		transform: translateY(-1px);
+		box-shadow: 0 6px 20px var(--theme-glow);
 	}
 </style>

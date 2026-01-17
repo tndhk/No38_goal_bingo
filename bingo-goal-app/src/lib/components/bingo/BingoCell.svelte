@@ -87,34 +87,32 @@
 		border-radius: 0.75rem;
 		font-size: 0.875rem;
 		font-weight: 500;
-		transition: all 0.2s ease-out;
+		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 		cursor: pointer;
 		outline: none;
-		font-family: var(--theme-font-body);
+		font-family: var(--font-body);
+		backdrop-filter: blur(8px);
+		-webkit-backdrop-filter: blur(8px);
 	}
 
 	.cell:focus-visible {
-		outline: 2px solid var(--theme-primary-light);
+		outline: 2px solid var(--theme-primary);
 		outline-offset: 2px;
 	}
 
 	/* Pending (未達成) */
 	.pending {
-		background: linear-gradient(145deg, var(--theme-surface), var(--theme-pending));
+		background: var(--theme-surface);
 		color: var(--theme-text);
-		box-shadow:
-			inset 2px 2px 4px rgba(0, 0, 0, 0.03),
-			4px 4px 12px rgba(0, 0, 0, 0.06),
-			-2px -2px 8px rgba(255, 255, 255, 0.8);
-		border: 2px dashed var(--theme-pending-border);
+		border: 1px solid var(--theme-border);
+		box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 	}
 
 	.pending:hover {
-		transform: scale(1.02);
-		box-shadow:
-			inset 2px 2px 4px rgba(0, 0, 0, 0.05),
-			6px 6px 16px rgba(0, 0, 0, 0.1),
-			-2px -2px 8px rgba(255, 255, 255, 0.9);
+		transform: translateY(-2px);
+		box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+		border-color: var(--theme-primary);
+		background: color-mix(in srgb, var(--theme-surface) 90%, var(--theme-primary));
 	}
 
 	.pending:active {
@@ -123,19 +121,15 @@
 
 	/* Achieved (達成) */
 	.achieved {
-		background: linear-gradient(145deg, var(--theme-primary-light), var(--theme-primary));
+		background: linear-gradient(135deg, var(--theme-primary), var(--theme-secondary));
 		color: white;
-		box-shadow:
-			0 4px 16px color-mix(in srgb, var(--theme-primary) 30%, transparent),
-			inset 0 1px 0 rgba(255, 255, 255, 0.15);
-		border: none;
+		border: 1px solid transparent;
+		box-shadow: 0 4px 15px var(--theme-glow);
 	}
 
 	.achieved:hover {
-		transform: scale(1.02);
-		box-shadow:
-			0 6px 20px color-mix(in srgb, var(--theme-primary) 40%, transparent),
-			inset 0 1px 0 rgba(255, 255, 255, 0.2);
+		transform: translateY(-2px) scale(1.02);
+		box-shadow: 0 8px 25px var(--theme-glow);
 	}
 
 	.achieved:active {
@@ -145,32 +139,32 @@
 	/* Bingo Highlight */
 	.bingo-highlight {
 		animation: pulse-bingo 2s ease-in-out infinite;
+		z-index: 10;
 	}
 
 	.bingo-highlight.achieved {
 		box-shadow:
-			0 0 0 3px var(--theme-bingo),
-			0 0 0 6px color-mix(in srgb, var(--theme-bingo) 30%, transparent),
-			0 4px 16px color-mix(in srgb, var(--theme-primary) 30%, transparent);
+			0 0 0 2px var(--theme-bg-base),
+			0 0 0 4px var(--color-bingo),
+			0 0 20px var(--color-bingo-glow);
 	}
 
 	.bingo-highlight.pending {
+		border-color: var(--color-bingo);
 		box-shadow:
-			0 0 0 3px var(--theme-bingo),
-			0 0 0 6px color-mix(in srgb, var(--theme-bingo) 30%, transparent),
-			4px 4px 12px rgba(0, 0, 0, 0.1);
+			0 0 0 2px var(--theme-bg-base),
+			0 0 0 4px var(--color-bingo),
+			0 0 15px var(--color-bingo-glow);
 	}
 
 	@keyframes pulse-bingo {
 		0%, 100% {
-			box-shadow:
-				0 0 0 3px var(--theme-bingo),
-				0 0 0 6px color-mix(in srgb, var(--theme-bingo) 30%, transparent);
+			transform: scale(1);
+			filter: brightness(1);
 		}
 		50% {
-			box-shadow:
-				0 0 0 4px var(--theme-bingo-glow),
-				0 0 0 10px color-mix(in srgb, var(--theme-bingo-glow) 20%, transparent);
+			transform: scale(1.03);
+			filter: brightness(1.1);
 		}
 	}
 
@@ -180,13 +174,19 @@
 		flex-direction: column;
 		align-items: center;
 		gap: 0.25rem;
-		color: var(--theme-text-light);
+		color: var(--theme-text-muted);
+		opacity: 0.7;
+		transition: opacity 0.2s;
+	}
+
+	.pending:hover .empty-state {
+		opacity: 1;
+		color: var(--theme-text);
 	}
 
 	.empty-icon {
 		width: 1.5rem;
 		height: 1.5rem;
-		opacity: 0.6;
 	}
 
 	.empty-text {
@@ -204,25 +204,33 @@
 		-webkit-line-clamp: 3;
 		-webkit-box-orient: vertical;
 		overflow: hidden;
+		line-height: 1.4;
 	}
 
 	/* Check icon */
 	.check-icon {
 		position: absolute;
-		top: 0.25rem;
-		right: 0.25rem;
-		width: 1.25rem;
-		height: 1.25rem;
-		background: rgba(255, 255, 255, 0.25);
+		top: -6px;
+		right: -6px;
+		width: 1.5rem;
+		height: 1.5rem;
+		background: var(--color-achieved);
 		border-radius: 50%;
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+		animation: pop-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 	}
 
 	.check-icon svg {
-		width: 0.875rem;
-		height: 0.875rem;
+		width: 1rem;
+		height: 1rem;
 		color: white;
+	}
+
+	@keyframes pop-in {
+		0% { transform: scale(0); }
+		100% { transform: scale(1); }
 	}
 </style>

@@ -101,39 +101,40 @@
 	.modal-body {
 		display: flex;
 		flex-direction: column;
-		gap: 1rem;
+		gap: 1.5rem;
 	}
 
 	.textarea {
 		width: 100%;
 		padding: 1rem;
-		border: 2px solid var(--theme-pending-border);
-		border-radius: 0.75rem;
+		border: 1px solid var(--theme-border);
+		border-radius: 1rem;
 		resize: none;
-		font-size: 1rem;
+		font-size: 1.125rem;
 		font-weight: 500;
 		color: var(--theme-text);
-		background: linear-gradient(145deg, var(--theme-background), var(--theme-pending));
+		background: rgba(0, 0, 0, 0.2);
 		transition: all 0.2s ease-out;
-		font-family: var(--theme-font-body);
+		font-family: var(--font-body);
+		line-height: 1.5;
 	}
 
 	.textarea::placeholder {
-		color: var(--theme-text-light);
+		color: var(--theme-text-muted);
 	}
 
 	.textarea:focus {
 		outline: none;
-		border-color: var(--theme-primary-light);
-		box-shadow:
-			0 0 0 3px color-mix(in srgb, var(--theme-primary-light) 15%, transparent),
-			0 4px 12px color-mix(in srgb, var(--theme-primary) 10%, transparent);
+		border-color: var(--theme-primary);
+		background: rgba(0, 0, 0, 0.3);
+		box-shadow: 0 0 0 4px color-mix(in srgb, var(--theme-primary) 15%, transparent);
 	}
 
 	.char-count {
 		text-align: right;
 		font-size: 0.875rem;
 		font-weight: 600;
+		margin-top: -1rem;
 	}
 
 	.char-count-current {
@@ -141,95 +142,99 @@
 	}
 
 	.char-count-separator {
-		color: var(--theme-text-light);
+		color: var(--theme-text-muted);
 	}
 
 	.char-count-max {
-		color: var(--theme-text-light);
+		color: var(--theme-text-muted);
 	}
 
 	.button-group {
 		display: flex;
 		gap: 0.75rem;
 		justify-content: flex-end;
+		margin-top: 1rem;
 	}
 
 	.btn {
-		padding: 0.625rem 1.25rem;
-		border-radius: 1rem;
+		padding: 0.75rem 1.5rem;
+		border-radius: 0.75rem;
 		font-weight: 600;
 		font-size: 0.875rem;
 		border: none;
 		cursor: pointer;
 		transition: all 0.2s ease-out;
-		font-family: var(--theme-font-body);
+		font-family: var(--font-body);
 	}
 
 	.btn-primary {
-		background: linear-gradient(135deg, var(--theme-primary-light), var(--theme-primary));
+		background: var(--theme-primary);
 		color: white;
-		box-shadow: 0 4px 14px color-mix(in srgb, var(--theme-primary) 25%, transparent);
+		box-shadow: 0 4px 15px var(--theme-glow);
 	}
 
 	.btn-primary:hover {
 		transform: translateY(-2px);
-		box-shadow: 0 6px 20px color-mix(in srgb, var(--theme-primary) 35%, transparent);
+		box-shadow: 0 6px 20px var(--theme-glow);
 	}
 
 	.btn-ghost {
 		background: transparent;
-		color: var(--theme-text-light);
+		color: var(--theme-text-muted);
 	}
 
 	.btn-ghost:hover {
-		background: color-mix(in srgb, var(--theme-primary) 8%, transparent);
+		background: rgba(255, 255, 255, 0.05);
+		color: var(--theme-text);
 	}
 
 	.btn-danger {
 		background: transparent;
-		color: var(--theme-achieved);
+		color: var(--theme-accent); /* Use accent or specific error color if defined, fallback to text */
 	}
 
 	.btn-danger:hover {
-		background: color-mix(in srgb, var(--theme-achieved) 10%, transparent);
+		background: rgba(255, 0, 0, 0.1);
+		color: #ef4444;
 	}
 
 	.toggle-achieved-btn {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		gap: 0.5rem;
+		gap: 0.75rem;
 		width: 100%;
-		padding: 0.75rem 1rem;
-		border: 2px solid var(--theme-pending-border);
+		padding: 1rem;
+		border: 1px solid var(--theme-border);
 		border-radius: 1rem;
-		background: linear-gradient(145deg, var(--theme-surface), var(--theme-pending));
+		background: rgba(255, 255, 255, 0.03);
 		font-weight: 600;
-		font-size: 0.875rem;
-		color: var(--theme-text-light);
+		font-size: 1rem;
+		color: var(--theme-text-muted);
 		cursor: pointer;
-		transition: all 0.2s ease-out;
-		font-family: var(--theme-font-body);
+		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+		font-family: var(--font-body);
 	}
 
 	.toggle-achieved-btn:hover {
-		background: linear-gradient(145deg, var(--theme-pending), var(--theme-surface));
+		border-color: var(--theme-primary);
+		background: rgba(255, 255, 255, 0.05);
 	}
 
 	.toggle-achieved-btn.achieved {
-		background: linear-gradient(135deg, var(--theme-primary-light), var(--theme-primary));
+		background: linear-gradient(135deg, var(--theme-achieved), var(--theme-achieved-dim));
 		border-color: transparent;
 		color: white;
-		box-shadow: 0 4px 14px color-mix(in srgb, var(--theme-primary) 25%, transparent);
+		box-shadow: 0 4px 15px var(--theme-achieved-glow);
 	}
 
 	.toggle-achieved-btn.achieved:hover {
-		background: linear-gradient(135deg, var(--theme-primary), var(--theme-primary-dark));
-		box-shadow: 0 6px 20px color-mix(in srgb, var(--theme-primary) 35%, transparent);
+		transform: translateY(-1px);
+		box-shadow: 0 6px 20px var(--theme-achieved-glow);
 	}
 
 	.toggle-icon {
-		width: 1.25rem;
-		height: 1.25rem;
+		width: 1.5rem;
+		height: 1.5rem;
 	}
 </style>
