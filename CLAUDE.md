@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 bingo_goal_app - 年度別目標ビンゴ管理Webアプリ。AIPMフレームワークに基づく個人開発プロジェクト。
 
-現在のフェーズ: Delivery（Phase 4 完了 - ビンゴ演出実装済み）
+現在のフェーズ: Delivery（Phase 5 完了 - MVP完成）
 
 ## Directory Structure
 
@@ -23,7 +23,7 @@ bingo_goal_app - 年度別目標ビンゴ管理Webアプリ。AIPMフレーム�
   - src/routes/: ページルーティング（+page.svelte, boards/+page.svelte）
   - src/lib/components/: コンポーネント
     - ui/: 汎用UIコンポーネント（Button, Modal, Dialog, SaveIndicator）
-    - bingo/: ビンゴ固有コンポーネント（BingoCell, BingoGrid, GoalInputModal, ProgressDisplay）
+    - bingo/: ビンゴ固有コンポーネント（BingoCell, BingoGrid, GoalInputModal, ProgressDisplay, BoardList）
   - src/lib/stores/: 状態管理（boardStore）
   - src/lib/utils/: ユーティリティ（storage, bingo, celebration）
   - src/lib/types/: 型定義（bingo.ts）

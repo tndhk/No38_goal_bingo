@@ -103,14 +103,14 @@ dev_tasks:
         # ST002: ビンゴボードを一覧で見る
         - id: ST002
           title: "ビンゴボードを一覧で見る"
-          status: pending
+          status: completed
           priority: 2
           solution: SL001
           screens: [SC004]
           tasks:
             - id: ST002-T1
               title: "BoardListコンポーネント"
-              status: pending
+              status: completed
               estimate: 1.5h
               depends_on: [ST001-T2]
               acceptance:
@@ -120,7 +120,7 @@ dev_tasks:
 
             - id: ST002-T2
               title: "/boardsルート実装"
-              status: pending
+              status: completed
               estimate: 1h
               depends_on: [ST002-T1]
               acceptance:
@@ -130,14 +130,14 @@ dev_tasks:
         # ST003: 年度を切り替える
         - id: ST003
           title: "年度を切り替える"
-          status: pending
+          status: completed
           priority: 3
           solution: SL001
           screens: [SC001, SC004]
           tasks:
             - id: ST003-T1
               title: "YearSelectorコンポーネント"
-              status: pending
+              status: completed
               estimate: 1h
               depends_on: [ST001-T2]
               acceptance:
@@ -147,7 +147,7 @@ dev_tasks:
 
             - id: ST003-T2
               title: "存在しない年度の処理"
-              status: pending
+              status: completed
               estimate: 30m
               depends_on: [ST003-T1, ST001-T4]
               acceptance:
@@ -157,14 +157,14 @@ dev_tasks:
         # ST004: ビンゴボードを削除する
         - id: ST004
           title: "ビンゴボードを削除する"
-          status: pending
+          status: completed
           priority: 8
           solution: SL001
           screens: [SC001, SC005]
           tasks:
             - id: ST004-T1
               title: "削除確認ダイアログ"
-              status: pending
+              status: completed
               estimate: 1h
               depends_on: [FND001-T4]
               acceptance:
@@ -174,7 +174,7 @@ dev_tasks:
 
             - id: ST004-T2
               title: "削除処理とリダイレクト"
-              status: pending
+              status: completed
               estimate: 30m
               depends_on: [ST004-T1, ST001-T2]
               acceptance:
