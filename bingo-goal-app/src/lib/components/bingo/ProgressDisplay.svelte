@@ -76,32 +76,32 @@
 	.progress-label {
 		font-size: 0.875rem;
 		font-weight: 600;
-		color: #3D3024;
+		color: var(--theme-text);
 	}
 
 	.progress-percentage {
 		font-size: 0.875rem;
 		font-weight: 700;
-		color: #2D5016;
+		color: var(--theme-primary);
 	}
 
 	.progress-track {
 		width: 100%;
 		height: 0.75rem;
-		background: linear-gradient(145deg, #F5F0E6, #EDE6D9);
+		background: linear-gradient(145deg, var(--theme-pending), var(--theme-surface));
 		border-radius: 9999px;
 		overflow: hidden;
 		box-shadow:
-			inset 2px 2px 4px rgba(61, 48, 36, 0.08),
+			inset 2px 2px 4px rgba(0, 0, 0, 0.08),
 			inset -1px -1px 2px rgba(255, 255, 255, 0.8);
 	}
 
 	.progress-fill {
 		height: 100%;
-		background: linear-gradient(90deg, #2D5016, #4A7C23, #7CB342);
+		background: linear-gradient(90deg, var(--theme-primary), var(--theme-primary-light), var(--theme-achieved-light));
 		border-radius: 9999px;
 		transition: width 0.5s ease-out;
-		box-shadow: 0 2px 8px rgba(45, 80, 22, 0.3);
+		box-shadow: 0 2px 8px color-mix(in srgb, var(--theme-primary) 30%, transparent);
 	}
 
 	.badges {
@@ -119,7 +119,7 @@
 		font-weight: 700;
 		font-size: 0.875rem;
 		border-radius: 0.75rem;
-		font-family: 'Caveat', 'Zen Kurenaido', cursive;
+		font-family: var(--theme-font-heading);
 	}
 
 	.badge-icon {
@@ -129,21 +129,21 @@
 	}
 
 	.badge-bingo {
-		background: linear-gradient(135deg, #B45309, #D97706);
+		background: linear-gradient(135deg, var(--theme-bingo), var(--theme-bingo-glow));
 		color: white;
 		box-shadow:
-			0 4px 12px rgba(180, 83, 9, 0.3),
+			0 4px 12px color-mix(in srgb, var(--theme-bingo) 30%, transparent),
 			inset 0 1px 0 rgba(255, 255, 255, 0.2);
 		animation: badge-pop 0.3s ease-out;
 	}
 
 	.badge-perfect {
-		background: linear-gradient(135deg, #2D5016, #4A7C23, #7CB342, #B45309, #C2410C);
+		background: linear-gradient(135deg, var(--theme-primary), var(--theme-primary-light), var(--theme-achieved-light), var(--theme-bingo), var(--theme-achieved));
 		background-size: 300% 300%;
 		animation: rainbow-shift 3s ease infinite, badge-pop 0.3s ease-out;
 		color: white;
 		box-shadow:
-			0 4px 16px rgba(45, 80, 22, 0.4),
+			0 4px 16px color-mix(in srgb, var(--theme-primary) 40%, transparent),
 			inset 0 1px 0 rgba(255, 255, 255, 0.2);
 	}
 
@@ -170,13 +170,13 @@
 	.hint {
 		font-size: 0.875rem;
 		font-weight: 500;
-		color: #6B5C4C;
-		background: linear-gradient(145deg, rgba(253, 251, 247, 0.9), rgba(245, 240, 230, 0.9));
+		color: var(--theme-text-light);
+		background: linear-gradient(145deg, color-mix(in srgb, var(--theme-background) 90%, transparent), color-mix(in srgb, var(--theme-pending) 90%, transparent));
 		padding: 0.5rem 1rem;
 		border-radius: 0.75rem;
 		box-shadow:
-			0 2px 8px rgba(61, 48, 36, 0.06),
+			0 2px 8px rgba(0, 0, 0, 0.06),
 			inset 0 1px 0 rgba(255, 255, 255, 0.9);
-		border: 1px solid #D4C4B0;
+		border: 1px solid var(--theme-pending-border);
 	}
 </style>

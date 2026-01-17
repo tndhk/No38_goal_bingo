@@ -62,17 +62,17 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		background-color: rgba(61, 48, 36, 0.4);
+		background-color: color-mix(in srgb, var(--theme-text) 40%, transparent);
 		backdrop-filter: blur(4px);
 		animation: fadeIn 0.2s ease-out;
 	}
 
 	.modal-content {
-		background: linear-gradient(145deg, #FDFBF7, #F5F0E6);
+		background: linear-gradient(145deg, var(--theme-background), var(--theme-pending));
 		border-radius: 1rem;
 		box-shadow:
-			0 24px 48px rgba(61, 48, 36, 0.12),
-			0 8px 16px rgba(61, 48, 36, 0.08),
+			0 24px 48px rgba(0, 0, 0, 0.12),
+			0 8px 16px rgba(0, 0, 0, 0.08),
 			inset 0 1px 0 rgba(255, 255, 255, 0.9);
 		max-width: 28rem;
 		width: 100%;
@@ -80,15 +80,15 @@
 		margin-right: 1rem;
 		padding: 1.5rem;
 		animation: modalEnter 0.25s ease-out;
-		border: 1px solid #D4C4B0;
+		border: 1px solid var(--theme-pending-border);
 	}
 
 	.modal-title {
 		font-size: 1.5rem;
 		font-weight: 600;
 		margin-bottom: 1rem;
-		color: #2D5016;
-		font-family: 'Caveat', 'Zen Kurenaido', cursive;
+		color: var(--theme-primary);
+		font-family: var(--theme-font-heading);
 	}
 
 	@keyframes fadeIn {

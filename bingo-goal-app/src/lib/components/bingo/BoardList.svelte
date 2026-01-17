@@ -82,21 +82,20 @@
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
-		background: linear-gradient(145deg, #FDFBF7, #F5F0E6);
-		border: 1px solid #D4C4B0;
+		background: linear-gradient(145deg, var(--theme-background), var(--theme-pending));
+		border: 1px solid var(--theme-pending-border);
 		border-radius: 0.75rem;
 		transition: all 0.2s ease-out;
 		box-shadow:
-			0 2px 8px rgba(61, 48, 36, 0.06),
+			0 2px 8px rgba(0, 0, 0, 0.06),
 			inset 0 1px 0 rgba(255, 255, 255, 0.9);
 		padding-right: 0.5rem;
 	}
 
 	.board-card:hover {
 		box-shadow:
-			0 6px 16px rgba(61, 48, 36, 0.1),
+			0 6px 16px rgba(0, 0, 0, 0.1),
 			inset 0 1px 0 rgba(255, 255, 255, 0.9);
-		border-color: #B8A896;
 	}
 
 	.card-button {
@@ -113,11 +112,11 @@
 	}
 
 	.card-button:hover {
-		background: rgba(45, 80, 22, 0.03);
+		background: color-mix(in srgb, var(--theme-primary) 3%, transparent);
 	}
 
 	.card-button:active {
-		background: rgba(45, 80, 22, 0.06);
+		background: color-mix(in srgb, var(--theme-primary) 6%, transparent);
 	}
 
 	.card-content {
@@ -135,12 +134,12 @@
 	.board-name {
 		font-size: 1.25rem;
 		font-weight: 600;
-		color: #3D3024;
+		color: var(--theme-text);
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
 		max-width: 12rem;
-		font-family: 'Caveat', 'Zen Kurenaido', cursive;
+		font-family: var(--theme-font-heading);
 	}
 
 	.badge {
@@ -151,12 +150,12 @@
 	}
 
 	.badge-perfect {
-		background: linear-gradient(135deg, #B45309, #D97706);
+		background: linear-gradient(135deg, var(--theme-bingo), var(--theme-bingo-glow));
 		color: white;
 	}
 
 	.badge-bingo {
-		background: linear-gradient(135deg, #4A7C23, #2D5016);
+		background: linear-gradient(135deg, var(--theme-primary-light), var(--theme-primary));
 		color: white;
 	}
 
@@ -169,21 +168,21 @@
 	.progress-bar {
 		flex: 1;
 		height: 6px;
-		background: #E8E0D5;
+		background: var(--theme-pending-border);
 		border-radius: 9999px;
 		overflow: hidden;
 	}
 
 	.progress-fill {
 		height: 100%;
-		background: linear-gradient(90deg, #2D5016, #4A7C23);
+		background: linear-gradient(90deg, var(--theme-primary), var(--theme-primary-light));
 		border-radius: 9999px;
 		transition: width 0.3s ease-out;
 	}
 
 	.progress-text {
 		font-size: 0.75rem;
-		color: #6B5C4C;
+		color: var(--theme-text-light);
 		font-weight: 500;
 		white-space: nowrap;
 	}
@@ -198,15 +197,15 @@
 		background: transparent;
 		border: none;
 		border-radius: 0.5rem;
-		color: #9CA3AF;
+		color: var(--theme-text-light);
 		cursor: pointer;
 		transition: all 0.15s ease-out;
 		flex-shrink: 0;
 	}
 
 	.delete-btn:hover {
-		background: rgba(194, 65, 12, 0.1);
-		color: #C2410C;
+		background: color-mix(in srgb, var(--theme-achieved) 10%, transparent);
+		color: var(--theme-achieved);
 	}
 
 	.delete-btn svg {

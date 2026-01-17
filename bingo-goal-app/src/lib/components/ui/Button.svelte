@@ -47,11 +47,11 @@
 		cursor: pointer;
 		transition: all 0.2s ease-out;
 		outline: none;
-		font-family: 'Quicksand', 'M PLUS Rounded 1c', sans-serif;
+		font-family: var(--theme-font-body);
 	}
 
 	.btn:focus-visible {
-		outline: 2px solid #4A7C23;
+		outline: 2px solid var(--theme-primary-light);
 		outline-offset: 2px;
 	}
 
@@ -61,37 +61,37 @@
 		transform: none !important;
 	}
 
-	/* Primary - Forest Green */
+	/* Primary */
 	.btn-primary {
-		background: linear-gradient(135deg, #4A7C23, #2D5016);
+		background: linear-gradient(135deg, var(--theme-primary-light), var(--theme-primary));
 		color: white;
-		box-shadow: 0 4px 14px rgba(45, 80, 22, 0.25);
+		box-shadow: 0 4px 14px color-mix(in srgb, var(--theme-primary) 25%, transparent);
 	}
 
 	.btn-primary:hover:not(:disabled) {
 		transform: translateY(-2px);
-		box-shadow: 0 6px 20px rgba(45, 80, 22, 0.35);
+		box-shadow: 0 6px 20px color-mix(in srgb, var(--theme-primary) 35%, transparent);
 	}
 
 	.btn-primary:active:not(:disabled) {
 		transform: translateY(0);
-		box-shadow: 0 2px 8px rgba(45, 80, 22, 0.2);
+		box-shadow: 0 2px 8px color-mix(in srgb, var(--theme-primary) 20%, transparent);
 	}
 
-	/* Secondary - Cream */
+	/* Secondary */
 	.btn-secondary {
-		background: linear-gradient(145deg, #FAF7F2, #F5F0E6);
-		color: #2D5016;
+		background: linear-gradient(145deg, var(--theme-surface), var(--theme-pending));
+		color: var(--theme-primary);
 		box-shadow:
-			0 2px 8px rgba(61, 48, 36, 0.08),
+			0 2px 8px rgba(0, 0, 0, 0.08),
 			inset 0 1px 0 rgba(255, 255, 255, 0.8);
-		border: 1px solid #D4C4B0;
+		border: 1px solid var(--theme-pending-border);
 	}
 
 	.btn-secondary:hover:not(:disabled) {
 		transform: translateY(-2px);
 		box-shadow:
-			0 4px 12px rgba(61, 48, 36, 0.12),
+			0 4px 12px rgba(0, 0, 0, 0.12),
 			inset 0 1px 0 rgba(255, 255, 255, 0.9);
 	}
 
@@ -99,36 +99,36 @@
 		transform: translateY(0);
 	}
 
-	/* Ghost - Brown Text */
+	/* Ghost */
 	.btn-ghost {
 		background: transparent;
-		color: #6B5C4C;
+		color: var(--theme-text-light);
 		box-shadow: none;
 	}
 
 	.btn-ghost:hover:not(:disabled) {
-		background: rgba(45, 80, 22, 0.08);
+		background: color-mix(in srgb, var(--theme-primary) 8%, transparent);
 	}
 
 	.btn-ghost:active:not(:disabled) {
-		background: rgba(45, 80, 22, 0.12);
+		background: color-mix(in srgb, var(--theme-primary) 12%, transparent);
 	}
 
-	/* Danger - Terracotta */
+	/* Danger */
 	.btn-danger {
-		background: linear-gradient(135deg, #C2410C, #EA580C);
+		background: linear-gradient(135deg, var(--theme-achieved), var(--theme-achieved-light));
 		color: white;
-		box-shadow: 0 4px 14px rgba(194, 65, 12, 0.25);
+		box-shadow: 0 4px 14px color-mix(in srgb, var(--theme-achieved) 25%, transparent);
 	}
 
 	.btn-danger:hover:not(:disabled) {
 		transform: translateY(-2px);
-		box-shadow: 0 6px 20px rgba(194, 65, 12, 0.35);
+		box-shadow: 0 6px 20px color-mix(in srgb, var(--theme-achieved) 35%, transparent);
 	}
 
 	.btn-danger:active:not(:disabled) {
 		transform: translateY(0);
-		box-shadow: 0 2px 8px rgba(194, 65, 12, 0.2);
+		box-shadow: 0 2px 8px color-mix(in srgb, var(--theme-achieved) 20%, transparent);
 	}
 
 	/* Spinner */

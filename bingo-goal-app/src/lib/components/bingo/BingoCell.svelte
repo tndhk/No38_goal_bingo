@@ -88,44 +88,43 @@
 		transition: all 0.2s ease-out;
 		cursor: pointer;
 		outline: none;
-		font-family: 'Quicksand', 'M PLUS Rounded 1c', sans-serif;
+		font-family: var(--theme-font-body);
 	}
 
 	.cell:focus-visible {
-		outline: 2px solid #4A7C23;
+		outline: 2px solid var(--theme-primary-light);
 		outline-offset: 2px;
 	}
 
-	/* Pending (未達成) - Cream with dashed border */
+	/* Pending (未達成) */
 	.pending {
-		background: linear-gradient(145deg, #FAF7F2, #F5F0E6);
-		color: #3D3024;
+		background: linear-gradient(145deg, var(--theme-surface), var(--theme-pending));
+		color: var(--theme-text);
 		box-shadow:
-			inset 2px 2px 4px rgba(61, 48, 36, 0.03),
-			4px 4px 12px rgba(61, 48, 36, 0.06),
+			inset 2px 2px 4px rgba(0, 0, 0, 0.03),
+			4px 4px 12px rgba(0, 0, 0, 0.06),
 			-2px -2px 8px rgba(255, 255, 255, 0.8);
-		border: 2px dashed #D4C4B0;
+		border: 2px dashed var(--theme-pending-border);
 	}
 
 	.pending:hover {
 		transform: scale(1.02);
 		box-shadow:
-			inset 2px 2px 4px rgba(61, 48, 36, 0.05),
-			6px 6px 16px rgba(61, 48, 36, 0.1),
+			inset 2px 2px 4px rgba(0, 0, 0, 0.05),
+			6px 6px 16px rgba(0, 0, 0, 0.1),
 			-2px -2px 8px rgba(255, 255, 255, 0.9);
-		border-color: #B8A896;
 	}
 
 	.pending:active {
 		transform: scale(0.98);
 	}
 
-	/* Achieved (達成) - Forest Green */
+	/* Achieved (達成) */
 	.achieved {
-		background: linear-gradient(145deg, #4A7C23, #2D5016);
+		background: linear-gradient(145deg, var(--theme-primary-light), var(--theme-primary));
 		color: white;
 		box-shadow:
-			0 4px 16px rgba(45, 80, 22, 0.3),
+			0 4px 16px color-mix(in srgb, var(--theme-primary) 30%, transparent),
 			inset 0 1px 0 rgba(255, 255, 255, 0.15);
 		border: none;
 	}
@@ -133,7 +132,7 @@
 	.achieved:hover {
 		transform: scale(1.02);
 		box-shadow:
-			0 6px 20px rgba(45, 80, 22, 0.4),
+			0 6px 20px color-mix(in srgb, var(--theme-primary) 40%, transparent),
 			inset 0 1px 0 rgba(255, 255, 255, 0.2);
 	}
 
@@ -141,45 +140,45 @@
 		transform: scale(0.98);
 	}
 
-	/* Bingo Highlight - Amber */
+	/* Bingo Highlight */
 	.bingo-highlight {
 		animation: pulse-bingo 2s ease-in-out infinite;
 	}
 
 	.bingo-highlight.achieved {
 		box-shadow:
-			0 0 0 3px #B45309,
-			0 0 0 6px rgba(180, 83, 9, 0.3),
-			0 4px 16px rgba(45, 80, 22, 0.3);
+			0 0 0 3px var(--theme-bingo),
+			0 0 0 6px color-mix(in srgb, var(--theme-bingo) 30%, transparent),
+			0 4px 16px color-mix(in srgb, var(--theme-primary) 30%, transparent);
 	}
 
 	.bingo-highlight.pending {
 		box-shadow:
-			0 0 0 3px #B45309,
-			0 0 0 6px rgba(180, 83, 9, 0.3),
-			4px 4px 12px rgba(61, 48, 36, 0.1);
+			0 0 0 3px var(--theme-bingo),
+			0 0 0 6px color-mix(in srgb, var(--theme-bingo) 30%, transparent),
+			4px 4px 12px rgba(0, 0, 0, 0.1);
 	}
 
 	@keyframes pulse-bingo {
 		0%, 100% {
 			box-shadow:
-				0 0 0 3px #B45309,
-				0 0 0 6px rgba(180, 83, 9, 0.3);
+				0 0 0 3px var(--theme-bingo),
+				0 0 0 6px color-mix(in srgb, var(--theme-bingo) 30%, transparent);
 		}
 		50% {
 			box-shadow:
-				0 0 0 4px #D97706,
-				0 0 0 10px rgba(217, 119, 6, 0.2);
+				0 0 0 4px var(--theme-bingo-glow),
+				0 0 0 10px color-mix(in srgb, var(--theme-bingo-glow) 20%, transparent);
 		}
 	}
 
-	/* Empty state - Leaf icon */
+	/* Empty state */
 	.empty-state {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		gap: 0.25rem;
-		color: #8B6F47;
+		color: var(--theme-text-light);
 	}
 
 	.empty-icon {

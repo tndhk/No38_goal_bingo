@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-	/* Primary: Forest Green */
+	/* Primary: Forest Green (default) */
 	--color-primary: #2D5016;
 	--color-primary-light: #4A7C23;
 	--color-primary-dark: #1F3A0F;
@@ -34,16 +34,106 @@
 	--color-accent-amber: #D97706;
 }
 
+/* ================================
+   Forest Theme (default)
+   ================================ */
+:root,
+[data-theme="forest"] {
+	--theme-primary: #2D5016;
+	--theme-primary-light: #4A7C23;
+	--theme-primary-dark: #1F3A0F;
+	--theme-achieved: #C2410C;
+	--theme-achieved-light: #EA580C;
+	--theme-achieved-glow: #FB923C;
+	--theme-pending: #F5F0E6;
+	--theme-pending-border: #D4C4B0;
+	--theme-bingo: #B45309;
+	--theme-bingo-glow: #D97706;
+	--theme-background: #FDFBF7;
+	--theme-surface: #FAF7F2;
+	--theme-text: #3D3024;
+	--theme-text-light: #6B5C4C;
+	--theme-font-body: 'Quicksand', 'M PLUS Rounded 1c', sans-serif;
+	--theme-font-heading: 'Caveat', 'Zen Kurenaido', cursive;
+}
+
+/* ================================
+   Ocean Theme
+   ================================ */
+[data-theme="ocean"] {
+	--theme-primary: #1E3A5F;
+	--theme-primary-light: #2563EB;
+	--theme-primary-dark: #1E3A8A;
+	--theme-achieved: #059669;
+	--theme-achieved-light: #10B981;
+	--theme-achieved-glow: #34D399;
+	--theme-pending: #E0F2FE;
+	--theme-pending-border: #BAE6FD;
+	--theme-bingo: #0891B2;
+	--theme-bingo-glow: #22D3EE;
+	--theme-background: #F0F9FF;
+	--theme-surface: #E0F2FE;
+	--theme-text: #0C4A6E;
+	--theme-text-light: #0369A1;
+	--theme-font-body: 'Inter', 'Noto Sans JP', sans-serif;
+	--theme-font-heading: 'Playfair Display', 'Shippori Mincho', serif;
+}
+
+/* ================================
+   Sakura Theme
+   ================================ */
+[data-theme="sakura"] {
+	--theme-primary: #9D174D;
+	--theme-primary-light: #DB2777;
+	--theme-primary-dark: #831843;
+	--theme-achieved: #7C3AED;
+	--theme-achieved-light: #8B5CF6;
+	--theme-achieved-glow: #A78BFA;
+	--theme-pending: #FDF2F8;
+	--theme-pending-border: #FBCFE8;
+	--theme-bingo: #C026D3;
+	--theme-bingo-glow: #E879F9;
+	--theme-background: #FFF1F5;
+	--theme-surface: #FDF2F8;
+	--theme-text: #831843;
+	--theme-text-light: #BE185D;
+	--theme-font-body: 'Zen Maru Gothic', 'M PLUS Rounded 1c', sans-serif;
+	--theme-font-heading: 'Shippori Mincho', 'Noto Serif JP', serif;
+}
+
+/* ================================
+   Midnight Theme (Dark Mode)
+   ================================ */
+[data-theme="midnight"] {
+	--theme-primary: #6366F1;
+	--theme-primary-light: #818CF8;
+	--theme-primary-dark: #4F46E5;
+	--theme-achieved: #10B981;
+	--theme-achieved-light: #34D399;
+	--theme-achieved-glow: #6EE7B7;
+	--theme-pending: #1E293B;
+	--theme-pending-border: #334155;
+	--theme-bingo: #F59E0B;
+	--theme-bingo-glow: #FBBF24;
+	--theme-background: #0F172A;
+	--theme-surface: #1E293B;
+	--theme-text: #E2E8F0;
+	--theme-text-light: #94A3B8;
+	--theme-font-body: 'JetBrains Mono', 'M PLUS 1 Code', monospace;
+	--theme-font-heading: 'Space Grotesk', 'Noto Sans JP', sans-serif;
+}
+
 body {
-	font-family: 'Quicksand', 'M PLUS Rounded 1c', sans-serif;
-	background-color: var(--color-background);
-	color: var(--color-text);
+	font-family: var(--theme-font-body);
+	background-color: var(--theme-background);
+	color: var(--theme-text);
 	font-weight: 500;
+	transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Heading font */
 h1, h2, h3, .font-heading {
-	font-family: 'Caveat', 'Zen Kurenaido', cursive;
+	font-family: var(--theme-font-heading);
 }
 
 /* Global animation utilities */

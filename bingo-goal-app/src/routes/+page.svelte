@@ -17,6 +17,7 @@
 	import ProgressDisplay from '$lib/components/bingo/ProgressDisplay.svelte';
 	import { getProgressSummary, getBingoLinePositions } from '$lib/utils/bingo';
 	import { celebrateBingo, celebratePerfect } from '$lib/utils/celebration';
+	import ThemeSelector from '$lib/components/ui/ThemeSelector.svelte';
 
 	let isModalOpen = $state(false);
 	let prevBingoCount = $state<number | null>(null);
@@ -115,7 +116,7 @@
 </script>
 
 <svelte:head>
-	<title>Forest Planner</title>
+	<title>Bingo Planner</title>
 </svelte:head>
 
 <div class="page">
@@ -130,10 +131,11 @@
 				<svg class="title-icon" fill="currentColor" viewBox="0 0 24 24">
 					<path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 2,11.5 2,13.5C2,15.5 3.75,17.25 3.75,17.25C7,8 17,8 17,8Z"/>
 				</svg>
-				Forest Planner
+				Bingo Planner
 			</h1>
 			<div class="header-actions">
 				<SaveIndicator {isSaving} />
+				<ThemeSelector />
 				<a href="/boards" class="boards-link" aria-label="View all boards">
 					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 						<path d="M4 6h16M4 10h16M4 14h16M4 18h16" />
@@ -260,12 +262,12 @@
 <style>
 	.page {
 		min-height: 100vh;
-		background: linear-gradient(180deg, #FDFBF7 0%, #F7F3EC 50%, #F0EBE1 100%);
+		background: linear-gradient(180deg, var(--theme-background) 0%, color-mix(in srgb, var(--theme-background) 95%, var(--theme-pending)) 50%, var(--theme-pending) 100%);
 		position: relative;
 		overflow: hidden;
 	}
 
-	/* Background decorations - Leaf silhouettes */
+	/* Background decorations */
 	.bg-decoration {
 		position: fixed;
 		z-index: 0;
@@ -276,7 +278,7 @@
 	.bg-decoration-1 {
 		width: 200px;
 		height: 200px;
-		background: #4A7C23;
+		background: var(--theme-primary-light);
 		top: -50px;
 		right: -50px;
 		clip-path: polygon(50% 0%, 100% 50%, 80% 100%, 50% 80%, 20% 100%, 0% 50%);
@@ -286,7 +288,7 @@
 	.bg-decoration-2 {
 		width: 150px;
 		height: 150px;
-		background: #2D5016;
+		background: var(--theme-primary);
 		bottom: 15%;
 		left: -40px;
 		clip-path: polygon(50% 0%, 100% 50%, 80% 100%, 50% 80%, 20% 100%, 0% 50%);
@@ -296,7 +298,7 @@
 	.bg-decoration-3 {
 		width: 120px;
 		height: 120px;
-		background: #7CB342;
+		background: var(--theme-achieved-light);
 		bottom: 40%;
 		right: -30px;
 		clip-path: polygon(50% 0%, 100% 50%, 80% 100%, 50% 80%, 20% 100%, 0% 50%);
@@ -305,9 +307,9 @@
 
 	/* Header */
 	.header {
-		background: linear-gradient(135deg, #4A7C23, #2D5016);
+		background: linear-gradient(135deg, var(--theme-primary-light), var(--theme-primary));
 		box-shadow:
-			0 4px 20px rgba(45, 80, 22, 0.3),
+			0 4px 20px color-mix(in srgb, var(--theme-primary) 30%, transparent),
 			inset 0 1px 0 rgba(255, 255, 255, 0.15);
 		position: relative;
 		z-index: 10;
@@ -330,7 +332,7 @@
 		font-weight: 600;
 		color: white;
 		letter-spacing: -0.01em;
-		font-family: 'Caveat', 'Zen Kurenaido', cursive;
+		font-family: var(--theme-font-heading);
 	}
 
 	.title-icon {
@@ -383,26 +385,26 @@
 	.select {
 		flex: 1;
 		padding: 0.75rem 1rem;
-		background: linear-gradient(145deg, #FDFBF7, #F5F0E6);
-		border: 2px solid #D4C4B0;
+		background: linear-gradient(145deg, var(--theme-background), var(--theme-pending));
+		border: 2px solid var(--theme-pending-border);
 		border-radius: 0.75rem;
 		font-weight: 600;
-		color: #3D3024;
+		color: var(--theme-text);
 		cursor: pointer;
 		transition: all 0.2s ease-out;
-		font-family: 'Caveat', 'Zen Kurenaido', cursive;
+		font-family: var(--theme-font-heading);
 		font-size: 1.125rem;
 	}
 
 	.select:focus {
 		outline: none;
-		border-color: #4A7C23;
-		box-shadow: 0 0 0 3px rgba(74, 124, 35, 0.15);
+		border-color: var(--theme-primary-light);
+		box-shadow: 0 0 0 3px color-mix(in srgb, var(--theme-primary-light) 15%, transparent);
 	}
 
 	.btn-new {
 		padding: 0.75rem 1.25rem;
-		background: linear-gradient(135deg, #4A7C23, #2D5016);
+		background: linear-gradient(135deg, var(--theme-primary-light), var(--theme-primary));
 		color: white;
 		border: none;
 		border-radius: 0.75rem;
@@ -410,13 +412,13 @@
 		font-size: 0.875rem;
 		cursor: pointer;
 		transition: all 0.2s ease-out;
-		box-shadow: 0 4px 14px rgba(45, 80, 22, 0.25);
-		font-family: 'Quicksand', 'M PLUS Rounded 1c', sans-serif;
+		box-shadow: 0 4px 14px color-mix(in srgb, var(--theme-primary) 25%, transparent);
+		font-family: var(--theme-font-body);
 	}
 
 	.btn-new:hover {
 		transform: translateY(-2px);
-		box-shadow: 0 6px 20px rgba(45, 80, 22, 0.35);
+		box-shadow: 0 6px 20px color-mix(in srgb, var(--theme-primary) 35%, transparent);
 	}
 
 	/* Empty state */
@@ -429,45 +431,45 @@
 		width: 4rem;
 		height: 4rem;
 		margin: 0 auto 1rem;
-		background: linear-gradient(145deg, #FDFBF7, #F5F0E6);
+		background: linear-gradient(145deg, var(--theme-background), var(--theme-pending));
 		border-radius: 50%;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		box-shadow:
-			0 4px 12px rgba(61, 48, 36, 0.08),
+			0 4px 12px rgba(0, 0, 0, 0.08),
 			inset 0 1px 0 rgba(255, 255, 255, 0.8);
-		border: 1px solid #D4C4B0;
+		border: 1px solid var(--theme-pending-border);
 	}
 
 	.empty-icon svg {
 		width: 2rem;
 		height: 2rem;
-		color: #8B6F47;
+		color: var(--theme-text-light);
 	}
 
 	.empty-text {
-		color: #6B5C4C;
+		color: var(--theme-text-light);
 		font-weight: 500;
 		margin-bottom: 1.5rem;
 	}
 
 	.btn-create {
 		padding: 0.875rem 2rem;
-		background: linear-gradient(135deg, #4A7C23, #2D5016);
+		background: linear-gradient(135deg, var(--theme-primary-light), var(--theme-primary));
 		color: white;
 		border: none;
 		border-radius: 0.75rem;
 		font-weight: 600;
 		cursor: pointer;
 		transition: all 0.2s ease-out;
-		box-shadow: 0 4px 14px rgba(45, 80, 22, 0.25);
-		font-family: 'Quicksand', 'M PLUS Rounded 1c', sans-serif;
+		box-shadow: 0 4px 14px color-mix(in srgb, var(--theme-primary) 25%, transparent);
+		font-family: var(--theme-font-body);
 	}
 
 	.btn-create:hover {
 		transform: translateY(-2px);
-		box-shadow: 0 6px 20px rgba(45, 80, 22, 0.35);
+		box-shadow: 0 6px 20px color-mix(in srgb, var(--theme-primary) 35%, transparent);
 	}
 
 	/* Dialog */
@@ -481,54 +483,54 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		background-color: rgba(61, 48, 36, 0.4);
+		background-color: color-mix(in srgb, var(--theme-text) 40%, transparent);
 		backdrop-filter: blur(4px);
 		animation: fadeIn 0.2s ease-out;
 	}
 
 	.dialog {
-		background: linear-gradient(145deg, #FDFBF7, #F5F0E6);
+		background: linear-gradient(145deg, var(--theme-background), var(--theme-pending));
 		border-radius: 1rem;
 		box-shadow:
-			0 24px 48px rgba(61, 48, 36, 0.12),
-			0 8px 16px rgba(61, 48, 36, 0.08),
+			0 24px 48px rgba(0, 0, 0, 0.12),
+			0 8px 16px rgba(0, 0, 0, 0.08),
 			inset 0 1px 0 rgba(255, 255, 255, 0.9);
 		max-width: 24rem;
 		width: 100%;
 		margin: 0 1rem;
 		padding: 1.5rem;
 		animation: modalEnter 0.25s ease-out;
-		border: 1px solid #D4C4B0;
+		border: 1px solid var(--theme-pending-border);
 	}
 
 	.dialog-title {
 		font-size: 1.5rem;
 		font-weight: 600;
 		margin-bottom: 1rem;
-		color: #2D5016;
-		font-family: 'Caveat', 'Zen Kurenaido', cursive;
+		color: var(--theme-primary);
+		font-family: var(--theme-font-heading);
 	}
 
 	.dialog-input {
 		width: 100%;
 		padding: 0.75rem 1rem;
-		background: linear-gradient(145deg, #FDFBF7, #F5F0E6);
-		border: 2px solid #D4C4B0;
+		background: linear-gradient(145deg, var(--theme-background), var(--theme-pending));
+		border: 2px solid var(--theme-pending-border);
 		border-radius: 0.75rem;
 		font-weight: 500;
-		color: #3D3024;
+		color: var(--theme-text);
 		margin-bottom: 1rem;
-		font-family: 'Quicksand', 'M PLUS Rounded 1c', sans-serif;
+		font-family: var(--theme-font-body);
 	}
 
 	.dialog-input::placeholder {
-		color: #8B6F47;
+		color: var(--theme-text-light);
 	}
 
 	.dialog-input:focus {
 		outline: none;
-		border-color: #4A7C23;
-		box-shadow: 0 0 0 3px rgba(74, 124, 35, 0.15);
+		border-color: var(--theme-primary-light);
+		box-shadow: 0 0 0 3px color-mix(in srgb, var(--theme-primary-light) 15%, transparent);
 	}
 
 	.dialog-actions {
@@ -540,23 +542,23 @@
 	.btn-ghost {
 		padding: 0.625rem 1.25rem;
 		background: transparent;
-		color: #6B5C4C;
+		color: var(--theme-text-light);
 		border: none;
 		border-radius: 0.75rem;
 		font-weight: 600;
 		font-size: 0.875rem;
 		cursor: pointer;
 		transition: all 0.2s ease-out;
-		font-family: 'Quicksand', 'M PLUS Rounded 1c', sans-serif;
+		font-family: var(--theme-font-body);
 	}
 
 	.btn-ghost:hover {
-		background: rgba(45, 80, 22, 0.08);
+		background: color-mix(in srgb, var(--theme-primary) 8%, transparent);
 	}
 
 	.btn-primary {
 		padding: 0.625rem 1.25rem;
-		background: linear-gradient(135deg, #4A7C23, #2D5016);
+		background: linear-gradient(135deg, var(--theme-primary-light), var(--theme-primary));
 		color: white;
 		border: none;
 		border-radius: 0.75rem;
@@ -564,13 +566,13 @@
 		font-size: 0.875rem;
 		cursor: pointer;
 		transition: all 0.2s ease-out;
-		box-shadow: 0 4px 14px rgba(45, 80, 22, 0.25);
-		font-family: 'Quicksand', 'M PLUS Rounded 1c', sans-serif;
+		box-shadow: 0 4px 14px color-mix(in srgb, var(--theme-primary) 25%, transparent);
+		font-family: var(--theme-font-body);
 	}
 
 	.btn-primary:hover {
 		transform: translateY(-2px);
-		box-shadow: 0 6px 20px rgba(45, 80, 22, 0.35);
+		box-shadow: 0 6px 20px color-mix(in srgb, var(--theme-primary) 35%, transparent);
 	}
 
 	@keyframes fadeIn {

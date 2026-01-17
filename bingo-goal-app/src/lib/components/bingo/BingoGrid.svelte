@@ -48,19 +48,19 @@
 		grid-template-columns: repeat(3, minmax(0, 1fr));
 		gap: 0.75rem;
 		padding: 1rem;
-		background: linear-gradient(145deg, #FDFBF7, #F5F0E6);
+		background: linear-gradient(145deg, var(--theme-background), var(--theme-pending));
 		border-radius: 1rem;
 		aspect-ratio: 1 / 1;
 		box-shadow:
-			0 8px 32px rgba(61, 48, 36, 0.08),
-			0 2px 8px rgba(61, 48, 36, 0.05),
+			0 8px 32px rgba(0, 0, 0, 0.08),
+			0 2px 8px rgba(0, 0, 0, 0.05),
 			inset 0 1px 0 rgba(255, 255, 255, 0.8);
-		border: 1px solid #D4C4B0;
+		border: 1px solid var(--theme-pending-border);
 		position: relative;
 		z-index: 1;
 	}
 
-	/* Leaf silhouette decorations */
+	/* Decorations */
 	.decoration {
 		position: absolute;
 		z-index: 0;
@@ -72,7 +72,7 @@
 		height: 60px;
 		top: -15px;
 		right: 0px;
-		background: #4A7C23;
+		background: var(--theme-primary-light);
 		clip-path: polygon(50% 0%, 100% 50%, 80% 100%, 50% 80%, 20% 100%, 0% 50%);
 		transform: rotate(15deg);
 	}
@@ -82,7 +82,7 @@
 		height: 45px;
 		bottom: -5px;
 		left: -10px;
-		background: #2D5016;
+		background: var(--theme-primary);
 		clip-path: polygon(50% 0%, 100% 50%, 80% 100%, 50% 80%, 20% 100%, 0% 50%);
 		transform: rotate(-30deg);
 	}
@@ -92,7 +92,7 @@
 		height: 35px;
 		top: 45%;
 		left: -15px;
-		background: #7CB342;
+		background: var(--theme-achieved-light);
 		clip-path: polygon(50% 0%, 100% 50%, 80% 100%, 50% 80%, 20% 100%, 0% 50%);
 		transform: rotate(45deg);
 	}
