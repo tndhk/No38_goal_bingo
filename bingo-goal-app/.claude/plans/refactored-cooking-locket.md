@@ -1,4 +1,23 @@
-# supabaseAdapter.ts パフォーマンス改善計画
+# 変更コミット
+
+## 対象ファイル
+
+- CLAUDE.md - プロジェクト概要更新（認証/クラウド同期追加）
+- dev_tasks.yaml - EP005（認証・クラウド同期）追加
+- total_development_spec.md - アーキテクチャ/Supabaseスキーマ追加
+- RELEASE_DECISION_REPORT.md - リリース判定レポート
+
+## コミットメッセージ
+
+```
+docs: Update documentation for Supabase auth and cloud sync feature
+```
+
+---
+
+# （以下は完了済みの計画）
+
+# supabaseAdapter.ts パフォーマンス改善計画（完了）
 
 ## レビュー指摘事項
 

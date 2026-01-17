@@ -169,7 +169,7 @@
 
 	.btn-primary {
 		background: var(--theme-primary);
-		color: white;
+		color: var(--theme-text-on-primary);
 		box-shadow: 0 4px 15px var(--theme-glow);
 	}
 
@@ -224,7 +224,7 @@
 	.toggle-achieved-btn.achieved {
 		background: linear-gradient(135deg, var(--theme-achieved), var(--theme-achieved-dim));
 		border-color: transparent;
-		color: white;
+		color: white; /* Keep white for achieved because achieved color is always dark enough? Let's check. */
 		box-shadow: 0 4px 15px var(--theme-achieved-glow);
 	}
 

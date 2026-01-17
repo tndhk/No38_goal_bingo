@@ -536,7 +536,7 @@
 		background: linear-gradient(135deg, var(--theme-primary), var(--theme-primary-dim));
 		border: none;
 		border-radius: 1rem;
-		color: white;
+		color: var(--theme-text-on-primary);
 		font-weight: 600;
 		font-size: 1.125rem;
 		cursor: pointer;

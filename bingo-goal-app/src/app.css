@@ -56,6 +56,7 @@
 	--theme-bg-grad-end: #312e81;
 
 	--theme-primary: #818cf8;
+	--theme-primary-dim: #4f46e5;
 	--theme-secondary: #c084fc;
 	--theme-accent: #2dd4bf;
 
@@ -65,6 +66,8 @@
 	--theme-text-muted: #94a3b8;
 
 	--theme-glow: rgba(129, 140, 248, 0.5);
+
+	--theme-text-on-primary: #ffffff;
 }
 
 [data-theme="neon"] {
@@ -75,6 +78,7 @@
 
 	--theme-primary: #22d3ee;
 	/* Cyan */
+	--theme-primary-dim: #0891b2;
 	--theme-secondary: #e879f9;
 	/* Pink */
 	--theme-accent: #facc15;
@@ -86,6 +90,8 @@
 	--theme-text-muted: #a1a1aa;
 
 	--theme-glow: rgba(34, 211, 238, 0.6);
+
+	--theme-text-on-primary: #09090b;
 }
 
 [data-theme="midnight"] {
@@ -95,6 +101,7 @@
 	--theme-bg-grad-end: #000000;
 
 	--theme-primary: #f8fafc;
+	--theme-primary-dim: #cbd5e1;
 	--theme-secondary: #94a3b8;
 	--theme-accent: #ffffff;
 
@@ -104,6 +111,8 @@
 	--theme-text-muted: #737373;
 
 	--theme-glow: rgba(255, 255, 255, 0.3);
+
+	--theme-text-on-primary: #000000;
 }
 
 [data-theme="glass"] {
@@ -117,6 +126,8 @@
 
 	--theme-primary: #ec4899;
 	/* Pink-500 */
+	--theme-primary-dim: #be185d;
+	/* Pink-700 */
 	--theme-secondary: #8b5cf6;
 	/* Violet-500 */
 	--theme-accent: #f472b6;
@@ -131,6 +142,8 @@
 	/* Pink-800 */
 
 	--theme-glow: rgba(236, 72, 153, 0.4);
+
+	--theme-text-on-primary: #ffffff;
 }
 
 
