@@ -76,32 +76,32 @@
 	.progress-label {
 		font-size: 0.875rem;
 		font-weight: 600;
-		color: #1E1B4B;
+		color: #3D3024;
 	}
 
 	.progress-percentage {
 		font-size: 0.875rem;
 		font-weight: 700;
-		color: #7C3AED;
+		color: #2D5016;
 	}
 
 	.progress-track {
 		width: 100%;
 		height: 0.75rem;
-		background: linear-gradient(145deg, #F5F3FF, #E9E5FF);
+		background: linear-gradient(145deg, #F5F0E6, #EDE6D9);
 		border-radius: 9999px;
 		overflow: hidden;
 		box-shadow:
-			inset 2px 2px 4px rgba(124, 58, 237, 0.1),
+			inset 2px 2px 4px rgba(61, 48, 36, 0.08),
 			inset -1px -1px 2px rgba(255, 255, 255, 0.8);
 	}
 
 	.progress-fill {
 		height: 100%;
-		background: linear-gradient(90deg, #10B981, #34D399, #6EE7B7);
+		background: linear-gradient(90deg, #2D5016, #4A7C23, #7CB342);
 		border-radius: 9999px;
 		transition: width 0.5s ease-out;
-		box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+		box-shadow: 0 2px 8px rgba(45, 80, 22, 0.3);
 	}
 
 	.badges {
@@ -118,7 +118,8 @@
 		padding: 0.5rem 1rem;
 		font-weight: 700;
 		font-size: 0.875rem;
-		border-radius: 9999px;
+		border-radius: 0.75rem;
+		font-family: 'Caveat', 'Zen Kurenaido', cursive;
 	}
 
 	.badge-icon {
@@ -128,22 +129,22 @@
 	}
 
 	.badge-bingo {
-		background: linear-gradient(135deg, #F59E0B, #FBBF24);
-		color: #1E1B4B;
+		background: linear-gradient(135deg, #B45309, #D97706);
+		color: white;
 		box-shadow:
-			0 4px 12px rgba(245, 158, 11, 0.3),
-			inset 0 1px 0 rgba(255, 255, 255, 0.3);
+			0 4px 12px rgba(180, 83, 9, 0.3),
+			inset 0 1px 0 rgba(255, 255, 255, 0.2);
 		animation: badge-pop 0.3s ease-out;
 	}
 
 	.badge-perfect {
-		background: linear-gradient(135deg, #7C3AED, #A78BFA, #F472B6, #FBBF24, #34D399);
+		background: linear-gradient(135deg, #2D5016, #4A7C23, #7CB342, #B45309, #C2410C);
 		background-size: 300% 300%;
 		animation: rainbow-shift 3s ease infinite, badge-pop 0.3s ease-out;
 		color: white;
 		box-shadow:
-			0 4px 16px rgba(124, 58, 237, 0.4),
-			inset 0 1px 0 rgba(255, 255, 255, 0.3);
+			0 4px 16px rgba(45, 80, 22, 0.4),
+			inset 0 1px 0 rgba(255, 255, 255, 0.2);
 	}
 
 	@keyframes badge-pop {
@@ -169,13 +170,13 @@
 	.hint {
 		font-size: 0.875rem;
 		font-weight: 500;
-		color: #6366F1;
-		background: linear-gradient(145deg, rgba(255, 255, 255, 0.8), rgba(245, 243, 255, 0.8));
+		color: #6B5C4C;
+		background: linear-gradient(145deg, rgba(253, 251, 247, 0.9), rgba(245, 240, 230, 0.9));
 		padding: 0.5rem 1rem;
-		border-radius: 9999px;
+		border-radius: 0.75rem;
 		box-shadow:
-			0 2px 8px rgba(124, 58, 237, 0.08),
+			0 2px 8px rgba(61, 48, 36, 0.06),
 			inset 0 1px 0 rgba(255, 255, 255, 0.9);
-		border: 1px solid rgba(124, 58, 237, 0.1);
+		border: 1px solid #D4C4B0;
 	}
 </style>

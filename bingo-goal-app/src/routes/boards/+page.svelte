@@ -62,7 +62,7 @@
 </script>
 
 <svelte:head>
-	<title>My Boards - Goal Bingo</title>
+	<title>My Boards - Forest Planner</title>
 </svelte:head>
 
 <div class="page">
@@ -161,50 +161,53 @@
 <style>
 	.page {
 		min-height: 100vh;
-		background: linear-gradient(180deg, #FAF5FF 0%, #F3E8FF 50%, #E9D5FF 100%);
+		background: linear-gradient(180deg, #FDFBF7 0%, #F7F3EC 50%, #F0EBE1 100%);
 		position: relative;
 		overflow: hidden;
 	}
 
 	.bg-decoration {
 		position: fixed;
-		border-radius: 50%;
 		z-index: 0;
 		pointer-events: none;
+		opacity: 0.08;
 	}
 
 	.bg-decoration-1 {
-		width: 300px;
-		height: 300px;
-		background: linear-gradient(135deg, rgba(244, 114, 182, 0.2), rgba(167, 139, 250, 0.2));
-		top: -100px;
-		right: -100px;
-		filter: blur(60px);
+		width: 200px;
+		height: 200px;
+		background: #4A7C23;
+		top: -50px;
+		right: -50px;
+		clip-path: polygon(50% 0%, 100% 50%, 80% 100%, 50% 80%, 20% 100%, 0% 50%);
+		transform: rotate(25deg);
 	}
 
 	.bg-decoration-2 {
-		width: 250px;
-		height: 250px;
-		background: linear-gradient(135deg, rgba(96, 165, 250, 0.2), rgba(52, 211, 153, 0.2));
-		bottom: 10%;
-		left: -80px;
-		filter: blur(50px);
+		width: 150px;
+		height: 150px;
+		background: #2D5016;
+		bottom: 15%;
+		left: -40px;
+		clip-path: polygon(50% 0%, 100% 50%, 80% 100%, 50% 80%, 20% 100%, 0% 50%);
+		transform: rotate(-15deg);
 	}
 
 	.bg-decoration-3 {
-		width: 200px;
-		height: 200px;
-		background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(244, 114, 182, 0.2));
-		bottom: 30%;
-		right: -60px;
-		filter: blur(40px);
+		width: 120px;
+		height: 120px;
+		background: #7CB342;
+		bottom: 40%;
+		right: -30px;
+		clip-path: polygon(50% 0%, 100% 50%, 80% 100%, 50% 80%, 20% 100%, 0% 50%);
+		transform: rotate(45deg);
 	}
 
 	.header {
-		background: linear-gradient(135deg, #7C3AED, #A78BFA);
+		background: linear-gradient(135deg, #4A7C23, #2D5016);
 		box-shadow:
-			0 4px 20px rgba(124, 58, 237, 0.3),
-			inset 0 1px 0 rgba(255, 255, 255, 0.2);
+			0 4px 20px rgba(45, 80, 22, 0.3),
+			inset 0 1px 0 rgba(255, 255, 255, 0.15);
 		position: relative;
 		z-index: 10;
 	}
@@ -224,7 +227,7 @@
 		justify-content: center;
 		width: 2.5rem;
 		height: 2.5rem;
-		border-radius: 0.75rem;
+		border-radius: 0.5rem;
 		color: white;
 		transition: background 0.15s ease-out;
 	}
@@ -239,10 +242,11 @@
 	}
 
 	.title {
-		font-size: 1.25rem;
-		font-weight: 800;
+		font-size: 1.5rem;
+		font-weight: 600;
 		color: white;
 		letter-spacing: -0.01em;
+		font-family: 'Caveat', 'Zen Kurenaido', cursive;
 	}
 
 	.main {
@@ -261,20 +265,21 @@
 
 	.btn-new {
 		padding: 0.75rem 1.5rem;
-		background: linear-gradient(135deg, #7C3AED, #A78BFA);
+		background: linear-gradient(135deg, #4A7C23, #2D5016);
 		color: white;
 		border: none;
-		border-radius: 9999px;
-		font-weight: 700;
+		border-radius: 0.75rem;
+		font-weight: 600;
 		font-size: 0.875rem;
 		cursor: pointer;
 		transition: all 0.2s ease-out;
-		box-shadow: 0 4px 14px rgba(124, 58, 237, 0.25);
+		box-shadow: 0 4px 14px rgba(45, 80, 22, 0.25);
+		font-family: 'Quicksand', 'M PLUS Rounded 1c', sans-serif;
 	}
 
 	.btn-new:hover {
 		transform: translateY(-2px);
-		box-shadow: 0 6px 20px rgba(124, 58, 237, 0.35);
+		box-shadow: 0 6px 20px rgba(45, 80, 22, 0.35);
 	}
 
 	.empty-state {
@@ -286,43 +291,45 @@
 		width: 4rem;
 		height: 4rem;
 		margin: 0 auto 1rem;
-		background: linear-gradient(145deg, #FFFFFF, #F5F3FF);
+		background: linear-gradient(145deg, #FDFBF7, #F5F0E6);
 		border-radius: 50%;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		box-shadow:
-			0 4px 12px rgba(124, 58, 237, 0.1),
+			0 4px 12px rgba(61, 48, 36, 0.08),
 			inset 0 1px 0 rgba(255, 255, 255, 0.8);
+		border: 1px solid #D4C4B0;
 	}
 
 	.empty-icon svg {
 		width: 2rem;
 		height: 2rem;
-		color: #A78BFA;
+		color: #8B6F47;
 	}
 
 	.empty-text {
-		color: #6366F1;
+		color: #6B5C4C;
 		font-weight: 500;
 		margin-bottom: 1.5rem;
 	}
 
 	.btn-create {
 		padding: 0.875rem 2rem;
-		background: linear-gradient(135deg, #7C3AED, #A78BFA);
+		background: linear-gradient(135deg, #4A7C23, #2D5016);
 		color: white;
 		border: none;
-		border-radius: 9999px;
-		font-weight: 700;
+		border-radius: 0.75rem;
+		font-weight: 600;
 		cursor: pointer;
 		transition: all 0.2s ease-out;
-		box-shadow: 0 4px 14px rgba(124, 58, 237, 0.25);
+		box-shadow: 0 4px 14px rgba(45, 80, 22, 0.25);
+		font-family: 'Quicksand', 'M PLUS Rounded 1c', sans-serif;
 	}
 
 	.btn-create:hover {
 		transform: translateY(-2px);
-		box-shadow: 0 6px 20px rgba(124, 58, 237, 0.35);
+		box-shadow: 0 6px 20px rgba(45, 80, 22, 0.35);
 	}
 
 	.dialog-backdrop {
@@ -335,55 +342,54 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		background-color: rgba(30, 27, 75, 0.4);
+		background-color: rgba(61, 48, 36, 0.4);
 		backdrop-filter: blur(4px);
 		animation: fadeIn 0.2s ease-out;
 	}
 
 	.dialog {
-		background: linear-gradient(145deg, #FFFFFF, #FAF5FF);
-		border-radius: 1.5rem;
+		background: linear-gradient(145deg, #FDFBF7, #F5F0E6);
+		border-radius: 1rem;
 		box-shadow:
-			0 24px 48px rgba(124, 58, 237, 0.15),
-			0 8px 16px rgba(124, 58, 237, 0.1),
+			0 24px 48px rgba(61, 48, 36, 0.12),
+			0 8px 16px rgba(61, 48, 36, 0.08),
 			inset 0 1px 0 rgba(255, 255, 255, 0.9);
 		max-width: 24rem;
 		width: 100%;
 		margin: 0 1rem;
 		padding: 1.5rem;
 		animation: modalEnter 0.25s ease-out;
-		border: 1px solid rgba(124, 58, 237, 0.08);
+		border: 1px solid #D4C4B0;
 	}
 
 	.dialog-title {
-		font-size: 1.125rem;
-		font-weight: 700;
+		font-size: 1.5rem;
+		font-weight: 600;
 		margin-bottom: 1rem;
-		background: linear-gradient(135deg, #7C3AED, #A78BFA);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-clip: text;
+		color: #2D5016;
+		font-family: 'Caveat', 'Zen Kurenaido', cursive;
 	}
 
 	.dialog-input {
 		width: 100%;
 		padding: 0.75rem 1rem;
-		background: linear-gradient(145deg, #FFFFFF, #F5F3FF);
-		border: 2px solid rgba(124, 58, 237, 0.15);
-		border-radius: 9999px;
-		font-weight: 600;
-		color: #1E1B4B;
+		background: linear-gradient(145deg, #FDFBF7, #F5F0E6);
+		border: 2px solid #D4C4B0;
+		border-radius: 0.75rem;
+		font-weight: 500;
+		color: #3D3024;
 		margin-bottom: 1rem;
+		font-family: 'Quicksand', 'M PLUS Rounded 1c', sans-serif;
 	}
 
 	.dialog-input::placeholder {
-		color: #A78BFA;
+		color: #8B6F47;
 	}
 
 	.dialog-input:focus {
 		outline: none;
-		border-color: #7C3AED;
-		box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+		border-color: #4A7C23;
+		box-shadow: 0 0 0 3px rgba(74, 124, 35, 0.15);
 	}
 
 	.dialog-actions {
@@ -395,35 +401,37 @@
 	.btn-ghost {
 		padding: 0.625rem 1.25rem;
 		background: transparent;
-		color: #6366F1;
+		color: #6B5C4C;
 		border: none;
-		border-radius: 9999px;
-		font-weight: 700;
+		border-radius: 0.75rem;
+		font-weight: 600;
 		font-size: 0.875rem;
 		cursor: pointer;
 		transition: all 0.2s ease-out;
+		font-family: 'Quicksand', 'M PLUS Rounded 1c', sans-serif;
 	}
 
 	.btn-ghost:hover {
-		background: rgba(124, 58, 237, 0.08);
+		background: rgba(45, 80, 22, 0.08);
 	}
 
 	.btn-primary {
 		padding: 0.625rem 1.25rem;
-		background: linear-gradient(135deg, #7C3AED, #A78BFA);
+		background: linear-gradient(135deg, #4A7C23, #2D5016);
 		color: white;
 		border: none;
-		border-radius: 9999px;
-		font-weight: 700;
+		border-radius: 0.75rem;
+		font-weight: 600;
 		font-size: 0.875rem;
 		cursor: pointer;
 		transition: all 0.2s ease-out;
-		box-shadow: 0 4px 14px rgba(124, 58, 237, 0.25);
+		box-shadow: 0 4px 14px rgba(45, 80, 22, 0.25);
+		font-family: 'Quicksand', 'M PLUS Rounded 1c', sans-serif;
 	}
 
 	.btn-primary:hover {
 		transform: translateY(-2px);
-		box-shadow: 0 6px 20px rgba(124, 58, 237, 0.35);
+		box-shadow: 0 6px 20px rgba(45, 80, 22, 0.35);
 	}
 
 	@keyframes fadeIn {

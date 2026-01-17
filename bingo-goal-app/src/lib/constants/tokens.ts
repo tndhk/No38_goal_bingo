@@ -1,29 +1,29 @@
 export const colors = {
-	// Primary: Violet
-	primary: '#7C3AED',
-	primaryLight: '#A78BFA',
-	primaryDark: '#5B21B6',
-	// Success/Achieved: Emerald
-	achieved: '#10B981',
-	achievedLight: '#6EE7B7',
-	achievedGlow: '#34D399',
-	// Pending: Amber Light
-	pending: '#FEF3C7',
-	pendingBorder: '#FDE68A',
+	// Primary: Forest Green
+	primary: '#2D5016',
+	primaryLight: '#4A7C23',
+	primaryDark: '#1F3A0F',
+	// Success/Achieved: Terracotta
+	achieved: '#C2410C',
+	achievedLight: '#EA580C',
+	achievedGlow: '#FB923C',
+	// Pending: Cream
+	pending: '#F5F0E6',
+	pendingBorder: '#D4C4B0',
 	// Bingo: Amber
-	bingo: '#F59E0B',
-	bingoGlow: '#FBBF24',
-	// Background & Surface
-	background: '#FAF5FF',
-	surface: '#FFFFFF',
-	// Text: Indigo
-	text: '#1E1B4B',
-	textLight: '#6366F1',
-	// Accents
-	accentPink: '#F472B6',
-	accentBlue: '#60A5FA',
-	accentGreen: '#34D399',
-	accentYellow: '#FBBF24',
+	bingo: '#B45309',
+	bingoGlow: '#D97706',
+	// Background & Surface: Washi Paper
+	background: '#FDFBF7',
+	surface: '#FAF7F2',
+	// Text: Brown
+	text: '#3D3024',
+	textLight: '#6B5C4C',
+	// Accents: Natural
+	accentMoss: '#4A7C23',
+	accentBark: '#8B6F47',
+	accentLeaf: '#7CB342',
+	accentAmber: '#D97706',
 } as const;
 
 export const spacing = {

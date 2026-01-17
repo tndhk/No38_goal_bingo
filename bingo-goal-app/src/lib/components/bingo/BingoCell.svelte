@@ -55,8 +55,8 @@
 >
 	{#if isEmpty}
 		<span class="empty-state">
-			<svg class="empty-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+			<svg class="empty-icon" fill="currentColor" viewBox="0 0 24 24">
+				<path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 2,11.5 2,13.5C2,15.5 3.75,17.25 3.75,17.25C7,8 17,8 17,8Z"/>
 			</svg>
 			<span class="empty-text">Goal</span>
 		</span>
@@ -82,114 +82,115 @@
 		height: 100%;
 		min-height: 80px;
 		padding: 0.5rem;
-		border-radius: 1rem;
+		border-radius: 0.75rem;
 		font-size: 0.875rem;
-		font-weight: 600;
+		font-weight: 500;
 		transition: all 0.2s ease-out;
 		cursor: pointer;
-		border: none;
 		outline: none;
+		font-family: 'Quicksand', 'M PLUS Rounded 1c', sans-serif;
 	}
 
 	.cell:focus-visible {
-		outline: 2px solid #A78BFA;
+		outline: 2px solid #4A7C23;
 		outline-offset: 2px;
 	}
 
-	/* Pending (未達成) */
+	/* Pending (未達成) - Cream with dashed border */
 	.pending {
-		background: linear-gradient(145deg, #FFFFFF, #F5F3FF);
-		color: #1E1B4B;
+		background: linear-gradient(145deg, #FAF7F2, #F5F0E6);
+		color: #3D3024;
 		box-shadow:
-			inset 2px 2px 4px rgba(124, 58, 237, 0.05),
-			4px 4px 12px rgba(124, 58, 237, 0.1),
+			inset 2px 2px 4px rgba(61, 48, 36, 0.03),
+			4px 4px 12px rgba(61, 48, 36, 0.06),
 			-2px -2px 8px rgba(255, 255, 255, 0.8);
-		border: 1px solid rgba(124, 58, 237, 0.1);
+		border: 2px dashed #D4C4B0;
 	}
 
 	.pending:hover {
 		transform: scale(1.02);
 		box-shadow:
-			inset 2px 2px 4px rgba(124, 58, 237, 0.08),
-			6px 6px 16px rgba(124, 58, 237, 0.15),
+			inset 2px 2px 4px rgba(61, 48, 36, 0.05),
+			6px 6px 16px rgba(61, 48, 36, 0.1),
 			-2px -2px 8px rgba(255, 255, 255, 0.9);
+		border-color: #B8A896;
 	}
 
 	.pending:active {
 		transform: scale(0.98);
 	}
 
-	/* Achieved (達成) */
+	/* Achieved (達成) - Forest Green */
 	.achieved {
-		background: linear-gradient(145deg, #10B981, #34D399);
+		background: linear-gradient(145deg, #4A7C23, #2D5016);
 		color: white;
 		box-shadow:
-			0 4px 16px rgba(16, 185, 129, 0.3),
-			inset 0 1px 0 rgba(255, 255, 255, 0.2);
+			0 4px 16px rgba(45, 80, 22, 0.3),
+			inset 0 1px 0 rgba(255, 255, 255, 0.15);
 		border: none;
 	}
 
 	.achieved:hover {
 		transform: scale(1.02);
 		box-shadow:
-			0 6px 20px rgba(16, 185, 129, 0.4),
-			inset 0 1px 0 rgba(255, 255, 255, 0.3);
+			0 6px 20px rgba(45, 80, 22, 0.4),
+			inset 0 1px 0 rgba(255, 255, 255, 0.2);
 	}
 
 	.achieved:active {
 		transform: scale(0.98);
 	}
 
-	/* Bingo Highlight */
+	/* Bingo Highlight - Amber */
 	.bingo-highlight {
 		animation: pulse-bingo 2s ease-in-out infinite;
 	}
 
 	.bingo-highlight.achieved {
 		box-shadow:
-			0 0 0 3px #F59E0B,
-			0 0 0 6px rgba(245, 158, 11, 0.3),
-			0 4px 16px rgba(16, 185, 129, 0.3);
+			0 0 0 3px #B45309,
+			0 0 0 6px rgba(180, 83, 9, 0.3),
+			0 4px 16px rgba(45, 80, 22, 0.3);
 	}
 
 	.bingo-highlight.pending {
 		box-shadow:
-			0 0 0 3px #F59E0B,
-			0 0 0 6px rgba(245, 158, 11, 0.3),
-			4px 4px 12px rgba(124, 58, 237, 0.1);
+			0 0 0 3px #B45309,
+			0 0 0 6px rgba(180, 83, 9, 0.3),
+			4px 4px 12px rgba(61, 48, 36, 0.1);
 	}
 
 	@keyframes pulse-bingo {
 		0%, 100% {
 			box-shadow:
-				0 0 0 3px #F59E0B,
-				0 0 0 6px rgba(245, 158, 11, 0.3);
+				0 0 0 3px #B45309,
+				0 0 0 6px rgba(180, 83, 9, 0.3);
 		}
 		50% {
 			box-shadow:
-				0 0 0 4px #FBBF24,
-				0 0 0 10px rgba(251, 191, 36, 0.2);
+				0 0 0 4px #D97706,
+				0 0 0 10px rgba(217, 119, 6, 0.2);
 		}
 	}
 
-	/* Empty state */
+	/* Empty state - Leaf icon */
 	.empty-state {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		gap: 0.25rem;
-		color: #A78BFA;
+		color: #8B6F47;
 	}
 
 	.empty-icon {
 		width: 1.5rem;
 		height: 1.5rem;
-		opacity: 0.7;
+		opacity: 0.6;
 	}
 
 	.empty-text {
 		font-size: 0.75rem;
-		font-weight: 700;
+		font-weight: 600;
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
 	}
@@ -211,7 +212,7 @@
 		right: 0.25rem;
 		width: 1.25rem;
 		height: 1.25rem;
-		background: rgba(255, 255, 255, 0.3);
+		background: rgba(255, 255, 255, 0.25);
 		border-radius: 50%;
 		display: flex;
 		align-items: center;

@@ -48,50 +48,52 @@
 		grid-template-columns: repeat(3, minmax(0, 1fr));
 		gap: 0.75rem;
 		padding: 1rem;
-		background: linear-gradient(145deg, #FFFFFF, #F5F3FF);
-		border-radius: 1.5rem;
+		background: linear-gradient(145deg, #FDFBF7, #F5F0E6);
+		border-radius: 1rem;
 		aspect-ratio: 1 / 1;
 		box-shadow:
-			0 8px 32px rgba(124, 58, 237, 0.12),
-			0 2px 8px rgba(124, 58, 237, 0.08),
+			0 8px 32px rgba(61, 48, 36, 0.08),
+			0 2px 8px rgba(61, 48, 36, 0.05),
 			inset 0 1px 0 rgba(255, 255, 255, 0.8);
-		border: 1px solid rgba(124, 58, 237, 0.08);
+		border: 1px solid #D4C4B0;
 		position: relative;
 		z-index: 1;
 	}
 
-	/* Geometric decorations */
+	/* Leaf silhouette decorations */
 	.decoration {
 		position: absolute;
-		border-radius: 50%;
 		z-index: 0;
-		opacity: 0.6;
+		opacity: 0.15;
 	}
 
 	.decoration-1 {
-		width: 80px;
-		height: 80px;
-		background: linear-gradient(135deg, #F472B6, #A78BFA);
-		top: -20px;
-		right: -10px;
-		filter: blur(20px);
+		width: 60px;
+		height: 60px;
+		top: -15px;
+		right: 0px;
+		background: #4A7C23;
+		clip-path: polygon(50% 0%, 100% 50%, 80% 100%, 50% 80%, 20% 100%, 0% 50%);
+		transform: rotate(15deg);
 	}
 
 	.decoration-2 {
-		width: 60px;
-		height: 60px;
-		background: linear-gradient(135deg, #60A5FA, #34D399);
-		bottom: -10px;
-		left: -15px;
-		filter: blur(15px);
+		width: 45px;
+		height: 45px;
+		bottom: -5px;
+		left: -10px;
+		background: #2D5016;
+		clip-path: polygon(50% 0%, 100% 50%, 80% 100%, 50% 80%, 20% 100%, 0% 50%);
+		transform: rotate(-30deg);
 	}
 
 	.decoration-3 {
-		width: 40px;
-		height: 40px;
-		background: linear-gradient(135deg, #FBBF24, #F472B6);
-		top: 50%;
-		left: -20px;
-		filter: blur(12px);
+		width: 35px;
+		height: 35px;
+		top: 45%;
+		left: -15px;
+		background: #7CB342;
+		clip-path: polygon(50% 0%, 100% 50%, 80% 100%, 50% 80%, 20% 100%, 0% 50%);
+		transform: rotate(45deg);
 	}
 </style>

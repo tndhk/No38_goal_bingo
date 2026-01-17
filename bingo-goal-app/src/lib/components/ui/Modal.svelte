@@ -62,17 +62,17 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		background-color: rgba(30, 27, 75, 0.4);
+		background-color: rgba(61, 48, 36, 0.4);
 		backdrop-filter: blur(4px);
 		animation: fadeIn 0.2s ease-out;
 	}
 
 	.modal-content {
-		background: linear-gradient(145deg, #FFFFFF, #FAF5FF);
-		border-radius: 1.5rem;
+		background: linear-gradient(145deg, #FDFBF7, #F5F0E6);
+		border-radius: 1rem;
 		box-shadow:
-			0 24px 48px rgba(124, 58, 237, 0.15),
-			0 8px 16px rgba(124, 58, 237, 0.1),
+			0 24px 48px rgba(61, 48, 36, 0.12),
+			0 8px 16px rgba(61, 48, 36, 0.08),
 			inset 0 1px 0 rgba(255, 255, 255, 0.9);
 		max-width: 28rem;
 		width: 100%;
@@ -80,18 +80,15 @@
 		margin-right: 1rem;
 		padding: 1.5rem;
 		animation: modalEnter 0.25s ease-out;
-		border: 1px solid rgba(124, 58, 237, 0.08);
+		border: 1px solid #D4C4B0;
 	}
 
 	.modal-title {
-		font-size: 1.25rem;
-		font-weight: 700;
+		font-size: 1.5rem;
+		font-weight: 600;
 		margin-bottom: 1rem;
-		color: #1E1B4B;
-		background: linear-gradient(135deg, #7C3AED, #A78BFA);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-clip: text;
+		color: #2D5016;
+		font-family: 'Caveat', 'Zen Kurenaido', cursive;
 	}
 
 	@keyframes fadeIn {

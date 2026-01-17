@@ -82,21 +82,21 @@
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
-		background: linear-gradient(145deg, #FFFFFF, #F5F3FF);
-		border: 1px solid rgba(124, 58, 237, 0.1);
-		border-radius: 1rem;
+		background: linear-gradient(145deg, #FDFBF7, #F5F0E6);
+		border: 1px solid #D4C4B0;
+		border-radius: 0.75rem;
 		transition: all 0.2s ease-out;
 		box-shadow:
-			0 2px 8px rgba(124, 58, 237, 0.08),
+			0 2px 8px rgba(61, 48, 36, 0.06),
 			inset 0 1px 0 rgba(255, 255, 255, 0.9);
 		padding-right: 0.5rem;
 	}
 
 	.board-card:hover {
 		box-shadow:
-			0 6px 16px rgba(124, 58, 237, 0.15),
+			0 6px 16px rgba(61, 48, 36, 0.1),
 			inset 0 1px 0 rgba(255, 255, 255, 0.9);
-		border-color: rgba(124, 58, 237, 0.2);
+		border-color: #B8A896;
 	}
 
 	.card-button {
@@ -108,16 +108,16 @@
 		border: none;
 		cursor: pointer;
 		text-align: left;
-		border-radius: 1rem 0 0 1rem;
+		border-radius: 0.75rem 0 0 0.75rem;
 		transition: background 0.15s ease-out;
 	}
 
 	.card-button:hover {
-		background: rgba(124, 58, 237, 0.03);
+		background: rgba(45, 80, 22, 0.03);
 	}
 
 	.card-button:active {
-		background: rgba(124, 58, 237, 0.06);
+		background: rgba(45, 80, 22, 0.06);
 	}
 
 	.card-content {
@@ -133,29 +133,30 @@
 	}
 
 	.board-name {
-		font-size: 1.125rem;
-		font-weight: 700;
-		color: #1E1B4B;
+		font-size: 1.25rem;
+		font-weight: 600;
+		color: #3D3024;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
 		max-width: 12rem;
+		font-family: 'Caveat', 'Zen Kurenaido', cursive;
 	}
 
 	.badge {
 		padding: 0.125rem 0.5rem;
-		border-radius: 9999px;
+		border-radius: 0.5rem;
 		font-size: 0.75rem;
 		font-weight: 600;
 	}
 
 	.badge-perfect {
-		background: linear-gradient(135deg, #FBBF24, #F59E0B);
-		color: #78350F;
+		background: linear-gradient(135deg, #B45309, #D97706);
+		color: white;
 	}
 
 	.badge-bingo {
-		background: linear-gradient(135deg, #10B981, #059669);
+		background: linear-gradient(135deg, #4A7C23, #2D5016);
 		color: white;
 	}
 
@@ -168,21 +169,21 @@
 	.progress-bar {
 		flex: 1;
 		height: 6px;
-		background: #E5E7EB;
+		background: #E8E0D5;
 		border-radius: 9999px;
 		overflow: hidden;
 	}
 
 	.progress-fill {
 		height: 100%;
-		background: linear-gradient(90deg, #7C3AED, #A78BFA);
+		background: linear-gradient(90deg, #2D5016, #4A7C23);
 		border-radius: 9999px;
 		transition: width 0.3s ease-out;
 	}
 
 	.progress-text {
 		font-size: 0.75rem;
-		color: #6366F1;
+		color: #6B5C4C;
 		font-weight: 500;
 		white-space: nowrap;
 	}
@@ -204,8 +205,8 @@
 	}
 
 	.delete-btn:hover {
-		background: rgba(239, 68, 68, 0.1);
-		color: #EF4444;
+		background: rgba(194, 65, 12, 0.1);
+		color: #C2410C;
 	}
 
 	.delete-btn svg {

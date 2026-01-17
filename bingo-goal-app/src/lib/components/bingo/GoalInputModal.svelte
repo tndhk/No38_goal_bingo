@@ -107,26 +107,27 @@
 	.textarea {
 		width: 100%;
 		padding: 1rem;
-		border: 2px solid rgba(124, 58, 237, 0.15);
-		border-radius: 1rem;
+		border: 2px solid #D4C4B0;
+		border-radius: 0.75rem;
 		resize: none;
 		font-size: 1rem;
 		font-weight: 500;
-		color: #1E1B4B;
-		background: linear-gradient(145deg, #FFFFFF, #FAF5FF);
+		color: #3D3024;
+		background: linear-gradient(145deg, #FDFBF7, #F5F0E6);
 		transition: all 0.2s ease-out;
+		font-family: 'Quicksand', 'M PLUS Rounded 1c', sans-serif;
 	}
 
 	.textarea::placeholder {
-		color: #A78BFA;
+		color: #8B6F47;
 	}
 
 	.textarea:focus {
 		outline: none;
-		border-color: #7C3AED;
+		border-color: #4A7C23;
 		box-shadow:
-			0 0 0 3px rgba(124, 58, 237, 0.15),
-			0 4px 12px rgba(124, 58, 237, 0.1);
+			0 0 0 3px rgba(74, 124, 35, 0.15),
+			0 4px 12px rgba(45, 80, 22, 0.1);
 	}
 
 	.char-count {
@@ -136,15 +137,15 @@
 	}
 
 	.char-count-current {
-		color: #7C3AED;
+		color: #2D5016;
 	}
 
 	.char-count-separator {
-		color: #A78BFA;
+		color: #8B6F47;
 	}
 
 	.char-count-max {
-		color: #A78BFA;
+		color: #8B6F47;
 	}
 
 	.button-group {
@@ -155,41 +156,42 @@
 
 	.btn {
 		padding: 0.625rem 1.25rem;
-		border-radius: 9999px;
-		font-weight: 700;
+		border-radius: 1rem;
+		font-weight: 600;
 		font-size: 0.875rem;
 		border: none;
 		cursor: pointer;
 		transition: all 0.2s ease-out;
+		font-family: 'Quicksand', 'M PLUS Rounded 1c', sans-serif;
 	}
 
 	.btn-primary {
-		background: linear-gradient(135deg, #7C3AED, #A78BFA);
+		background: linear-gradient(135deg, #4A7C23, #2D5016);
 		color: white;
-		box-shadow: 0 4px 14px rgba(124, 58, 237, 0.25);
+		box-shadow: 0 4px 14px rgba(45, 80, 22, 0.25);
 	}
 
 	.btn-primary:hover {
 		transform: translateY(-2px);
-		box-shadow: 0 6px 20px rgba(124, 58, 237, 0.35);
+		box-shadow: 0 6px 20px rgba(45, 80, 22, 0.35);
 	}
 
 	.btn-ghost {
 		background: transparent;
-		color: #6366F1;
+		color: #6B5C4C;
 	}
 
 	.btn-ghost:hover {
-		background: rgba(124, 58, 237, 0.08);
+		background: rgba(45, 80, 22, 0.08);
 	}
 
 	.btn-danger {
 		background: transparent;
-		color: #F472B6;
+		color: #C2410C;
 	}
 
 	.btn-danger:hover {
-		background: rgba(244, 114, 182, 0.1);
+		background: rgba(194, 65, 12, 0.1);
 	}
 
 	.toggle-achieved-btn {
@@ -199,31 +201,32 @@
 		gap: 0.5rem;
 		width: 100%;
 		padding: 0.75rem 1rem;
-		border: 2px solid rgba(124, 58, 237, 0.15);
-		border-radius: 9999px;
-		background: linear-gradient(145deg, #FFFFFF, #F5F3FF);
+		border: 2px solid #D4C4B0;
+		border-radius: 1rem;
+		background: linear-gradient(145deg, #FAF7F2, #F5F0E6);
 		font-weight: 600;
 		font-size: 0.875rem;
-		color: #6366F1;
+		color: #6B5C4C;
 		cursor: pointer;
 		transition: all 0.2s ease-out;
+		font-family: 'Quicksand', 'M PLUS Rounded 1c', sans-serif;
 	}
 
 	.toggle-achieved-btn:hover {
-		border-color: rgba(124, 58, 237, 0.3);
-		background: linear-gradient(145deg, #F5F3FF, #EDE9FE);
+		border-color: #B8A896;
+		background: linear-gradient(145deg, #F5F0E6, #EDE6D9);
 	}
 
 	.toggle-achieved-btn.achieved {
-		background: linear-gradient(135deg, #10B981, #059669);
+		background: linear-gradient(135deg, #4A7C23, #2D5016);
 		border-color: transparent;
 		color: white;
-		box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25);
+		box-shadow: 0 4px 14px rgba(45, 80, 22, 0.25);
 	}
 
 	.toggle-achieved-btn.achieved:hover {
-		background: linear-gradient(135deg, #059669, #047857);
-		box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35);
+		background: linear-gradient(135deg, #2D5016, #1F3A0F);
+		box-shadow: 0 6px 20px rgba(45, 80, 22, 0.35);
 	}
 
 	.toggle-icon {

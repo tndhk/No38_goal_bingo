@@ -1,44 +1,49 @@
 @import "tailwindcss";
 
 @theme {
-	/* Primary: Violet */
-	--color-primary: #7C3AED;
-	--color-primary-light: #A78BFA;
-	--color-primary-dark: #5B21B6;
+	/* Primary: Forest Green */
+	--color-primary: #2D5016;
+	--color-primary-light: #4A7C23;
+	--color-primary-dark: #1F3A0F;
 
-	/* Success/Achieved: Emerald */
-	--color-achieved: #10B981;
-	--color-achieved-light: #6EE7B7;
-	--color-achieved-glow: #34D399;
+	/* Success/Achieved: Terracotta */
+	--color-achieved: #C2410C;
+	--color-achieved-light: #EA580C;
+	--color-achieved-glow: #FB923C;
 
-	/* Pending: Amber Light */
-	--color-pending: #FEF3C7;
-	--color-pending-border: #FDE68A;
+	/* Pending: Cream */
+	--color-pending: #F5F0E6;
+	--color-pending-border: #D4C4B0;
 
 	/* Bingo: Amber */
-	--color-bingo: #F59E0B;
-	--color-bingo-glow: #FBBF24;
+	--color-bingo: #B45309;
+	--color-bingo-glow: #D97706;
 
-	/* Background & Surface */
-	--color-background: #FAF5FF;
-	--color-surface: #FFFFFF;
+	/* Background & Surface: Washi Paper */
+	--color-background: #FDFBF7;
+	--color-surface: #FAF7F2;
 
-	/* Text: Indigo */
-	--color-text: #1E1B4B;
-	--color-text-light: #6366F1;
+	/* Text: Brown */
+	--color-text: #3D3024;
+	--color-text-light: #6B5C4C;
 
-	/* Accents */
-	--color-accent-pink: #F472B6;
-	--color-accent-blue: #60A5FA;
-	--color-accent-green: #34D399;
-	--color-accent-yellow: #FBBF24;
+	/* Accents: Natural */
+	--color-accent-moss: #4A7C23;
+	--color-accent-bark: #8B6F47;
+	--color-accent-leaf: #7CB342;
+	--color-accent-amber: #D97706;
 }
 
 body {
-	font-family: 'Nunito', 'Hiragino Maru Gothic ProN', 'BIZ UDGothic', sans-serif;
+	font-family: 'Quicksand', 'M PLUS Rounded 1c', sans-serif;
 	background-color: var(--color-background);
 	color: var(--color-text);
-	font-weight: 600;
+	font-weight: 500;
+}
+
+/* Heading font */
+h1, h2, h3, .font-heading {
+	font-family: 'Caveat', 'Zen Kurenaido', cursive;
 }
 
 /* Global animation utilities */

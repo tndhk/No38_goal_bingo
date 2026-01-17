@@ -23,8 +23,8 @@
 		align-items: center;
 		gap: 0.5rem;
 		padding: 0.375rem 0.75rem;
-		background: rgba(255, 255, 255, 0.2);
-		border-radius: 9999px;
+		background: rgba(45, 80, 22, 0.15);
+		border-radius: 0.5rem;
 		backdrop-filter: blur(4px);
 	}
 
@@ -36,7 +36,7 @@
 	.dot {
 		width: 0.375rem;
 		height: 0.375rem;
-		background: white;
+		background: #4A7C23;
 		border-radius: 50%;
 		animation: bounce 1.4s ease-in-out infinite;
 	}
@@ -67,7 +67,7 @@
 	.label {
 		font-size: 0.75rem;
 		font-weight: 600;
-		color: rgba(255, 255, 255, 0.9);
+		color: #2D5016;
 		letter-spacing: 0.025em;
 	}
 </style>

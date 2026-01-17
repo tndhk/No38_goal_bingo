@@ -43,7 +43,7 @@
 
 <style>
 	.dialog-message {
-		color: #1E1B4B;
+		color: #3D3024;
 		margin-bottom: 1.5rem;
 		line-height: 1.5;
 	}
