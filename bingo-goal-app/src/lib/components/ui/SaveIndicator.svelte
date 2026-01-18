@@ -1,9 +1,15 @@
 <script lang="ts">
+	import { localeStore } from '$lib/stores/localeStore';
+	import { t } from '$lib/i18n/translations';
+
 	interface Props {
 		isSaving: boolean;
 	}
 
 	let { isSaving }: Props = $props();
+
+	const locale = $derived($localeStore);
+	const i18n = $derived(t(locale));
 </script>
 
 {#if isSaving}
@@ -13,7 +19,7 @@
 			<span class="dot"></span>
 			<span class="dot"></span>
 		</span>
-		<span class="label">Saving</span>
+		<span class="label">{i18n.common.saving}</span>
 	</span>
 {/if}
 

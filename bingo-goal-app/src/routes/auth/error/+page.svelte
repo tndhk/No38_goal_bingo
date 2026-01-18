@@ -1,11 +1,15 @@
 <script lang="ts">
 	import { currentTheme } from '$lib/stores/themeStore';
+	import { localeStore } from '$lib/stores/localeStore';
+	import { t } from '$lib/i18n/translations';
 
 	const theme = $derived($currentTheme);
+	const locale = $derived($localeStore);
+	const i18n = $derived(t(locale));
 </script>
 
 <svelte:head>
-	<title>Authentication Error - BinGoal!</title>
+	<title>{i18n.auth.errorTitle} - BinGoal!</title>
 </svelte:head>
 
 <div class="page">
@@ -20,11 +24,9 @@
 				/>
 			</svg>
 		</div>
-		<h1 class="title">Authentication Error</h1>
-		<p class="description">
-			Something went wrong during the authentication process. Please try again.
-		</p>
-		<a href="/" class="btn-primary">Return Home</a>
+		<h1 class="title">{i18n.auth.errorTitle}</h1>
+		<p class="description">{i18n.auth.errorDesc}</p>
+		<a href="/" class="btn-primary">{i18n.auth.returnHome}</a>
 	</div>
 </div>
 

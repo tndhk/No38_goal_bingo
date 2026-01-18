@@ -2,6 +2,8 @@
 	import type { BingoBoard } from '$lib/types/bingo';
 	import { generateBingoLines } from '$lib/types/bingo';
 	import { getAchievedCount, getBingoCount } from '$lib/utils/bingo';
+	import { localeStore } from '$lib/stores/localeStore';
+	import { t } from '$lib/i18n/translations';
 
 	interface Props {
 		boards: BingoBoard[];
@@ -10,6 +12,9 @@
 	}
 
 	let { boards, onSelectBoard, onDeleteBoard }: Props = $props();
+
+	const locale = $derived($localeStore);
+	const i18n = $derived(t(locale));
 
 	const sortedBoards = $derived(
 		[...boards].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
@@ -38,15 +43,15 @@
 				type="button"
 				class="card-button"
 				onclick={() => onSelectBoard(board.id)}
-				aria-label="{board.name} - {summary.achieved}/{summary.total} achieved"
+				aria-label="{board.name} - {summary.achieved}/{summary.total} {i18n.progress.achieved}"
 			>
 				<div class="card-content">
 					<div class="card-header">
 						<span class="board-name">{board.name}</span>
 						{#if summary.isPerfect}
-							<span class="badge badge-perfect">Perfect!</span>
+							<span class="badge badge-perfect">{i18n.progress.perfect}!</span>
 						{:else if summary.bingoCount > 0}
-							<span class="badge badge-bingo">{summary.bingoCount} Bingo</span>
+							<span class="badge badge-bingo">{summary.bingoCount} {i18n.progress.bingo}</span>
 						{/if}
 					</div>
 					<div class="card-stats">
@@ -56,7 +61,7 @@
 								style="width: {(summary.achieved / summary.total) * 100}%"
 							></div>
 						</div>
-						<span class="progress-text">{summary.achieved}/{summary.total} achieved</span>
+						<span class="progress-text">{summary.achieved}/{summary.total} {i18n.progress.achieved}</span>
 					</div>
 				</div>
 			</button>
@@ -64,7 +69,7 @@
 				type="button"
 				class="delete-btn"
 				onclick={(e) => handleDeleteClick(e, board.id)}
-				aria-label="Delete {board.name}"
+				aria-label="{i18n.common.delete} {board.name}"
 			>
 				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 					<path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />

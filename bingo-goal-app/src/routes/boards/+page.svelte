@@ -11,6 +11,8 @@
 		createBoard
 	} from '$lib/stores/boardStore';
 	import { currentTheme } from '$lib/stores/themeStore';
+	import { localeStore } from '$lib/stores/localeStore';
+	import { t } from '$lib/i18n/translations';
 	import type { BoardSize } from '$lib/types/bingo';
 	import BoardList from '$lib/components/bingo/BoardList.svelte';
 	import Dialog from '$lib/components/ui/Dialog.svelte';
@@ -23,6 +25,8 @@
 
 	const boards = $derived($boardStore.boards);
 	const themeIcon = $derived($currentTheme.meta.icon);
+	const locale = $derived($localeStore);
+	const i18n = $derived(t(locale));
 
 	onMount(() => {
 		initializeStore();
@@ -61,7 +65,7 @@
 	}
 
 	function handleCreateBoard() {
-		const name = newBoardName.trim() || `${new Date().getFullYear()} Goals`;
+		const name = newBoardName.trim() || i18n.boardModal.defaultName(new Date().getFullYear());
 		createBoard(name, selectedSize);
 		newBoardName = '';
 		selectedSize = 3;
@@ -84,14 +88,14 @@
 	<div class="content-wrapper">
 		<header class="header glass-panel">
 			<div class="header-inner">
-				<a href="/" class="btn-back" aria-label="Back to home">
+				<a href="/" class="btn-back" aria-label={i18n.common.backToHome}>
 					<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 						<path d="M19 12H5M12 19l-7-7 7-7" />
 					</svg>
 				</a>
 				<h1 class="brand">
 					<span class="brand-icon">{themeIcon}</span>
-					<span class="brand-text">My Bingoals</span>
+					<span class="brand-text">{i18n.boards.myBingoals}</span>
 				</h1>
 			</div>
 		</header>
@@ -107,7 +111,7 @@
 				</div>
 				<div class="new-board-section" in:fly={{ y: 20, duration: 400, delay: 200 }}>
 					<button type="button" class="btn-primary-lg" onclick={openNameDialog}>
-						+ Create New Board
+						{i18n.boards.createNewBoard}
 					</button>
 				</div>
 			{:else}
@@ -117,10 +121,10 @@
 							<path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
 						</svg>
 					</div>
-					<h2 class="empty-title">No Boards Yet</h2>
-					<p class="empty-desc">Create your first bingo board to start tracking goals.</p>
+					<h2 class="empty-title">{i18n.boards.noBoardsYet}</h2>
+					<p class="empty-desc">{i18n.main.createFirstBoardDesc}</p>
 					<button type="button" class="btn-primary-lg" onclick={openNameDialog}>
-						Create Your First Board
+						{i18n.boards.createFirstBoard}
 					</button>
 				</div>
 			{/if}
@@ -130,10 +134,10 @@
 
 <Dialog
 	isOpen={isDeleteDialogOpen}
-	title="Delete Board"
-	message="「{boardToDelete?.name}」を削除しますか? この操作は取り消せません。"
-	confirmLabel="Delete"
-	cancelLabel="Cancel"
+	title={i18n.boards.deleteBoard}
+	message={i18n.boards.deleteConfirm(boardToDelete?.name ?? '')}
+	confirmLabel={i18n.common.delete}
+	cancelLabel={i18n.common.cancel}
 	variant="danger"
 	onconfirm={handleDeleteConfirm}
 	oncancel={handleDeleteCancel}
@@ -155,19 +159,19 @@
 			onclick={(e) => e.stopPropagation()}
 			onkeydown={(e) => e.key === 'Escape' && (isNameDialogOpen = false)}
 		>
-			<h2 class="modal-title">New Board</h2>
+			<h2 class="modal-title">{i18n.boardModal.newBoard}</h2>
 
 			<div class="input-group">
 				<input
 					type="text"
 					bind:value={newBoardName}
-					placeholder={`${new Date().getFullYear()} Goals`}
+					placeholder={i18n.boardModal.defaultName(new Date().getFullYear())}
 					class="text-input"
 				/>
 			</div>
 
 			<div class="size-selector" role="group" aria-labelledby="grid-size-label">
-				<span id="grid-size-label" class="section-label">Grid Size</span>
+				<span id="grid-size-label" class="section-label">{i18n.boardModal.gridSize}</span>
 				<div class="grid-options">
 					{#each [3, 4, 5] as size (size)}
 						<button
@@ -177,7 +181,7 @@
 							onclick={() => (selectedSize = size as BoardSize)}
 						>
 							<span class="grid-size">{size}x{size}</span>
-							<span class="grid-count">{size * size} goals</span>
+							<span class="grid-count">{size * size} {i18n.boardModal.goals}</span>
 						</button>
 					{/each}
 				</div>
@@ -189,10 +193,10 @@
 					onclick={() => (isNameDialogOpen = false)}
 					class="btn-text"
 				>
-					Cancel
+					{i18n.common.cancel}
 				</button>
 				<button type="button" onclick={handleCreateBoard} class="btn-primary">
-					Create Board
+					{i18n.main.createBoard}
 				</button>
 			</div>
 		</div>

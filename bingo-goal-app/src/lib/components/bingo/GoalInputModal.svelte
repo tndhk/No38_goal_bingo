@@ -1,6 +1,8 @@
 <script lang="ts">
 	import type { CellPosition } from '$lib/types/bingo';
 	import Modal from '$lib/components/ui/Modal.svelte';
+	import { localeStore } from '$lib/stores/localeStore';
+	import { t } from '$lib/i18n/translations';
 
 	interface Props {
 		isOpen: boolean;
@@ -16,6 +18,9 @@
 	const MAX_LENGTH = 50;
 
 	let { isOpen, position, currentGoal, isAchieved, onSave, onClear, onClose, onToggleAchieved }: Props = $props();
+
+	const locale = $derived($localeStore);
+	const i18n = $derived(t(locale));
 
 	let goalText = $state(currentGoal);
 
@@ -34,12 +39,12 @@
 	}
 </script>
 
-<Modal {isOpen} onclose={onClose} title="Goal">
+<Modal {isOpen} onclose={onClose} title={i18n.goal.title}>
 	<div class="modal-body">
 		<textarea
 			bind:value={goalText}
 			maxlength={MAX_LENGTH}
-			placeholder="Enter your goal..."
+			placeholder={i18n.goal.placeholder}
 			rows="3"
 			class="textarea"
 		></textarea>
@@ -60,12 +65,12 @@
 				<svg class="toggle-icon" viewBox="0 0 24 24" fill="currentColor">
 					<path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
 				</svg>
-				<span>達成済み</span>
+				<span>{i18n.goal.achieved}</span>
 			{:else}
 				<svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 					<circle cx="12" cy="12" r="10"/>
 				</svg>
-				<span>達成</span>
+				<span>{i18n.goal.markAchieved}</span>
 			{/if}
 		</button>
 
@@ -76,7 +81,7 @@
 					onclick={handleClear}
 					class="btn btn-danger"
 				>
-					Clear
+					{i18n.goal.clear}
 				</button>
 			{/if}
 			<button
@@ -84,14 +89,14 @@
 				onclick={onClose}
 				class="btn btn-ghost"
 			>
-				Cancel
+				{i18n.common.cancel}
 			</button>
 			<button
 				type="button"
 				onclick={handleSave}
 				class="btn btn-primary"
 			>
-				Save
+				{i18n.common.save}
 			</button>
 		</div>
 	</div>

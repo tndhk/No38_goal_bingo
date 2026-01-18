@@ -20,6 +20,50 @@ export type TranslationKeys = {
 	preview: {
 		goals: string[];
 	};
+	common: {
+		cancel: string;
+		save: string;
+		delete: string;
+		saving: string;
+		backToHome: string;
+		manageBoards: string;
+	};
+	main: {
+		startJourney: string;
+		createFirstBoardDesc: string;
+		createBoard: string;
+	};
+	boardModal: {
+		newBoard: string;
+		gridSize: string;
+		goals: string;
+		defaultName: (year: number) => string;
+	};
+	boards: {
+		myBingoals: string;
+		noBoardsYet: string;
+		createFirstBoard: string;
+		createNewBoard: string;
+		deleteBoard: string;
+		deleteConfirm: (name: string) => string;
+	};
+	goal: {
+		title: string;
+		placeholder: string;
+		clear: string;
+		achieved: string;
+		markAchieved: string;
+	};
+	progress: {
+		achieved: string;
+		bingo: string;
+		perfect: string;
+	};
+	auth: {
+		errorTitle: string;
+		errorDesc: string;
+		returnHome: string;
+	};
 };
 
 const translations: Record<Locale, TranslationKeys> = {
@@ -64,6 +108,51 @@ const translations: Record<Locale, TranslationKeys> = {
 				'日記を書く',
 				'毎日瞑想'
 			]
+		},
+		common: {
+			cancel: 'キャンセル',
+			save: '保存',
+			delete: '削除',
+			saving: '保存中',
+			backToHome: 'ホームに戻る',
+			manageBoards: 'ボード管理'
+		},
+		main: {
+			startJourney: '目標を始めよう',
+			createFirstBoardDesc: '最初のビンゴボードを作成して、目標達成の旅を始めましょう',
+			createBoard: 'ボード作成'
+		},
+		boardModal: {
+			newBoard: '新規ボード',
+			gridSize: 'グリッドサイズ',
+			goals: '個の目標',
+			defaultName: (year: number) => `${year}年の目標`
+		},
+		boards: {
+			myBingoals: 'マイビンゴール',
+			noBoardsYet: 'ボードがありません',
+			createFirstBoard: '最初のボードを作成',
+			createNewBoard: '+ 新しいボード',
+			deleteBoard: 'ボード削除',
+			deleteConfirm: (name: string) =>
+				`「${name}」を削除しますか？この操作は元に戻せません。`
+		},
+		goal: {
+			title: '目標',
+			placeholder: '目標を入力...',
+			clear: 'クリア',
+			achieved: '達成済み',
+			markAchieved: '達成'
+		},
+		progress: {
+			achieved: '達成',
+			bingo: 'ビンゴ',
+			perfect: 'パーフェクト'
+		},
+		auth: {
+			errorTitle: '認証エラー',
+			errorDesc: '問題が発生しました。もう一度お試しください。',
+			returnHome: 'ホームに戻る'
 		}
 	},
 	en: {
@@ -107,6 +196,51 @@ const translations: Record<Locale, TranslationKeys> = {
 				'Write journal',
 				'Meditate daily'
 			]
+		},
+		common: {
+			cancel: 'Cancel',
+			save: 'Save',
+			delete: 'Delete',
+			saving: 'Saving',
+			backToHome: 'Back to home',
+			manageBoards: 'Manage Boards'
+		},
+		main: {
+			startJourney: 'Start Your Journey',
+			createFirstBoardDesc: 'Create your first bingo board and start achieving your goals',
+			createBoard: 'Create Board'
+		},
+		boardModal: {
+			newBoard: 'New Board',
+			gridSize: 'Grid Size',
+			goals: 'goals',
+			defaultName: (year: number) => `${year} Goals`
+		},
+		boards: {
+			myBingoals: 'My Bingoals',
+			noBoardsYet: 'No Boards Yet',
+			createFirstBoard: 'Create Your First Board',
+			createNewBoard: '+ Create New Board',
+			deleteBoard: 'Delete Board',
+			deleteConfirm: (name: string) =>
+				`Delete "${name}"? This action cannot be undone.`
+		},
+		goal: {
+			title: 'Goal',
+			placeholder: 'Enter your goal...',
+			clear: 'Clear',
+			achieved: 'Achieved',
+			markAchieved: 'Mark achieved'
+		},
+		progress: {
+			achieved: 'achieved',
+			bingo: 'BINGO',
+			perfect: 'PERFECT'
+		},
+		auth: {
+			errorTitle: 'Authentication Error',
+			errorDesc: 'Something went wrong. Please try again.',
+			returnHome: 'Return Home'
 		}
 	}
 };

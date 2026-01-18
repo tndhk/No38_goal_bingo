@@ -11,7 +11,7 @@ test.describe('Goal Input and Achievement', () => {
 		const guestButton = page.getByRole('button', { name: /Guest Mode|ゲストで試す/i });
 		await guestButton.click();
 		await page.waitForSelector('[role="dialog"]', { timeout: 5000 });
-		await page.locator('[role="dialog"]').getByRole('button', { name: 'Create Board' }).click();
+		await page.locator('[role="dialog"]').getByRole('button', { name: 'ボード作成' }).click();
 
 		// Wait for grid to appear
 		await page.waitForSelector('button.cell', { timeout: 5000 });
@@ -25,8 +25,8 @@ test.describe('Goal Input and Achievement', () => {
 		await page.waitForSelector('[aria-labelledby="modal-title"]', { timeout: 5000 });
 
 		// Modal should appear
-		await expect(page.getByRole('dialog', { name: 'Goal' })).toBeVisible();
-		await expect(page.getByPlaceholder('Enter your goal...')).toBeVisible();
+		await expect(page.getByRole('dialog', { name: '目標' })).toBeVisible();
+		await expect(page.getByPlaceholder('目標を入力...')).toBeVisible();
 	});
 
 	test('should save a goal', async ({ page }) => {
@@ -35,13 +35,13 @@ test.describe('Goal Input and Achievement', () => {
 		await page.waitForSelector('[aria-labelledby="modal-title"]', { timeout: 5000 });
 
 		// Enter goal text
-		await page.getByPlaceholder('Enter your goal...').fill('Learn TypeScript');
+		await page.getByPlaceholder('目標を入力...').fill('Learn TypeScript');
 
 		// Save
-		await page.getByRole('dialog', { name: 'Goal' }).getByRole('button', { name: 'Save' }).click();
+		await page.getByRole('dialog', { name: '目標' }).getByRole('button', { name: '保存' }).click();
 
 		// Modal should close and goal should appear in cell
-		await expect(page.getByRole('dialog', { name: 'Goal' })).not.toBeVisible();
+		await expect(page.getByRole('dialog', { name: '目標' })).not.toBeVisible();
 		await expect(page.locator('button.cell').first()).toContainText('Learn TypeScript');
 	});
 
@@ -51,13 +51,13 @@ test.describe('Goal Input and Achievement', () => {
 		await page.waitForSelector('[aria-labelledby="modal-title"]', { timeout: 5000 });
 
 		// Enter goal text
-		await page.getByPlaceholder('Enter your goal...').fill('Draft Goal');
+		await page.getByPlaceholder('目標を入力...').fill('Draft Goal');
 
 		// Cancel
-		await page.getByRole('dialog', { name: 'Goal' }).getByRole('button', { name: 'Cancel' }).click();
+		await page.getByRole('dialog', { name: '目標' }).getByRole('button', { name: 'キャンセル' }).click();
 
 		// Modal should close and cell should still be empty
-		await expect(page.getByRole('dialog', { name: 'Goal' })).not.toBeVisible();
+		await expect(page.getByRole('dialog', { name: '目標' })).not.toBeVisible();
 		await expect(page.locator('button.cell').first()).not.toContainText('Draft Goal');
 	});
 
@@ -65,11 +65,11 @@ test.describe('Goal Input and Achievement', () => {
 		// Click a cell and save a goal
 		await page.locator('button.cell').first().click();
 		await page.waitForSelector('[aria-labelledby="modal-title"]', { timeout: 5000 });
-		await page.getByPlaceholder('Enter your goal...').fill('Complete project');
-		await page.getByRole('dialog', { name: 'Goal' }).getByRole('button', { name: 'Save' }).click();
+		await page.getByPlaceholder('目標を入力...').fill('Complete project');
+		await page.getByRole('dialog', { name: '目標' }).getByRole('button', { name: '保存' }).click();
 
 		// Wait for modal to close
-		await expect(page.getByRole('dialog', { name: 'Goal' })).not.toBeVisible();
+		await expect(page.getByRole('dialog', { name: '目標' })).not.toBeVisible();
 
 		// Click the cell again
 		await page.locator('button.cell').first().click();
@@ -82,7 +82,7 @@ test.describe('Goal Input and Achievement', () => {
 		await expect(page.getByRole('button', { name: '達成済み' })).toBeVisible();
 
 		// Save and verify
-		await page.getByRole('dialog', { name: 'Goal' }).getByRole('button', { name: 'Save' }).click();
+		await page.getByRole('dialog', { name: '目標' }).getByRole('button', { name: '保存' }).click();
 
 		// Cell should have achieved class
 		await expect(page.locator('button.cell').first()).toHaveClass(/achieved/);
@@ -92,21 +92,21 @@ test.describe('Goal Input and Achievement', () => {
 		// Click a cell and save a goal
 		await page.locator('button.cell').first().click();
 		await page.waitForSelector('[aria-labelledby="modal-title"]', { timeout: 5000 });
-		await page.getByPlaceholder('Enter your goal...').fill('Goal to clear');
-		await page.getByRole('dialog', { name: 'Goal' }).getByRole('button', { name: 'Save' }).click();
+		await page.getByPlaceholder('目標を入力...').fill('Goal to clear');
+		await page.getByRole('dialog', { name: '目標' }).getByRole('button', { name: '保存' }).click();
 
 		// Wait for modal to close
-		await expect(page.getByRole('dialog', { name: 'Goal' })).not.toBeVisible();
+		await expect(page.getByRole('dialog', { name: '目標' })).not.toBeVisible();
 
 		// Click the cell again
 		await page.locator('button.cell').first().click();
 		await page.waitForSelector('[aria-labelledby="modal-title"]', { timeout: 5000 });
 
 		// Click Clear button
-		await page.getByRole('dialog', { name: 'Goal' }).getByRole('button', { name: 'Clear' }).click();
+		await page.getByRole('dialog', { name: '目標' }).getByRole('button', { name: 'クリア' }).click();
 
-		// Cell should now be empty (show "Goal" placeholder text)
-		await expect(page.locator('button.cell').first().locator('.empty-text')).toContainText('Goal');
+		// Cell should now be empty (show "目標" placeholder text)
+		await expect(page.locator('button.cell').first().locator('.empty-text')).toContainText('目標');
 	});
 
 	test('should show character count', async ({ page }) => {
@@ -115,7 +115,7 @@ test.describe('Goal Input and Achievement', () => {
 		await page.waitForSelector('[aria-labelledby="modal-title"]', { timeout: 5000 });
 
 		// Enter text
-		await page.getByPlaceholder('Enter your goal...').fill('Hello');
+		await page.getByPlaceholder('目標を入力...').fill('Hello');
 
 		// Character count should show 5/50
 		await expect(page.locator('.char-count')).toContainText('5');
@@ -126,11 +126,11 @@ test.describe('Goal Input and Achievement', () => {
 		// Click a cell and save a goal
 		await page.locator('button.cell').first().click();
 		await page.waitForSelector('[aria-labelledby="modal-title"]', { timeout: 5000 });
-		await page.getByPlaceholder('Enter your goal...').fill('Persistent Goal');
-		await page.getByRole('dialog', { name: 'Goal' }).getByRole('button', { name: 'Save' }).click();
+		await page.getByPlaceholder('目標を入力...').fill('Persistent Goal');
+		await page.getByRole('dialog', { name: '目標' }).getByRole('button', { name: '保存' }).click();
 
 		// Wait for modal to close
-		await expect(page.getByRole('dialog', { name: 'Goal' })).not.toBeVisible();
+		await expect(page.getByRole('dialog', { name: '目標' })).not.toBeVisible();
 
 		// Wait for save to complete (SaveIndicator shows saving state)
 		await page.waitForTimeout(500);

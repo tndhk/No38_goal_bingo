@@ -47,6 +47,7 @@ describe('GoalInputModal', () => {
 		const textarea = screen.getByRole('textbox');
 		await fireEvent.input(textarea, { target: { value: 'New goal' } });
 
+		// テスト環境ではlocaleが'en'（vitest環境のnavigator.languageがen）
 		const saveButton = screen.getByText('Save');
 		await fireEvent.click(saveButton);
 
@@ -57,6 +58,7 @@ describe('GoalInputModal', () => {
 		const onClose = vi.fn();
 		render(GoalInputModal, { props: { ...defaultProps, onClose } });
 
+		// テスト環境ではlocaleが'en'（vitest環境のnavigator.languageがen）
 		const cancelButton = screen.getByText('Cancel');
 		await fireEvent.click(cancelButton);
 
@@ -69,6 +71,7 @@ describe('GoalInputModal', () => {
 			props: { ...defaultProps, currentGoal: 'Some goal', onClear }
 		});
 
+		// テスト環境ではlocaleが'en'（vitest環境のnavigator.languageがen）
 		const clearButton = screen.getByText('Clear');
 		await fireEvent.click(clearButton);
 
@@ -86,13 +89,15 @@ describe('GoalInputModal', () => {
 	test('shows title', () => {
 		render(GoalInputModal, { props: defaultProps });
 
+		// テスト環境ではlocaleが'en'（vitest環境のnavigator.languageがen）
 		expect(screen.getByText('Goal')).toBeTruthy();
 	});
 
 	test('displays Not Achieved button when isAchieved is false', () => {
 		render(GoalInputModal, { props: defaultProps });
 
-		expect(screen.getByText('達成')).toBeTruthy();
+		// テスト環境ではlocaleが'en'（vitest環境のnavigator.languageがen）
+		expect(screen.getByText('Mark achieved')).toBeTruthy();
 	});
 
 	test('displays Achieved button when isAchieved is true', () => {
@@ -100,7 +105,8 @@ describe('GoalInputModal', () => {
 			props: { ...defaultProps, isAchieved: true }
 		});
 
-		expect(screen.getByText('達成済み')).toBeTruthy();
+		// テスト環境ではlocaleが'en'（vitest環境のnavigator.languageがen）
+		expect(screen.getByText('Achieved')).toBeTruthy();
 	});
 
 	test('calls onToggleAchieved when achieved button is clicked', async () => {
@@ -109,7 +115,8 @@ describe('GoalInputModal', () => {
 			props: { ...defaultProps, onToggleAchieved }
 		});
 
-		const toggleButton = screen.getByText('達成');
+		// テスト環境ではlocaleが'en'（vitest環境のnavigator.languageがen）
+		const toggleButton = screen.getByText('Mark achieved');
 		await fireEvent.click(toggleButton);
 
 		expect(onToggleAchieved).toHaveBeenCalledTimes(1);

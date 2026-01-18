@@ -20,7 +20,7 @@ test.describe('Board Management', () => {
 
 		// Dialog should appear
 		await expect(page.locator('[role="dialog"]')).toBeVisible();
-		await expect(page.getByText('New Board')).toBeVisible();
+		await expect(page.getByText('新規ボード')).toBeVisible();
 	});
 
 	test('should create a new board with default settings', async ({ page }) => {
@@ -31,7 +31,7 @@ test.describe('Board Management', () => {
 		await page.waitForSelector('[role="dialog"]', { timeout: 5000 });
 
 		// Click Create Board in dialog (default 3x3)
-		await page.locator('[role="dialog"]').getByRole('button', { name: 'Create Board' }).click();
+		await page.locator('[role="dialog"]').getByRole('button', { name: 'ボード作成' }).click();
 
 		// Should show the bingo grid (9 cells for 3x3)
 		await expect(page.locator('button.cell').first()).toBeVisible();
@@ -49,7 +49,7 @@ test.describe('Board Management', () => {
 		await nameInput.fill('My Custom Goals');
 
 		// Create board
-		await page.locator('[role="dialog"]').getByRole('button', { name: 'Create Board' }).click();
+		await page.locator('[role="dialog"]').getByRole('button', { name: 'ボード作成' }).click();
 
 		// Board should be selectable with that name
 		const boardSelect = page.getByRole('combobox', { name: 'Select Board' });
@@ -67,7 +67,7 @@ test.describe('Board Management', () => {
 		await page.locator('[role="dialog"]').getByText('5x5').click();
 
 		// Create board
-		await page.locator('[role="dialog"]').getByRole('button', { name: 'Create Board' }).click();
+		await page.locator('[role="dialog"]').getByRole('button', { name: 'ボード作成' }).click();
 
 		// Should show grid with 25 cells
 		await expect(page.locator('button.cell')).toHaveCount(25);
@@ -81,7 +81,7 @@ test.describe('Board Management', () => {
 		await page.waitForSelector('[role="dialog"]', { timeout: 5000 });
 
 		// Cancel
-		await page.locator('[role="dialog"]').getByRole('button', { name: 'Cancel' }).click();
+		await page.locator('[role="dialog"]').getByRole('button', { name: 'キャンセル' }).click();
 
 		// Dialog should be closed
 		await expect(page.locator('[role="dialog"]')).not.toBeVisible();
@@ -95,7 +95,7 @@ test.describe('Board Management', () => {
 
 		const nameInput = page.locator('[role="dialog"]').locator('input[type="text"]');
 		await nameInput.fill('Board To Delete');
-		await page.locator('[role="dialog"]').getByRole('button', { name: 'Create Board' }).click();
+		await page.locator('[role="dialog"]').getByRole('button', { name: 'ボード作成' }).click();
 
 		// Wait for grid to appear
 		await page.waitForSelector('button.cell', { timeout: 5000 });
@@ -110,14 +110,14 @@ test.describe('Board Management', () => {
 		await page.waitForSelector('text=Board To Delete', { timeout: 5000 });
 
 		// Find and click delete button for the board
-		const deleteButton = page.locator('[aria-label="Delete Board To Delete"]');
+		const deleteButton = page.locator('[aria-label="削除 Board To Delete"]');
 
 		if (await deleteButton.isVisible().catch(() => false)) {
 			await deleteButton.click();
 
 			// Confirm deletion in dialog
 			const confirmDialog = page.locator('[role="dialog"]');
-			await confirmDialog.getByRole('button', { name: 'Delete' }).click();
+			await confirmDialog.getByRole('button', { name: '削除' }).click();
 
 			// Board should be removed
 			await expect(page.locator('text=Board To Delete')).not.toBeVisible();

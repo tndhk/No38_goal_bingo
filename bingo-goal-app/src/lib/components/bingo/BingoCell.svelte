@@ -1,6 +1,8 @@
 <script lang="ts">
 	import type { Cell } from '$lib/types/bingo';
 	import { currentTheme } from '$lib/stores/themeStore';
+	import { localeStore } from '$lib/stores/localeStore';
+	import { t } from '$lib/i18n/translations';
 
 	interface Props {
 		cell: Cell;
@@ -13,6 +15,8 @@
 
 	const isEmpty = $derived(cell.goal.trim() === '');
 	const themeIcon = $derived($currentTheme.icon);
+	const locale = $derived($localeStore);
+	const i18n = $derived(t(locale));
 
 	let pressTimer: ReturnType<typeof setTimeout> | null = null;
 	let isLongPress = false;
@@ -60,7 +64,7 @@
 			<svg class="empty-icon" fill="currentColor" viewBox={themeIcon.viewBox}>
 				<path d={themeIcon.svgPath}/>
 			</svg>
-			<span class="empty-text">Goal</span>
+			<span class="empty-text">{i18n.goal.title}</span>
 		</span>
 	{:else}
 		<span class="goal-text">{cell.goal}</span>
