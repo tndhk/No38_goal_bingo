@@ -51,14 +51,14 @@ describe('translations', () => {
 		});
 
 		it('should have createBoard translation', () => {
-			expect(t('ja').main.createBoard).toBe('ボード作成');
+			expect(t('ja').main.createBoard).toBe('ビンゴ作成');
 			expect(t('en').main.createBoard).toBe('Create Board');
 		});
 	});
 
 	describe('board modal translations', () => {
 		it('should have newBoard translation', () => {
-			expect(t('ja').boardModal.newBoard).toBe('新規ボード');
+			expect(t('ja').boardModal.newBoard).toBe('新規ビンゴ');
 			expect(t('en').boardModal.newBoard).toBe('New Board');
 		});
 
@@ -85,22 +85,22 @@ describe('translations', () => {
 		});
 
 		it('should have noBoardsYet translation', () => {
-			expect(t('ja').boards.noBoardsYet).toBe('ボードがありません');
+			expect(t('ja').boards.noBoardsYet).toBe('ビンゴがありません');
 			expect(t('en').boards.noBoardsYet).toBe('No Boards Yet');
 		});
 
 		it('should have createFirstBoard translation', () => {
-			expect(t('ja').boards.createFirstBoard).toBe('最初のボードを作成');
+			expect(t('ja').boards.createFirstBoard).toBe('最初のビンゴを作成');
 			expect(t('en').boards.createFirstBoard).toBe('Create Your First Board');
 		});
 
 		it('should have createNewBoard translation', () => {
-			expect(t('ja').boards.createNewBoard).toBe('+ 新しいボード');
+			expect(t('ja').boards.createNewBoard).toBe('+ 新しいビンゴ');
 			expect(t('en').boards.createNewBoard).toBe('+ Create New Board');
 		});
 
 		it('should have deleteBoard translation', () => {
-			expect(t('ja').boards.deleteBoard).toBe('ボード削除');
+			expect(t('ja').boards.deleteBoard).toBe('ビンゴ削除');
 			expect(t('en').boards.deleteBoard).toBe('Delete Board');
 		});
 

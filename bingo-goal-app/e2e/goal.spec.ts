@@ -11,7 +11,7 @@ test.describe('Goal Input and Achievement', () => {
 		const guestButton = page.getByRole('button', { name: /Guest Mode|ゲストで試す/i });
 		await guestButton.click();
 		await page.waitForSelector('[role="dialog"]', { timeout: 5000 });
-		await page.locator('[role="dialog"]').getByRole('button', { name: 'ボード作成' }).click();
+		await page.locator('[role="dialog"]').getByRole('button', { name: 'ビンゴ作成' }).click();
 
 		// Wait for grid to appear
 		await page.waitForSelector('button.cell', { timeout: 5000 });
