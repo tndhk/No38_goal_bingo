@@ -95,24 +95,24 @@
 }
 
 [data-theme="midnight"] {
-	/* Minimalist Dark */
-	--theme-bg-base: #000000;
-	--theme-bg-grad-start: #171717;
-	--theme-bg-grad-end: #000000;
+	/* Pop Midnight - 夜のネオンポップ */
+	--theme-bg-base: #1a1a2e;
+	--theme-bg-grad-start: #16213e;
+	--theme-bg-grad-end: #0f0f23;
 
-	--theme-primary: #f8fafc;
-	--theme-primary-dim: #cbd5e1;
-	--theme-secondary: #94a3b8;
-	--theme-accent: #ffffff;
+	--theme-primary: #ff6b9d;
+	--theme-primary-dim: #c44569;
+	--theme-secondary: #ffd93d;
+	--theme-accent: #6bcb77;
 
-	--theme-surface: rgba(38, 38, 38, 0.7);
-	--theme-border: rgba(255, 255, 255, 0.15);
-	--theme-text: #f5f5f5;
-	--theme-text-muted: #737373;
+	--theme-surface: rgba(26, 26, 46, 0.9);
+	--theme-border: rgba(255, 107, 157, 0.25);
+	--theme-text: #f8f8f8;
+	--theme-text-muted: #b8b8d1;
 
-	--theme-glow: rgba(255, 255, 255, 0.3);
+	--theme-glow: rgba(255, 107, 157, 0.5);
 
-	--theme-text-on-primary: #000000;
+	--theme-text-on-primary: #1a1a2e;
 }
 
 [data-theme="glass"] {
