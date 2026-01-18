@@ -153,7 +153,7 @@
 	}
 
 	.theme-option:hover {
-		background: rgba(255, 255, 255, 0.05);
+		background: color-mix(in srgb, var(--theme-primary) 10%, transparent);
 	}
 
 	.theme-option.active {
