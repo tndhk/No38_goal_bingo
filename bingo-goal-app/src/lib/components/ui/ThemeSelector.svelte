@@ -110,14 +110,14 @@
 		top: calc(100% + 0.5rem);
 		right: 0;
 		width: 18rem;
-		background: var(--theme-surface);
+		background: color-mix(in srgb, var(--theme-bg-base) 95%, var(--theme-surface));
 		backdrop-filter: blur(12px);
 		-webkit-backdrop-filter: blur(12px);
 		border: 1px solid var(--theme-border);
 		border-radius: 1rem;
 		box-shadow:
-			0 10px 25px rgba(0, 0, 0, 0.2),
-			0 4px 10px rgba(0, 0, 0, 0.1);
+			0 10px 25px rgba(0, 0, 0, 0.3),
+			0 4px 10px rgba(0, 0, 0, 0.15);
 		overflow: hidden;
 		z-index: 100;
 		animation: slideDown 0.2s cubic-bezier(0.16, 1, 0.3, 1);
