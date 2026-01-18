@@ -1,6 +1,6 @@
 import { writable, derived, get } from 'svelte/store';
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { AppState, BingoBoard, CellPosition, BoardSize } from '$lib/types/bingo';
+import type { AppState, BingoBoard, CellPosition, BoardSize, Cell } from '$lib/types/bingo';
 import { createEmptyBoard } from '$lib/types/bingo';
 import type { StorageAdapter } from '$lib/utils/storageAdapter';
 import {
@@ -20,11 +20,56 @@ const initialState: AppState = {
 	isSaving: false
 };
 
-let debounceTimer: ReturnType<typeof setTimeout> | null = null;
-let isInitialized = false;
-let currentAdapter: StorageAdapter = createLocalStorageAdapter();
-let supabaseClient: SupabaseClient<Database> | null = null;
-let currentUserId: string | null = null;
+// Module-level state grouped together
+const storeState = {
+	debounceTimer: null as ReturnType<typeof setTimeout> | null,
+	isInitialized: false,
+	adapter: createLocalStorageAdapter() as StorageAdapter,
+	supabaseClient: null as SupabaseClient<Database> | null,
+	userId: null as string | null
+};
+
+function isAuthenticated(): boolean {
+	return storeState.userId !== null;
+}
+
+/**
+ * Update cells in a board and return the updated board
+ */
+function updateBoardCells(
+	board: BingoBoard,
+	position: CellPosition,
+	cellUpdater: (cell: Cell) => Cell
+): BingoBoard {
+	const updatedCells = board.cells.map((cell) =>
+		cell.position === position ? cellUpdater(cell) : cell
+	);
+	return {
+		...board,
+		cells: updatedCells,
+		updatedAt: new Date()
+	};
+}
+
+/**
+ * Update a board in the state by its ID
+ */
+function updateBoardInState(
+	state: AppState,
+	boardId: string,
+	boardUpdater: (board: BingoBoard) => BingoBoard
+): AppState {
+	const boardIndex = state.boards.findIndex((b) => b.id === boardId);
+	if (boardIndex === -1) return state;
+
+	const updatedBoards = [...state.boards];
+	updatedBoards[boardIndex] = boardUpdater(state.boards[boardIndex]);
+
+	return {
+		...state,
+		boards: updatedBoards
+	};
+}
 
 function createBoardStore() {
 	const { subscribe, set, update } = writable<AppState>(initialState);
@@ -34,8 +79,8 @@ function createBoardStore() {
 		set,
 		update,
 		reset: () => {
-			if (debounceTimer) clearTimeout(debounceTimer);
-			isInitialized = false;
+			if (storeState.debounceTimer) clearTimeout(storeState.debounceTimer);
+			storeState.isInitialized = false;
 			set({ ...initialState });
 		}
 	};
@@ -47,13 +92,13 @@ export function setSupabaseClient(
 	client: SupabaseClient<Database> | null,
 	userId: string | null
 ): void {
-	supabaseClient = client;
-	const wasAuthenticated = currentUserId !== null;
+	storeState.supabaseClient = client;
+	const wasAuthenticated = isAuthenticated();
 	const isNowAuthenticated = userId !== null;
-	currentUserId = userId;
+	storeState.userId = userId;
 
 	if (isNowAuthenticated && client) {
-		currentAdapter = createSupabaseAdapter(client, userId);
+		storeState.adapter = createSupabaseAdapter(client, userId);
 
 		if (!wasAuthenticated) {
 			handleLoginMerge();
@@ -61,7 +106,7 @@ export function setSupabaseClient(
 			reloadFromCloud();
 		}
 	} else {
-		currentAdapter = createLocalStorageAdapter();
+		storeState.adapter = createLocalStorageAdapter();
 
 		if (wasAuthenticated && !isNowAuthenticated) {
 			handleLogout();
@@ -70,15 +115,15 @@ export function setSupabaseClient(
 }
 
 async function handleLoginMerge(): Promise<void> {
-	if (!supabaseClient || !currentUserId) return;
+	if (!storeState.supabaseClient || !storeState.userId) return;
 
 	const localData = getLocalStorageData();
-	const cloudData = await currentAdapter.load();
+	const cloudData = await storeState.adapter.load();
 	const boardsToUpload = getBoardsToUpload(localData, cloudData);
 
 	if (boardsToUpload.length > 0) {
 		for (const board of boardsToUpload) {
-			await currentAdapter.saveBoard(board);
+			await storeState.adapter.saveBoard(board);
 		}
 	}
 
@@ -87,33 +132,33 @@ async function handleLoginMerge(): Promise<void> {
 
 	clearLocalStorage();
 
-	isInitialized = true;
+	storeState.isInitialized = true;
 }
 
 async function reloadFromCloud(): Promise<void> {
-	const cloudData = await currentAdapter.load();
+	const cloudData = await storeState.adapter.load();
 	if (cloudData) {
 		boardStore.set(cloudData);
 	}
-	isInitialized = true;
+	storeState.isInitialized = true;
 }
 
 function handleLogout(): void {
 	clearLocalStorage();
 	boardStore.reset();
-	isInitialized = false;
+	storeState.isInitialized = false;
 }
 
 async function triggerAutoSave(): Promise<void> {
-	if (debounceTimer) clearTimeout(debounceTimer);
+	if (storeState.debounceTimer) clearTimeout(storeState.debounceTimer);
 
 	boardStore.update((state) => ({ ...state, isSaving: true }));
 
-	debounceTimer = setTimeout(async () => {
+	storeState.debounceTimer = setTimeout(async () => {
 		const state = get(boardStore);
 
 		try {
-			await currentAdapter.save(state);
+			await storeState.adapter.save(state);
 		} catch (error) {
 			console.error('Failed to save:', error);
 		}
@@ -127,13 +172,13 @@ export function resetStore(): void {
 }
 
 export async function initializeStore(): Promise<void> {
-	if (isInitialized) return;
+	if (storeState.isInitialized) return;
 
-	const stored = await currentAdapter.load();
+	const stored = await storeState.adapter.load();
 	if (stored) {
 		boardStore.set(stored);
 	}
-	isInitialized = true;
+	storeState.isInitialized = true;
 }
 
 export function createBoard(name: string, size: BoardSize = 3): void {
@@ -149,61 +194,25 @@ export function createBoard(name: string, size: BoardSize = 3): void {
 }
 
 export function updateCell(boardId: string, position: CellPosition, goal: string): void {
-	boardStore.update((state) => {
-		const boardIndex = state.boards.findIndex((b) => b.id === boardId);
-		if (boardIndex === -1) return state;
-
-		const board = state.boards[boardIndex];
-		const updatedCells = board.cells.map((cell) =>
-			cell.position === position ? { ...cell, goal } : cell
-		);
-
-		const updatedBoard: BingoBoard = {
-			...board,
-			cells: updatedCells,
-			updatedAt: new Date()
-		};
-
-		const updatedBoards = [...state.boards];
-		updatedBoards[boardIndex] = updatedBoard;
-
-		return {
-			...state,
-			boards: updatedBoards
-		};
-	});
+	boardStore.update((state) =>
+		updateBoardInState(state, boardId, (board) =>
+			updateBoardCells(board, position, (cell) => ({ ...cell, goal }))
+		)
+	);
 	triggerAutoSave();
 }
 
 export function toggleAchieved(boardId: string, position: CellPosition): void {
-	boardStore.update((state) => {
-		const boardIndex = state.boards.findIndex((b) => b.id === boardId);
-		if (boardIndex === -1) return state;
-
-		const board = state.boards[boardIndex];
-		const updatedCells = board.cells.map((cell) =>
-			cell.position === position ? { ...cell, isAchieved: !cell.isAchieved } : cell
-		);
-
-		const updatedBoard: BingoBoard = {
-			...board,
-			cells: updatedCells,
-			updatedAt: new Date()
-		};
-
-		const updatedBoards = [...state.boards];
-		updatedBoards[boardIndex] = updatedBoard;
-
-		return {
-			...state,
-			boards: updatedBoards
-		};
-	});
+	boardStore.update((state) =>
+		updateBoardInState(state, boardId, (board) =>
+			updateBoardCells(board, position, (cell) => ({ ...cell, isAchieved: !cell.isAchieved }))
+		)
+	);
 	triggerAutoSave();
 }
 
 export async function deleteBoard(boardId: string): Promise<void> {
-	await currentAdapter.deleteBoard(boardId);
+	await storeState.adapter.deleteBoard(boardId);
 
 	boardStore.update((state) => {
 		const filteredBoards = state.boards.filter((b) => b.id !== boardId);

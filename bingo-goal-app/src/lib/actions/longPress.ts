@@ -5,6 +5,8 @@ export interface LongPressOptions {
 
 const DEFAULT_DURATION = 500;
 
+type EventBinding = [string, EventListener];
+
 export function longPress(node: HTMLElement, options: LongPressOptions) {
 	let timer: ReturnType<typeof setTimeout> | null = null;
 	let duration = options.duration ?? DEFAULT_DURATION;
@@ -32,13 +34,19 @@ export function longPress(node: HTMLElement, options: LongPressOptions) {
 		}
 	}
 
-	node.addEventListener('mousedown', startPress);
-	node.addEventListener('mouseup', cancelPress);
-	node.addEventListener('mouseleave', cancelPress);
-	node.addEventListener('touchstart', startPress);
-	node.addEventListener('touchend', cancelPress);
-	node.addEventListener('touchcancel', cancelPress);
-	node.addEventListener('contextmenu', handleContextMenu);
+	const eventBindings: EventBinding[] = [
+		['mousedown', startPress],
+		['mouseup', cancelPress],
+		['mouseleave', cancelPress],
+		['touchstart', startPress],
+		['touchend', cancelPress],
+		['touchcancel', cancelPress],
+		['contextmenu', handleContextMenu]
+	];
+
+	for (const [event, handler] of eventBindings) {
+		node.addEventListener(event, handler);
+	}
 
 	return {
 		update(newOptions: LongPressOptions) {
@@ -47,13 +55,9 @@ export function longPress(node: HTMLElement, options: LongPressOptions) {
 		},
 		destroy() {
 			cancelPress();
-			node.removeEventListener('mousedown', startPress);
-			node.removeEventListener('mouseup', cancelPress);
-			node.removeEventListener('mouseleave', cancelPress);
-			node.removeEventListener('touchstart', startPress);
-			node.removeEventListener('touchend', cancelPress);
-			node.removeEventListener('touchcancel', cancelPress);
-			node.removeEventListener('contextmenu', handleContextMenu);
+			for (const [event, handler] of eventBindings) {
+				node.removeEventListener(event, handler);
+			}
 		}
 	};
 }

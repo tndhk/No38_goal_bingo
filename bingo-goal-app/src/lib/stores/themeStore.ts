@@ -1,9 +1,15 @@
-import { writable, derived, get } from 'svelte/store';
+import { writable, derived } from 'svelte/store';
 import { browser } from '$app/environment';
 import { themes, defaultThemeId, isValidThemeId } from '$lib/themes';
 import type { ThemeId, Theme } from '$lib/themes';
 
 const STORAGE_KEY = 'bingo-goal-theme';
+
+function applyThemeToDOM(id: ThemeId): void {
+	if (browser) {
+		document.documentElement.setAttribute('data-theme', id);
+	}
+}
 
 function getInitialThemeId(): ThemeId {
 	if (!browser) return defaultThemeId;
@@ -16,7 +22,8 @@ function getInitialThemeId(): ThemeId {
 }
 
 function createThemeStore() {
-	const { subscribe, set, update } = writable<ThemeId>(getInitialThemeId());
+	const initialThemeId = getInitialThemeId();
+	const { subscribe, set } = writable<ThemeId>(initialThemeId);
 
 	return {
 		subscribe,
@@ -24,14 +31,11 @@ function createThemeStore() {
 			set(id);
 			if (browser) {
 				localStorage.setItem(STORAGE_KEY, id);
-				document.documentElement.setAttribute('data-theme', id);
 			}
+			applyThemeToDOM(id);
 		},
 		initialize: () => {
-			if (browser) {
-				const currentThemeId = get({ subscribe });
-				document.documentElement.setAttribute('data-theme', currentThemeId);
-			}
+			applyThemeToDOM(initialThemeId);
 		}
 	};
 }

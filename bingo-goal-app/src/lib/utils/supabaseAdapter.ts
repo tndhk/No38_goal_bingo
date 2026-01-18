@@ -10,6 +10,45 @@ type CellInsert = Database['public']['Tables']['cells']['Insert'];
 
 type BoardWithCells = BoardRow & { cells: CellRow[] };
 
+function cellRowToCell(cell: CellRow): Cell {
+	return {
+		position: cell.position as CellPosition,
+		goal: cell.goal,
+		isAchieved: cell.is_achieved
+	};
+}
+
+function boardRowToBingoBoard(boardData: BoardWithCells): BingoBoard {
+	return {
+		id: boardData.id,
+		name: boardData.name,
+		size: boardData.size as BoardSize,
+		cells: (boardData.cells || []).map(cellRowToCell),
+		createdAt: new Date(boardData.created_at),
+		updatedAt: new Date(boardData.updated_at)
+	};
+}
+
+function bingoBoardToBoardInsert(board: BingoBoard, userId: string): BoardInsert {
+	return {
+		id: board.id,
+		user_id: userId,
+		name: board.name,
+		size: board.size,
+		created_at: board.createdAt.toISOString(),
+		updated_at: board.updatedAt.toISOString()
+	};
+}
+
+function cellToCellInsert(cell: Cell, boardId: string): CellInsert {
+	return {
+		board_id: boardId,
+		position: cell.position,
+		goal: cell.goal,
+		is_achieved: cell.isAchieved
+	};
+}
+
 export function createSupabaseAdapter(
 	supabase: SupabaseClient<Database>,
 	userId: string
@@ -37,22 +76,7 @@ export function createSupabaseAdapter(
 					};
 				}
 
-				const boards: BingoBoard[] = boardsData.map((boardData) => {
-					const cells: Cell[] = (boardData.cells || []).map((cell) => ({
-						position: cell.position as CellPosition,
-						goal: cell.goal,
-						isAchieved: cell.is_achieved
-					}));
-
-					return {
-						id: boardData.id,
-						name: boardData.name,
-						size: boardData.size as BoardSize,
-						cells,
-						createdAt: new Date(boardData.created_at),
-						updatedAt: new Date(boardData.updated_at)
-					};
-				});
+				const boards = boardsData.map(boardRowToBingoBoard);
 
 				return {
 					boards,
@@ -77,14 +101,7 @@ export function createSupabaseAdapter(
 
 		async saveBoard(board: BingoBoard): Promise<void> {
 			try {
-				const boardData: BoardInsert = {
-					id: board.id,
-					user_id: userId,
-					name: board.name,
-					size: board.size,
-					created_at: board.createdAt.toISOString(),
-					updated_at: board.updatedAt.toISOString()
-				};
+				const boardData = bingoBoardToBoardInsert(board, userId);
 
 				const { error: upsertError } = await supabase
 					.from('boards')
@@ -95,12 +112,7 @@ export function createSupabaseAdapter(
 					return;
 				}
 
-				const cellsData: CellInsert[] = board.cells.map((cell) => ({
-					board_id: board.id,
-					position: cell.position,
-					goal: cell.goal,
-					is_achieved: cell.isAchieved
-				}));
+				const cellsData = board.cells.map((cell) => cellToCellInsert(cell, board.id));
 
 				const { error: cellsError } = await supabase
 					.from('cells')

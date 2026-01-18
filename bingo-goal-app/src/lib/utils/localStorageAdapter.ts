@@ -1,66 +1,8 @@
 import type { StorageAdapter } from './storageAdapter';
-import type { AppState, BingoBoard, Cell, BoardSize } from '$lib/types/bingo';
+import type { AppState, BingoBoard } from '$lib/types/bingo';
+import { STORAGE_KEY, migrateBoard, boardToStoredBoard, type StoredState } from './migration';
 
-export const STORAGE_KEY = 'bingo-goal-app-state';
-
-type StoredBoard = Omit<BingoBoard, 'createdAt' | 'updatedAt'> & {
-	createdAt: string;
-	updatedAt: string;
-};
-
-type LegacyStoredBoard = Omit<StoredBoard, 'name'> & {
-	year?: number;
-	name?: string;
-};
-
-type StoredState = {
-	boards: (StoredBoard | LegacyStoredBoard)[];
-	currentBoardId: string | null;
-	isSaving: boolean;
-};
-
-const LEGACY_POSITION_MAP: Record<string, string> = {
-	topLeft: 'cell_0_0',
-	topCenter: 'cell_0_1',
-	topRight: 'cell_0_2',
-	middleLeft: 'cell_1_0',
-	middleCenter: 'cell_1_1',
-	middleRight: 'cell_1_2',
-	bottomLeft: 'cell_2_0',
-	bottomCenter: 'cell_2_1',
-	bottomRight: 'cell_2_2'
-};
-
-function isLegacyPosition(position: string): boolean {
-	return position in LEGACY_POSITION_MAP;
-}
-
-function migrateCellPosition(position: string): string {
-	if (isLegacyPosition(position)) {
-		return LEGACY_POSITION_MAP[position];
-	}
-	return position;
-}
-
-function migrateBoard(board: StoredBoard | LegacyStoredBoard): BingoBoard {
-	const legacyBoard = board as LegacyStoredBoard;
-	const name =
-		legacyBoard.name ?? (legacyBoard.year ? `${legacyBoard.year} Goals` : 'Untitled Board');
-	const size: BoardSize = (board as { size?: BoardSize }).size ?? 3;
-	const cells: Cell[] = board.cells.map((cell) => ({
-		...cell,
-		position: migrateCellPosition(cell.position as string)
-	})) as Cell[];
-
-	return {
-		id: board.id,
-		name,
-		size,
-		cells,
-		createdAt: new Date(board.createdAt),
-		updatedAt: new Date(board.updatedAt)
-	};
-}
+export { STORAGE_KEY };
 
 export function createLocalStorageAdapter(): StorageAdapter {
 	return {
@@ -84,11 +26,7 @@ export function createLocalStorageAdapter(): StorageAdapter {
 		async save(state: AppState): Promise<void> {
 			try {
 				const dataToStore: StoredState = {
-					boards: state.boards.map((board) => ({
-						...board,
-						createdAt: board.createdAt.toISOString(),
-						updatedAt: board.updatedAt.toISOString()
-					})),
+					boards: state.boards.map(boardToStoredBoard),
 					currentBoardId: state.currentBoardId,
 					isSaving: false
 				};
@@ -119,8 +57,6 @@ export function clearLocalStorage(): void {
 }
 
 export function getLocalStorageData(): AppState | null {
-	const adapter = createLocalStorageAdapter();
-	// This is a synchronous check for localStorage
 	try {
 		const stored = localStorage.getItem(STORAGE_KEY);
 		if (!stored) return null;

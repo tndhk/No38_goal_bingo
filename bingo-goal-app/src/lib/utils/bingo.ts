@@ -8,6 +8,10 @@ export type ProgressSummary = {
 	hint: string | null;
 };
 
+function createAchievedPositionSet(cells: Cell[]): Set<CellPosition> {
+	return new Set(cells.filter((c) => c.isAchieved).map((c) => c.position));
+}
+
 function isLineCompleted(line: BingoLine, achievedPositions: Set<CellPosition>): boolean {
 	return line.positions.every((pos) => achievedPositions.has(pos));
 }
@@ -17,10 +21,7 @@ function getAchievedCountForLine(line: BingoLine, achievedPositions: Set<CellPos
 }
 
 export function getCompletedLines(cells: Cell[], bingoLines: BingoLine[]): BingoLine[] {
-	const achievedPositions = new Set(
-		cells.filter((c) => c.isAchieved).map((c) => c.position)
-	);
-
+	const achievedPositions = createAchievedPositionSet(cells);
 	return bingoLines.filter((line) => isLineCompleted(line, achievedPositions));
 }
 
@@ -33,22 +34,17 @@ export function getAchievedCount(cells: Cell[]): number {
 }
 
 export function getNearBingoLines(cells: Cell[], bingoLines: BingoLine[]): BingoLine[] {
-	const achievedPositions = new Set(
-		cells.filter((c) => c.isAchieved).map((c) => c.position)
-	);
+	const achievedPositions = createAchievedPositionSet(cells);
 
 	return bingoLines.filter((line) => {
 		const lineSize = line.positions.length;
 		const achievedCount = getAchievedCountForLine(line, achievedPositions);
-		return achievedCount === lineSize - 1; // Exactly one away from bingo
+		return achievedCount === lineSize - 1;
 	});
 }
 
 export function getNearBingoPositions(cells: Cell[], bingoLines: BingoLine[]): CellPosition[] {
-	const achievedPositions = new Set(
-		cells.filter((c) => c.isAchieved).map((c) => c.position)
-	);
-
+	const achievedPositions = createAchievedPositionSet(cells);
 	const nearLines = getNearBingoLines(cells, bingoLines);
 	const positions = new Set<CellPosition>();
 
@@ -94,7 +90,7 @@ export function getProgressSummary(cells: Cell[], bingoLines: BingoLine[]): Prog
 
 	return {
 		achieved,
-		total: cells.length, // Dynamic based on actual cell count
+		total: cells.length,
 		bingoCount,
 		isPerfect: perfect,
 		hint

@@ -4,20 +4,26 @@ import { browser } from '$app/environment';
 export type Locale = 'ja' | 'en';
 
 const STORAGE_KEY = 'bingo-goal-locale';
+const DEFAULT_LOCALE: Locale = 'ja';
+
+function isValidLocale(value: string): value is Locale {
+	return value === 'ja' || value === 'en';
+}
+
+function detectBrowserLocale(): Locale {
+	const browserLang = navigator.language.toLowerCase();
+	return browserLang.startsWith('ja') ? 'ja' : 'en';
+}
 
 function getInitialLocale(): Locale {
-	if (!browser) return 'ja';
+	if (!browser) return DEFAULT_LOCALE;
 
 	const stored = localStorage.getItem(STORAGE_KEY);
-	if (stored === 'ja' || stored === 'en') {
+	if (stored && isValidLocale(stored)) {
 		return stored;
 	}
 
-	const browserLang = navigator.language.toLowerCase();
-	if (browserLang.startsWith('ja')) {
-		return 'ja';
-	}
-	return 'en';
+	return detectBrowserLocale();
 }
 
 function createLocaleStore() {
