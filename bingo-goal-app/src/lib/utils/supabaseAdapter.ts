@@ -91,8 +91,18 @@ export function createSupabaseAdapter(
 
 		async save(state: AppState): Promise<void> {
 			try {
-				for (const board of state.boards) {
-					await this.saveBoard(board);
+				const results = await Promise.allSettled(
+					state.boards.map((board) => this.saveBoard(board))
+				);
+
+				const failures = results.filter(
+					(r): r is PromiseRejectedResult => r.status === 'rejected'
+				);
+				if (failures.length > 0) {
+					console.error(
+						'Some boards failed to save:',
+						failures.map((f) => f.reason)
+					);
 				}
 			} catch (error) {
 				console.error('Failed to save to Supabase:', error);

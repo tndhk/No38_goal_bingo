@@ -122,8 +122,18 @@ async function handleLoginMerge(): Promise<void> {
 	const boardsToUpload = getBoardsToUpload(localData, cloudData);
 
 	if (boardsToUpload.length > 0) {
-		for (const board of boardsToUpload) {
-			await storeState.adapter.saveBoard(board);
+		const results = await Promise.allSettled(
+			boardsToUpload.map((board) => storeState.adapter.saveBoard(board))
+		);
+
+		const failures = results.filter(
+			(r): r is PromiseRejectedResult => r.status === 'rejected'
+		);
+		if (failures.length > 0) {
+			console.error(
+				'Failed to upload some local boards:',
+				failures.map((f) => f.reason)
+			);
 		}
 	}
 
