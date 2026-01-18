@@ -92,7 +92,7 @@ describe('GoalInputModal', () => {
 	test('displays Not Achieved button when isAchieved is false', () => {
 		render(GoalInputModal, { props: defaultProps });
 
-		expect(screen.getByText('Not Achieved')).toBeTruthy();
+		expect(screen.getByText('達成')).toBeTruthy();
 	});
 
 	test('displays Achieved button when isAchieved is true', () => {
@@ -100,7 +100,7 @@ describe('GoalInputModal', () => {
 			props: { ...defaultProps, isAchieved: true }
 		});
 
-		expect(screen.getByText('Achieved')).toBeTruthy();
+		expect(screen.getByText('達成済み')).toBeTruthy();
 	});
 
 	test('calls onToggleAchieved when achieved button is clicked', async () => {
@@ -109,7 +109,7 @@ describe('GoalInputModal', () => {
 			props: { ...defaultProps, onToggleAchieved }
 		});
 
-		const toggleButton = screen.getByText('Not Achieved');
+		const toggleButton = screen.getByText('達成');
 		await fireEvent.click(toggleButton);
 
 		expect(onToggleAchieved).toHaveBeenCalledTimes(1);

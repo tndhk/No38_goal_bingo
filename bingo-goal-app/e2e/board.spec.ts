@@ -100,6 +100,9 @@ test.describe('Board Management', () => {
 		// Wait for grid to appear
 		await page.waitForSelector('button.cell', { timeout: 5000 });
 
+		// Wait for save to complete
+		await page.waitForTimeout(500);
+
 		// Go to boards page
 		await page.goto('/boards');
 
@@ -107,7 +110,7 @@ test.describe('Board Management', () => {
 		await page.waitForSelector('text=Board To Delete', { timeout: 5000 });
 
 		// Find and click delete button for the board
-		const deleteButton = page.locator('[aria-label="Delete board"]').first();
+		const deleteButton = page.locator('[aria-label="Delete Board To Delete"]');
 
 		if (await deleteButton.isVisible().catch(() => false)) {
 			await deleteButton.click();

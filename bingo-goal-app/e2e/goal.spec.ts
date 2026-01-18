@@ -22,67 +22,67 @@ test.describe('Goal Input and Achievement', () => {
 		await page.locator('button.cell').first().click();
 
 		// Wait for modal
-		await page.waitForSelector('[role="dialog"]', { timeout: 5000 });
+		await page.waitForSelector('[aria-labelledby="modal-title"]', { timeout: 5000 });
 
 		// Modal should appear
-		await expect(page.locator('[role="dialog"]')).toBeVisible();
+		await expect(page.getByRole('dialog', { name: 'Goal' })).toBeVisible();
 		await expect(page.getByPlaceholder('Enter your goal...')).toBeVisible();
 	});
 
 	test('should save a goal', async ({ page }) => {
 		// Click a cell
 		await page.locator('button.cell').first().click();
-		await page.waitForSelector('[role="dialog"]', { timeout: 5000 });
+		await page.waitForSelector('[aria-labelledby="modal-title"]', { timeout: 5000 });
 
 		// Enter goal text
 		await page.getByPlaceholder('Enter your goal...').fill('Learn TypeScript');
 
 		// Save
-		await page.locator('[role="dialog"]').getByRole('button', { name: 'Save' }).click();
+		await page.getByRole('dialog', { name: 'Goal' }).getByRole('button', { name: 'Save' }).click();
 
 		// Modal should close and goal should appear in cell
-		await expect(page.locator('[role="dialog"]')).not.toBeVisible();
+		await expect(page.getByRole('dialog', { name: 'Goal' })).not.toBeVisible();
 		await expect(page.locator('button.cell').first()).toContainText('Learn TypeScript');
 	});
 
 	test('should cancel without saving', async ({ page }) => {
 		// Click a cell
 		await page.locator('button.cell').first().click();
-		await page.waitForSelector('[role="dialog"]', { timeout: 5000 });
+		await page.waitForSelector('[aria-labelledby="modal-title"]', { timeout: 5000 });
 
 		// Enter goal text
 		await page.getByPlaceholder('Enter your goal...').fill('Draft Goal');
 
 		// Cancel
-		await page.locator('[role="dialog"]').getByRole('button', { name: 'Cancel' }).click();
+		await page.getByRole('dialog', { name: 'Goal' }).getByRole('button', { name: 'Cancel' }).click();
 
 		// Modal should close and cell should still be empty
-		await expect(page.locator('[role="dialog"]')).not.toBeVisible();
+		await expect(page.getByRole('dialog', { name: 'Goal' })).not.toBeVisible();
 		await expect(page.locator('button.cell').first()).not.toContainText('Draft Goal');
 	});
 
 	test('should mark goal as achieved', async ({ page }) => {
 		// Click a cell and save a goal
 		await page.locator('button.cell').first().click();
-		await page.waitForSelector('[role="dialog"]', { timeout: 5000 });
+		await page.waitForSelector('[aria-labelledby="modal-title"]', { timeout: 5000 });
 		await page.getByPlaceholder('Enter your goal...').fill('Complete project');
-		await page.locator('[role="dialog"]').getByRole('button', { name: 'Save' }).click();
+		await page.getByRole('dialog', { name: 'Goal' }).getByRole('button', { name: 'Save' }).click();
 
 		// Wait for modal to close
-		await expect(page.locator('[role="dialog"]')).not.toBeVisible();
+		await expect(page.getByRole('dialog', { name: 'Goal' })).not.toBeVisible();
 
 		// Click the cell again
 		await page.locator('button.cell').first().click();
-		await page.waitForSelector('[role="dialog"]', { timeout: 5000 });
+		await page.waitForSelector('[aria-labelledby="modal-title"]', { timeout: 5000 });
 
-		// Click Mark as Done
-		await page.getByRole('button', { name: 'Mark as Done' }).click();
+		// Click 達成 (Mark as Done)
+		await page.getByRole('button', { name: '達成' }).click();
 
-		// Button should now show "Achieved"
-		await expect(page.getByRole('button', { name: 'Achieved' })).toBeVisible();
+		// Button should now show "達成済み" (Achieved)
+		await expect(page.getByRole('button', { name: '達成済み' })).toBeVisible();
 
 		// Save and verify
-		await page.locator('[role="dialog"]').getByRole('button', { name: 'Save' }).click();
+		await page.getByRole('dialog', { name: 'Goal' }).getByRole('button', { name: 'Save' }).click();
 
 		// Cell should have achieved class
 		await expect(page.locator('button.cell').first()).toHaveClass(/achieved/);
@@ -91,19 +91,19 @@ test.describe('Goal Input and Achievement', () => {
 	test('should clear a goal', async ({ page }) => {
 		// Click a cell and save a goal
 		await page.locator('button.cell').first().click();
-		await page.waitForSelector('[role="dialog"]', { timeout: 5000 });
+		await page.waitForSelector('[aria-labelledby="modal-title"]', { timeout: 5000 });
 		await page.getByPlaceholder('Enter your goal...').fill('Goal to clear');
-		await page.locator('[role="dialog"]').getByRole('button', { name: 'Save' }).click();
+		await page.getByRole('dialog', { name: 'Goal' }).getByRole('button', { name: 'Save' }).click();
 
 		// Wait for modal to close
-		await expect(page.locator('[role="dialog"]')).not.toBeVisible();
+		await expect(page.getByRole('dialog', { name: 'Goal' })).not.toBeVisible();
 
 		// Click the cell again
 		await page.locator('button.cell').first().click();
-		await page.waitForSelector('[role="dialog"]', { timeout: 5000 });
+		await page.waitForSelector('[aria-labelledby="modal-title"]', { timeout: 5000 });
 
 		// Click Clear button
-		await page.locator('[role="dialog"]').getByRole('button', { name: 'Clear' }).click();
+		await page.getByRole('dialog', { name: 'Goal' }).getByRole('button', { name: 'Clear' }).click();
 
 		// Cell should now be empty (show "Goal" placeholder text)
 		await expect(page.locator('button.cell').first().locator('.empty-text')).toContainText('Goal');
@@ -112,7 +112,7 @@ test.describe('Goal Input and Achievement', () => {
 	test('should show character count', async ({ page }) => {
 		// Click a cell
 		await page.locator('button.cell').first().click();
-		await page.waitForSelector('[role="dialog"]', { timeout: 5000 });
+		await page.waitForSelector('[aria-labelledby="modal-title"]', { timeout: 5000 });
 
 		// Enter text
 		await page.getByPlaceholder('Enter your goal...').fill('Hello');
@@ -125,12 +125,12 @@ test.describe('Goal Input and Achievement', () => {
 	test('should persist goal after page reload', async ({ page }) => {
 		// Click a cell and save a goal
 		await page.locator('button.cell').first().click();
-		await page.waitForSelector('[role="dialog"]', { timeout: 5000 });
+		await page.waitForSelector('[aria-labelledby="modal-title"]', { timeout: 5000 });
 		await page.getByPlaceholder('Enter your goal...').fill('Persistent Goal');
-		await page.locator('[role="dialog"]').getByRole('button', { name: 'Save' }).click();
+		await page.getByRole('dialog', { name: 'Goal' }).getByRole('button', { name: 'Save' }).click();
 
 		// Wait for modal to close
-		await expect(page.locator('[role="dialog"]')).not.toBeVisible();
+		await expect(page.getByRole('dialog', { name: 'Goal' })).not.toBeVisible();
 
 		// Wait for save to complete (SaveIndicator shows saving state)
 		await page.waitForTimeout(500);

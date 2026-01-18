@@ -60,12 +60,12 @@
 				<svg class="toggle-icon" viewBox="0 0 24 24" fill="currentColor">
 					<path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
 				</svg>
-				<span>Achieved</span>
+				<span>達成済み</span>
 			{:else}
 				<svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 					<circle cx="12" cy="12" r="10"/>
 				</svg>
-				<span>Mark as Done</span>
+				<span>達成</span>
 			{/if}
 		</button>
 
