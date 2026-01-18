@@ -74,24 +74,24 @@ export const themes: Record<ThemeId, Theme> = {
 		meta: {
 			id: 'midnight',
 			name: 'Midnight',
-			description: 'Minimalist dark',
-			icon: '🌑'
+			description: 'Neon Pop vibes',
+			icon: '🌃'
 		},
 		colors: {
-			primary: '#f8fafc',
-			primaryLight: '#94a3b8',
-			primaryDark: '#cbd5e1',
-			achieved: '#f8fafc',
-			achievedLight: '#ffffff',
-			achievedGlow: '#e2e8f0',
-			pending: 'rgba(38, 38, 38, 0.7)',
-			pendingBorder: 'rgba(255, 255, 255, 0.15)',
-			bingo: '#ffffff',
-			bingoGlow: '#f8fafc',
-			background: '#000000',
-			surface: 'rgba(38, 38, 38, 0.7)',
-			text: '#f5f5f5',
-			textLight: '#737373'
+			primary: '#ff6b9d',
+			primaryLight: '#ff8fb3',
+			primaryDark: '#c44569',
+			achieved: '#ffd93d',
+			achievedLight: '#ffe066',
+			achievedGlow: '#f4c430',
+			pending: 'rgba(26, 26, 46, 0.9)',
+			pendingBorder: 'rgba(255, 107, 157, 0.25)',
+			bingo: '#6bcb77',
+			bingoGlow: '#98d9a1',
+			background: '#1a1a2e',
+			surface: 'rgba(26, 26, 46, 0.9)',
+			text: '#f8f8f8',
+			textLight: '#b8b8d1'
 		},
 		fonts: {
 			body: "'Inter', sans-serif",
@@ -99,7 +99,7 @@ export const themes: Record<ThemeId, Theme> = {
 			googleFontsUrl: ''
 		},
 		icon: {
-			svgPath: 'M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z',
+			svgPath: 'M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z M17 4a2 2 0 0 0 2 2a2 2 0 0 0 -2 2a2 2 0 0 0 -2 -2a2 2 0 0 0 2 -2',
 			viewBox: '0 0 24 24',
 			clipPath: 'circle(50% at 50% 50%)'
 		}
