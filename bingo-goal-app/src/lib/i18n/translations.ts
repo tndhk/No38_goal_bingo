@@ -115,25 +115,25 @@ const translations: Record<Locale, TranslationKeys> = {
 			delete: '削除',
 			saving: '保存中',
 			backToHome: 'ホームに戻る',
-			manageBoards: 'ボード管理'
+			manageBoards: 'ビンゴ管理'
 		},
 		main: {
 			startJourney: '目標を始めよう',
 			createFirstBoardDesc: '最初のビンゴボードを作成して、目標達成の旅を始めましょう',
-			createBoard: 'ボード作成'
+			createBoard: 'ビンゴ作成'
 		},
 		boardModal: {
-			newBoard: '新規ボード',
+			newBoard: '新規ビンゴ',
 			gridSize: 'グリッドサイズ',
 			goals: '個の目標',
 			defaultName: (year: number) => `${year}年の目標`
 		},
 		boards: {
 			myBingoals: 'マイビンゴール',
-			noBoardsYet: 'ボードがありません',
-			createFirstBoard: '最初のボードを作成',
-			createNewBoard: '+ 新しいボード',
-			deleteBoard: 'ボード削除',
+			noBoardsYet: 'ビンゴがありません',
+			createFirstBoard: '最初のビンゴを作成',
+			createNewBoard: '+ 新しいビンゴ',
+			deleteBoard: 'ビンゴ削除',
 			deleteConfirm: (name: string) =>
 				`「${name}」を削除しますか？この操作は元に戻せません。`
 		},
