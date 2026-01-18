@@ -1,7 +1,9 @@
 import type { Handle } from '@sveltejs/kit';
+import { sequence } from '@sveltejs/kit/hooks';
+import { dev } from '$app/environment';
 import { createSupabaseServerClient } from '$lib/supabase/client';
 
-export const handle: Handle = async ({ event, resolve }) => {
+const supabaseHandle: Handle = async ({ event, resolve }) => {
 	event.locals.supabase = createSupabaseServerClient({
 		getAll: () => event.cookies.getAll(),
 		setAll: (cookiesToSet) => {
@@ -41,3 +43,19 @@ export const handle: Handle = async ({ event, resolve }) => {
 		}
 	});
 };
+
+const securityHeadersHandle: Handle = async ({ event, resolve }) => {
+	const response = await resolve(event);
+
+	response.headers.set('X-Content-Type-Options', 'nosniff');
+	response.headers.set('X-Frame-Options', 'DENY');
+	response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+
+	if (!dev) {
+		response.headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+	}
+
+	return response;
+};
+
+export const handle = sequence(supabaseHandle, securityHeadersHandle);
