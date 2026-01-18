@@ -78,48 +78,49 @@
 	.board-list {
 		display: flex;
 		flex-direction: column;
-		gap: 0.75rem;
+		gap: 1rem;
 	}
 
 	.board-card {
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
-		background: linear-gradient(145deg, var(--theme-background), var(--theme-pending));
-		border: 1px solid var(--theme-pending-border);
-		border-radius: 0.75rem;
-		transition: all 0.2s ease-out;
-		box-shadow:
-			0 2px 8px rgba(0, 0, 0, 0.06),
-			inset 0 1px 0 rgba(255, 255, 255, 0.9);
-		padding-right: 0.5rem;
+		/* glass-panel style */
+		background: var(--theme-surface);
+		backdrop-filter: blur(12px);
+		-webkit-backdrop-filter: blur(12px);
+		border: 1px solid var(--theme-border);
+		border-radius: 1rem;
+		transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+		box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+		padding-right: 0.75rem;
 	}
 
 	.board-card:hover {
-		box-shadow:
-			0 6px 16px rgba(0, 0, 0, 0.1),
-			inset 0 1px 0 rgba(255, 255, 255, 0.9);
+		transform: translateY(-2px);
+		box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1), 0 0 15px var(--theme-glow);
+		border-color: var(--theme-primary);
 	}
 
 	.card-button {
 		flex: 1;
 		display: flex;
 		align-items: center;
-		padding: 1rem;
+		padding: 1.25rem 1rem;
 		background: transparent;
 		border: none;
 		cursor: pointer;
 		text-align: left;
-		border-radius: 0.75rem 0 0 0.75rem;
-		transition: background 0.15s ease-out;
+		border-radius: 1rem 0 0 1rem;
+		transition: background 0.2s ease-out;
 	}
 
 	.card-button:hover {
-		background: color-mix(in srgb, var(--theme-primary) 3%, transparent);
+		background: rgba(255, 255, 255, 0.05);
 	}
 
 	.card-button:active {
-		background: color-mix(in srgb, var(--theme-primary) 6%, transparent);
+		background: rgba(255, 255, 255, 0.08);
 	}
 
 	.card-content {
@@ -130,36 +131,40 @@
 	.card-header {
 		display: flex;
 		align-items: center;
-		gap: 0.5rem;
-		margin-bottom: 0.5rem;
+		gap: 0.75rem;
+		margin-bottom: 0.75rem;
 	}
 
 	.board-name {
-		font-size: 1.25rem;
-		font-weight: 600;
+		font-size: 1.125rem;
+		font-weight: 700;
 		color: var(--theme-text);
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
 		max-width: 12rem;
-		font-family: var(--theme-font-heading);
+		font-family: var(--font-display);
 	}
 
 	.badge {
-		padding: 0.125rem 0.5rem;
+		padding: 0.25rem 0.625rem;
 		border-radius: 0.5rem;
-		font-size: 0.75rem;
-		font-weight: 600;
+		font-size: 0.6875rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.03em;
 	}
 
 	.badge-perfect {
-		background: linear-gradient(135deg, var(--theme-bingo), var(--theme-bingo-glow));
-		color: black; /* Bingo is amber-like, black usually better */
+		background: linear-gradient(135deg, #fbbf24, #f59e0b);
+		color: #000;
+		box-shadow: 0 2px 8px rgba(251, 191, 36, 0.4);
 	}
 
 	.badge-bingo {
-		background: linear-gradient(135deg, var(--theme-primary-dim), var(--theme-primary));
+		background: linear-gradient(135deg, var(--theme-primary), var(--theme-primary-dim));
 		color: var(--theme-text-on-primary);
+		box-shadow: 0 2px 8px var(--theme-glow);
 	}
 
 	.card-stats {
@@ -171,7 +176,7 @@
 	.progress-bar {
 		flex: 1;
 		height: 6px;
-		background: var(--theme-pending-border);
+		background: rgba(255, 255, 255, 0.1);
 		border-radius: 9999px;
 		overflow: hidden;
 	}
@@ -185,7 +190,7 @@
 
 	.progress-text {
 		font-size: 0.75rem;
-		color: var(--theme-text-light);
+		color: var(--theme-text-muted);
 		font-weight: 500;
 		white-space: nowrap;
 	}
@@ -199,16 +204,16 @@
 		padding: 0;
 		background: transparent;
 		border: none;
-		border-radius: 0.5rem;
-		color: var(--theme-text-light);
+		border-radius: 0.75rem;
+		color: var(--theme-text-muted);
 		cursor: pointer;
-		transition: all 0.15s ease-out;
+		transition: all 0.2s ease-out;
 		flex-shrink: 0;
 	}
 
 	.delete-btn:hover {
-		background: color-mix(in srgb, var(--theme-achieved) 10%, transparent);
-		color: var(--theme-achieved);
+		background: rgba(239, 68, 68, 0.15);
+		color: #ef4444;
 	}
 
 	.delete-btn svg {

@@ -134,7 +134,7 @@
 </script>
 
 <svelte:head>
-	<title>Bingo Planner</title>
+	<title>BinGoal!</title>
 </svelte:head>
 
 {#if showLanding}
@@ -153,7 +153,7 @@
 			<div class="header-inner">
 				<h1 class="brand">
 					<span class="brand-icon">{themeIcon}</span>
-					<span class="brand-text">Bingo Planner</span>
+					<span class="brand-text">BinGoal!</span>
 				</h1>
 				<div class="actions">
 					<SaveIndicator {isSaving} />

@@ -5,7 +5,7 @@
 </script>
 
 <svelte:head>
-	<title>Authentication Error - Bingo Planner</title>
+	<title>Authentication Error - BinGoal!</title>
 </svelte:head>
 
 <div class="page">

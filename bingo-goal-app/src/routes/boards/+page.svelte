@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
+	import { fade, fly, scale } from 'svelte/transition';
+	import { cubicOut } from 'svelte/easing';
 	import {
 		boardStore,
 		initializeStore,
@@ -20,7 +22,7 @@
 	let selectedSize = $state<BoardSize>(3);
 
 	const boards = $derived($boardStore.boards);
-	const themeIcon = $derived($currentTheme.icon);
+	const themeIcon = $derived($currentTheme.meta.icon);
 
 	onMount(() => {
 		initializeStore();
@@ -68,51 +70,62 @@
 </script>
 
 <svelte:head>
-	<title>My Boards - Bingo Planner</title>
+	<title>My Bingoals - BinGoal!</title>
 </svelte:head>
 
-<div class="page">
-	<div class="bg-decoration bg-decoration-1" style="clip-path: {themeIcon.clipPath}"></div>
-	<div class="bg-decoration bg-decoration-2" style="clip-path: {themeIcon.clipPath}"></div>
-	<div class="bg-decoration bg-decoration-3" style="clip-path: {themeIcon.clipPath}"></div>
+<div class="page-container">
+	<!-- Ambient Background -->
+	<div class="ambient-bg">
+		<div class="orb orb-1"></div>
+		<div class="orb orb-2"></div>
+		<div class="orb orb-3"></div>
+	</div>
 
-	<header class="header">
-		<div class="header-content">
-			<a href="/" class="back-link" aria-label="Back to home">
-				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-					<path d="M19 12H5M12 19l-7-7 7-7" />
-				</svg>
-			</a>
-			<h1 class="title">My Boards</h1>
-		</div>
-	</header>
-
-	<main class="main">
-		{#if boards.length > 0}
-			<BoardList
-				{boards}
-				onSelectBoard={handleSelectBoard}
-				onDeleteBoard={handleDeleteRequest}
-			/>
-			<div class="new-board-section">
-				<button type="button" class="btn-new" onclick={openNameDialog}>
-					+ Create New Board
-				</button>
-			</div>
-		{:else}
-			<div class="empty-state">
-				<div class="empty-icon">
-					<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+	<div class="content-wrapper">
+		<header class="header glass-panel">
+			<div class="header-inner">
+				<a href="/" class="btn-back" aria-label="Back to home">
+					<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+						<path d="M19 12H5M12 19l-7-7 7-7" />
 					</svg>
-				</div>
-				<p class="empty-text">No boards yet</p>
-				<button type="button" class="btn-create" onclick={openNameDialog}>
-					Create Your First Board
-				</button>
+				</a>
+				<h1 class="brand">
+					<span class="brand-icon">{themeIcon}</span>
+					<span class="brand-text">My Bingoals</span>
+				</h1>
 			</div>
-		{/if}
-	</main>
+		</header>
+
+		<main class="main-content">
+			{#if boards.length > 0}
+				<div in:fly={{ y: 20, duration: 400, delay: 100 }}>
+					<BoardList
+						{boards}
+						onSelectBoard={handleSelectBoard}
+						onDeleteBoard={handleDeleteRequest}
+					/>
+				</div>
+				<div class="new-board-section" in:fly={{ y: 20, duration: 400, delay: 200 }}>
+					<button type="button" class="btn-primary-lg" onclick={openNameDialog}>
+						+ Create New Board
+					</button>
+				</div>
+			{:else}
+				<div class="empty-state glass-panel" in:scale={{ duration: 300, start: 0.9 }}>
+					<div class="empty-icon-wrapper">
+						<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+						</svg>
+					</div>
+					<h2 class="empty-title">No Boards Yet</h2>
+					<p class="empty-desc">Create your first bingo board to start tracking goals.</p>
+					<button type="button" class="btn-primary-lg" onclick={openNameDialog}>
+						Create Your First Board
+					</button>
+				</div>
+			{/if}
+		</main>
+	</div>
 </div>
 
 <Dialog
@@ -127,55 +140,59 @@
 />
 
 {#if isNameDialogOpen}
-	<!-- svelte-ignore a11y_click_events_have_key_events -->
 	<div
 		role="presentation"
-		class="dialog-backdrop"
+		class="modal-backdrop"
+		transition:fade={{ duration: 200 }}
 		onclick={() => (isNameDialogOpen = false)}
 	>
-		<!-- svelte-ignore a11y_click_events_have_key_events -->
-		<!-- svelte-ignore a11y_interactive_supports_focus -->
 		<div
 			role="dialog"
 			aria-modal="true"
-			class="dialog"
+			tabindex="-1"
+			class="modal-card glass-panel"
+			transition:fly={{ y: 20, duration: 300, easing: cubicOut }}
 			onclick={(e) => e.stopPropagation()}
+			onkeydown={(e) => e.key === 'Escape' && (isNameDialogOpen = false)}
 		>
-			<h2 class="dialog-title">New Board</h2>
-			<input
-				type="text"
-				bind:value={newBoardName}
-				placeholder={`${new Date().getFullYear()} Goals`}
-				class="dialog-input"
-			/>
+			<h2 class="modal-title">New Board</h2>
 
-			<div class="size-selector">
-				<label class="size-label">Board Size</label>
-				<div class="size-options">
+			<div class="input-group">
+				<input
+					type="text"
+					bind:value={newBoardName}
+					placeholder={`${new Date().getFullYear()} Goals`}
+					class="text-input"
+				/>
+			</div>
+
+			<div class="size-selector" role="group" aria-labelledby="grid-size-label">
+				<span id="grid-size-label" class="section-label">Grid Size</span>
+				<div class="grid-options">
 					{#each [3, 4, 5] as size (size)}
 						<button
 							type="button"
-							class="size-option"
+							class="grid-option"
 							class:selected={selectedSize === size}
 							onclick={() => (selectedSize = size as BoardSize)}
 						>
-							{size}x{size}
-							<span class="size-count">({size * size} goals)</span>
+							<span class="grid-size">{size}x{size}</span>
+							<span class="grid-count">{size * size} goals</span>
 						</button>
 					{/each}
 				</div>
 			</div>
 
-			<div class="dialog-actions">
+			<div class="modal-actions">
 				<button
 					type="button"
 					onclick={() => (isNameDialogOpen = false)}
-					class="btn-ghost"
+					class="btn-text"
 				>
 					Cancel
 				</button>
 				<button type="button" onclick={handleCreateBoard} class="btn-primary">
-					Create
+					Create Board
 				</button>
 			</div>
 		</div>
@@ -183,348 +200,347 @@
 {/if}
 
 <style>
-	.page {
+	/* Layout & Container */
+	.page-container {
 		min-height: 100vh;
-		background: linear-gradient(180deg, var(--theme-background) 0%, color-mix(in srgb, var(--theme-background) 95%, var(--theme-pending)) 50%, var(--theme-pending) 100%);
 		position: relative;
+		overflow-x: hidden;
+		color: var(--theme-text);
+	}
+
+	.content-wrapper {
+		position: relative;
+		z-index: 10;
+		display: flex;
+		flex-direction: column;
+		min-height: 100vh;
+	}
+
+	/* Ambient Background */
+	.ambient-bg {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 0;
+		background: radial-gradient(circle at 50% 0%, var(--theme-bg-grad-end), var(--theme-bg-grad-start));
 		overflow: hidden;
 	}
 
-	.bg-decoration {
-		position: fixed;
-		z-index: 0;
-		pointer-events: none;
-		opacity: 0.08;
+	.orb {
+		position: absolute;
+		border-radius: 50%;
+		filter: blur(80px);
+		opacity: 0.6;
+		animation: float 10s ease-in-out infinite;
 	}
 
-	.bg-decoration-1 {
+	.orb-1 {
+		width: 400px;
+		height: 400px;
+		background: var(--theme-primary);
+		top: -100px;
+		right: -100px;
+		animation-delay: 0s;
+	}
+
+	.orb-2 {
+		width: 300px;
+		height: 300px;
+		background: var(--theme-secondary);
+		bottom: 10%;
+		left: -50px;
+		animation-delay: -2s;
+	}
+
+	.orb-3 {
 		width: 200px;
 		height: 200px;
-		background: var(--theme-primary-light);
-		top: -50px;
-		right: -50px;
-		transform: rotate(25deg);
+		background: var(--theme-accent);
+		top: 40%;
+		right: 20%;
+		animation-delay: -5s;
 	}
 
-	.bg-decoration-2 {
-		width: 150px;
-		height: 150px;
-		background: var(--theme-primary);
-		bottom: 15%;
-		left: -40px;
-		transform: rotate(-15deg);
+	@keyframes float {
+		0%, 100% { transform: translate(0, 0); }
+		50% { transform: translate(10px, 20px); }
 	}
 
-	.bg-decoration-3 {
-		width: 120px;
-		height: 120px;
-		background: var(--theme-achieved-light);
-		bottom: 40%;
-		right: -30px;
-		transform: rotate(45deg);
-	}
-
+	/* Header */
 	.header {
-		background: linear-gradient(135deg, var(--theme-primary-dim), var(--theme-primary));
-		box-shadow:
-			0 4px 20px color-mix(in srgb, var(--theme-primary) 30%, transparent),
-			inset 0 1px 0 rgba(255, 255, 255, 0.15);
-		position: relative;
-		z-index: 10;
+		position: sticky;
+		top: 1rem;
+		margin: 0 1rem;
+		border-radius: 1rem;
+		padding: 0.75rem 1.25rem;
+		margin-bottom: 2rem;
+		z-index: 50;
 	}
 
-	.header-content {
-		max-width: 28rem;
-		margin: 0 auto;
-		padding: 1rem;
+	.header-inner {
 		display: flex;
 		align-items: center;
-		gap: 0.75rem;
+		gap: 1rem;
+		max-width: 32rem;
+		margin: 0 auto;
 	}
 
-	.back-link {
+	.btn-back {
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		width: 2.5rem;
 		height: 2.5rem;
-		border-radius: 0.5rem;
-		color: var(--theme-text-on-primary);
-		transition: background 0.15s ease-out;
+		border-radius: 0.75rem;
+		background: rgba(255, 255, 255, 0.05);
+		border: 1px solid transparent;
+		color: var(--theme-text);
+		cursor: pointer;
+		transition: all 0.2s;
 	}
 
-	.back-link:hover {
-		background: rgba(255, 255, 255, 0.15);
+	.btn-back:hover {
+		background: rgba(255, 255, 255, 0.1);
+		transform: translateY(-1px);
 	}
 
-	.back-link svg {
-		width: 1.5rem;
-		height: 1.5rem;
+	.brand {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		font-family: var(--font-display);
+		font-size: 1.25rem;
+		font-weight: 700;
+		color: var(--theme-text);
 	}
 
-	.title {
-		font-size: 1.5rem;
-		font-weight: 600;
-		color: var(--theme-text-on-primary);
-		letter-spacing: -0.01em;
-		font-family: var(--theme-font-heading);
-	}
-
-	.main {
-		max-width: 28rem;
+	/* Main Content */
+	.main-content {
+		flex: 1;
+		width: 100%;
+		max-width: 32rem;
 		margin: 0 auto;
-		padding: 1.5rem 1rem;
-		position: relative;
-		z-index: 1;
+		padding: 0 1rem 3rem;
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
 	}
 
 	.new-board-section {
-		margin-top: 1.5rem;
 		display: flex;
 		justify-content: center;
 	}
 
-	.btn-new {
-		padding: 0.75rem 1.5rem;
-		background: linear-gradient(135deg, var(--theme-primary-dim), var(--theme-primary));
-		color: var(--theme-text-on-primary);
-		border: none;
-		border-radius: 0.75rem;
-		font-weight: 600;
-		font-size: 0.875rem;
-		cursor: pointer;
-		transition: all 0.2s ease-out;
-		box-shadow: 0 4px 14px color-mix(in srgb, var(--theme-primary) 25%, transparent);
-		font-family: var(--theme-font-body);
-	}
-
-	.btn-new:hover {
-		transform: translateY(-2px);
-		box-shadow: 0 6px 20px color-mix(in srgb, var(--theme-primary) 35%, transparent);
-	}
-
+	/* Empty State */
 	.empty-state {
 		text-align: center;
-		padding: 3rem 1rem;
+		padding: 3rem 2rem;
+		border-radius: 1.5rem;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 1rem;
 	}
 
-	.empty-icon {
-		width: 4rem;
-		height: 4rem;
-		margin: 0 auto 1rem;
-		background: linear-gradient(145deg, var(--theme-background), var(--theme-pending));
+	.empty-icon-wrapper {
+		width: 5rem;
+		height: 5rem;
 		border-radius: 50%;
+		background: linear-gradient(135deg, var(--theme-primary), var(--theme-primary-dim));
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		box-shadow:
-			0 4px 12px rgba(0, 0, 0, 0.08),
-			inset 0 1px 0 rgba(255, 255, 255, 0.8);
-		border: 1px solid var(--theme-pending-border);
-	}
-
-	.empty-icon svg {
-		width: 2rem;
-		height: 2rem;
-		color: var(--theme-text-light);
-	}
-
-	.empty-text {
-		color: var(--theme-text-light);
-		font-weight: 500;
-		margin-bottom: 1.5rem;
-	}
-
-	.btn-create {
-		padding: 0.875rem 2rem;
-		background: linear-gradient(135deg, var(--theme-primary-dim), var(--theme-primary));
-		color: var(--theme-text-on-primary);
-		border: none;
-		border-radius: 0.75rem;
-		font-weight: 600;
-		cursor: pointer;
-		transition: all 0.2s ease-out;
-		box-shadow: 0 4px 14px color-mix(in srgb, var(--theme-primary) 25%, transparent);
-		font-family: var(--theme-font-body);
-	}
-
-	.btn-create:hover {
-		transform: translateY(-2px);
-		box-shadow: 0 6px 20px color-mix(in srgb, var(--theme-primary) 35%, transparent);
-	}
-
-	.dialog-backdrop {
-		position: fixed;
-		top: 0;
-		right: 0;
-		bottom: 0;
-		left: 0;
-		z-index: 50;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		background-color: color-mix(in srgb, var(--theme-text) 40%, transparent);
-		backdrop-filter: blur(4px);
-		animation: fadeIn 0.2s ease-out;
-	}
-
-	.dialog {
-		/* 明るいテーマでも見やすい背景 */
-		background: color-mix(in srgb, var(--theme-surface) 98%, white);
-		backdrop-filter: blur(20px);
-		-webkit-backdrop-filter: blur(20px);
-		border-radius: 1rem;
-		box-shadow:
-			0 24px 48px rgba(0, 0, 0, 0.12),
-			0 8px 16px rgba(0, 0, 0, 0.08),
-			inset 0 1px 0 rgba(255, 255, 255, 0.9);
-		max-width: 24rem;
-		width: 100%;
-		margin: 0 1rem;
-		padding: 1.5rem;
-		animation: modalEnter 0.25s ease-out;
-		border: 2px solid var(--theme-border);
-	}
-
-	.dialog-title {
-		font-size: 1.5rem;
-		font-weight: 600;
-		margin-bottom: 1rem;
-		color: var(--theme-text); /* 常にテーマのテキストカラーを使用 */
-		font-family: var(--theme-font-heading);
-	}
-
-	.dialog-input {
-		width: 100%;
-		padding: 0.75rem 1rem;
-		/* テーマに応じた背景 */
-		background: color-mix(in srgb, var(--theme-surface) 70%, var(--theme-text) 5%);
-		border: 2px solid var(--theme-border);
-		border-radius: 0.75rem;
-		font-weight: 500;
-		color: var(--theme-text);
-		margin-bottom: 1rem;
-		font-family: var(--theme-font-body);
-	}
-
-	.dialog-input::placeholder {
-		color: var(--theme-text-light);
-	}
-
-	.dialog-input:focus {
-		outline: none;
-		border-color: var(--theme-primary-light);
-		box-shadow: 0 0 0 3px color-mix(in srgb, var(--theme-primary-light) 15%, transparent);
-	}
-
-	.size-selector {
-		margin-bottom: 1rem;
-	}
-
-	.size-label {
-		display: block;
-		font-weight: 600;
-		color: var(--theme-text);
 		margin-bottom: 0.5rem;
-		font-size: 0.875rem;
-		font-family: var(--theme-font-body);
+		box-shadow: 0 10px 30px -10px var(--theme-primary);
 	}
 
-	.size-options {
-		display: flex;
-		gap: 0.5rem;
-	}
-
-	.size-option {
-		flex: 1;
-		padding: 0.75rem 0.5rem;
-		/* テーマに応じた背景 */
-		background: color-mix(in srgb, var(--theme-surface) 60%, var(--theme-text) 3%);
-		border: 2px solid var(--theme-border);
-		border-radius: 0.5rem;
-		font-weight: 600;
-		color: var(--theme-text);
-		cursor: pointer;
-		transition: all 0.2s ease-out;
-		text-align: center;
-		font-family: var(--theme-font-body);
-	}
-
-	.size-option:hover {
-		border-color: var(--theme-primary);
-		background: color-mix(in srgb, var(--theme-surface) 70%, var(--theme-text) 5%);
-	}
-
-	.size-option.selected {
-		border-color: var(--theme-primary);
-		background: var(--theme-primary);
+	.empty-icon-wrapper svg {
 		color: var(--theme-text-on-primary);
-		box-shadow: 0 4px 12px var(--theme-glow);
 	}
 
-	.size-count {
-		display: block;
-		font-size: 0.75rem;
-		color: var(--theme-text-light);
-		font-weight: 400;
-		margin-top: 0.25rem;
+	.empty-title {
+		font-family: var(--font-display);
+		font-size: 1.5rem;
+		font-weight: 700;
 	}
 
-	.dialog-actions {
-		display: flex;
-		gap: 0.75rem;
-		justify-content: flex-end;
+	.empty-desc {
+		color: var(--theme-text-muted);
+		margin-bottom: 1rem;
 	}
 
-	.btn-ghost {
-		padding: 0.625rem 1.25rem;
-		background: transparent;
-		color: var(--theme-text-light);
+	/* Buttons */
+	.btn-primary-lg {
+		padding: 1rem 2.5rem;
+		background: linear-gradient(135deg, var(--theme-primary), var(--theme-primary-dim));
 		border: none;
-		border-radius: 0.75rem;
+		border-radius: 1rem;
+		color: var(--theme-text-on-primary);
 		font-weight: 600;
-		font-size: 0.875rem;
+		font-size: 1.125rem;
 		cursor: pointer;
-		transition: all 0.2s ease-out;
-		font-family: var(--theme-font-body);
+		box-shadow: 0 4px 20px color-mix(in srgb, var(--theme-primary) 40%, transparent);
+		transition: transform 0.2s, box-shadow 0.2s;
 	}
 
-	.btn-ghost:hover {
-		background: color-mix(in srgb, var(--theme-primary) 8%, transparent);
+	.btn-primary-lg:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 8px 30px color-mix(in srgb, var(--theme-primary) 50%, transparent);
+	}
+
+	/* Modal Styles */
+	.modal-backdrop {
+		position: fixed;
+		inset: 0;
+		z-index: 1000;
+		background: rgba(0, 0, 0, 0.8);
+		backdrop-filter: blur(12px);
+		-webkit-backdrop-filter: blur(12px);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 1rem;
+	}
+
+	.modal-card {
+		width: 100%;
+		max-width: 24rem;
+		border-radius: 1.5rem;
+		padding: 2.5rem;
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+		background: color-mix(in srgb, var(--theme-surface) 98%, white);
+		backdrop-filter: blur(24px);
+		-webkit-backdrop-filter: blur(24px);
+		border: 2px solid var(--theme-border);
+		box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+	}
+
+	.modal-title {
+		font-family: var(--font-display);
+		font-size: 1.75rem;
+		font-weight: 800;
+		text-align: center;
+		color: var(--theme-text);
+		letter-spacing: -0.03em;
+	}
+
+	.text-input {
+		width: 100%;
+		background: color-mix(in srgb, var(--theme-surface) 70%, var(--theme-text) 5%);
+		border: 2px solid var(--theme-border);
+		padding: 1.25rem;
+		border-radius: 1rem;
+		color: var(--theme-text);
+		font-size: 1.25rem;
+		font-weight: 600;
+		text-align: center;
+		transition: all 0.2s;
+	}
+
+	.text-input:focus {
+		outline: none;
+		border-color: var(--theme-primary);
+		background: color-mix(in srgb, var(--theme-surface) 80%, var(--theme-text) 8%);
+		box-shadow: 0 0 0 4px color-mix(in srgb, var(--theme-primary) 20%, transparent);
+	}
+
+	.text-input::placeholder {
+		color: var(--theme-text-muted);
+	}
+
+	.section-label {
+		display: block;
+		font-size: 0.9375rem;
+		font-weight: 700;
+		color: var(--theme-text);
+		margin-bottom: 1rem;
+		text-align: center;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+	}
+
+	.grid-options {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1rem;
+	}
+
+	.grid-option {
+		background: rgba(255, 255, 255, 0.05);
+		border: 1px solid var(--theme-border);
+		border-radius: 1rem;
+		padding: 1rem 0.5rem;
+		cursor: pointer;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.5rem;
+		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+		color: var(--theme-text);
+	}
+
+	.grid-option:hover {
+		background: rgba(255, 255, 255, 0.1);
+		border-color: var(--theme-primary);
+		transform: translateY(-2px);
+	}
+
+	.grid-option.selected {
+		background: var(--theme-primary);
+		border-color: transparent;
+		color: var(--theme-text-on-primary);
+		box-shadow: 0 8px 15px var(--theme-glow);
+	}
+
+	.grid-size {
+		font-weight: 700;
+		font-size: 1.125rem;
+	}
+
+	.grid-count {
+		font-size: 0.75rem;
+		opacity: 0.8;
+	}
+
+	.modal-actions {
+		display: flex;
+		gap: 1rem;
+		margin-top: 0.5rem;
+	}
+
+	.btn-text {
+		flex: 1;
+		padding: 0.875rem;
+		background: transparent;
+		border: none;
+		color: var(--theme-text);
+		font-weight: 600;
+		cursor: pointer;
+	}
+
+	.btn-text:hover {
+		color: var(--theme-text);
 	}
 
 	.btn-primary {
-		padding: 0.625rem 1.25rem;
-		background: linear-gradient(135deg, var(--theme-primary-dim), var(--theme-primary));
-		color: var(--theme-text-on-primary);
+		flex: 1;
+		padding: 0.875rem;
+		background: var(--theme-primary);
 		border: none;
 		border-radius: 0.75rem;
+		color: var(--theme-text-on-primary);
 		font-weight: 600;
-		font-size: 0.875rem;
 		cursor: pointer;
-		transition: all 0.2s ease-out;
-		box-shadow: 0 4px 14px color-mix(in srgb, var(--theme-primary) 25%, transparent);
-		font-family: var(--theme-font-body);
+		box-shadow: 0 4px 15px var(--theme-glow);
+		transition: all 0.2s;
 	}
 
 	.btn-primary:hover {
-		transform: translateY(-2px);
-		box-shadow: 0 6px 20px color-mix(in srgb, var(--theme-primary) 35%, transparent);
-	}
-
-	@keyframes fadeIn {
-		from { opacity: 0; }
-		to { opacity: 1; }
-	}
-
-	@keyframes modalEnter {
-		from {
-			opacity: 0;
-			transform: scale(0.95) translateY(10px);
-		}
-		to {
-			opacity: 1;
-			transform: scale(1) translateY(0);
-		}
+		transform: translateY(-1px);
+		box-shadow: 0 6px 20px var(--theme-glow);
 	}
 </style>
