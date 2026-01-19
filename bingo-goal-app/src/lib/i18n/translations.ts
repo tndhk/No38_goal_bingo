@@ -46,6 +46,8 @@ export type TranslationKeys = {
 		createNewBoard: string;
 		deleteBoard: string;
 		deleteConfirm: (name: string) => string;
+		limitReached: string;
+		remaining: (count: number) => string;
 	};
 	goal: {
 		title: string;
@@ -162,7 +164,9 @@ const translations: Record<Locale, TranslationKeys> = {
 			createNewBoard: '+ 新しいビンゴ',
 			deleteBoard: 'ビンゴ削除',
 			deleteConfirm: (name: string) =>
-				`「${name}」を削除しますか？この操作は元に戻せません。`
+				`「${name}」を削除しますか？この操作は元に戻せません。`,
+			limitReached: '上限に達しました',
+			remaining: (count: number) => `残り${count}個作成可能`
 		},
 		goal: {
 			title: '目標',
@@ -335,7 +339,9 @@ const translations: Record<Locale, TranslationKeys> = {
 			createNewBoard: '+ Create New Board',
 			deleteBoard: 'Delete Board',
 			deleteConfirm: (name: string) =>
-				`Delete "${name}"? This action cannot be undone.`
+				`Delete "${name}"? This action cannot be undone.`,
+			limitReached: 'Limit reached',
+			remaining: (count: number) => `${count} more available`
 		},
 		goal: {
 			title: 'Goal',

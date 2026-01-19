@@ -17,6 +17,7 @@ import {
 	boardSizeSchema,
 	type ValidationResult
 } from '$lib/validation/schemas';
+import { MAX_BOARDS } from '$lib/constants/tokens';
 
 const DEBOUNCE_MS = 500;
 
@@ -202,6 +203,15 @@ export type CreateBoardResult =
 	| { success: false; errors: { name?: string; size?: string } };
 
 export function createBoard(name: string, size: BoardSize = 3): CreateBoardResult {
+	// ボード作成数上限チェック
+	const currentState = get(boardStore);
+	if (currentState.boards.length >= MAX_BOARDS) {
+		return {
+			success: false,
+			errors: { name: 'LIMIT_EXCEEDED' }
+		};
+	}
+
 	// Validate name
 	const nameResult = validateBoardName(name);
 	if (!nameResult.success) {

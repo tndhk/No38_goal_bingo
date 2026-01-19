@@ -13,6 +13,7 @@
 	import { currentTheme } from '$lib/stores/themeStore';
 	import { localeStore } from '$lib/stores/localeStore';
 	import { t } from '$lib/i18n/translations';
+	import { MAX_BOARDS } from '$lib/constants/tokens';
 	import type { BoardSize } from '$lib/types/bingo';
 	import BoardList from '$lib/components/bingo/BoardList.svelte';
 	import Dialog from '$lib/components/ui/Dialog.svelte';
@@ -27,6 +28,8 @@
 	const themeIcon = $derived($currentTheme.meta.icon);
 	const locale = $derived($localeStore);
 	const i18n = $derived(t(locale));
+	const remainingBoards = $derived(MAX_BOARDS - boards.length);
+	const isAtLimit = $derived(boards.length >= MAX_BOARDS);
 
 	onMount(() => {
 		initializeStore();
@@ -110,9 +113,14 @@
 					/>
 				</div>
 				<div class="new-board-section" in:fly={{ y: 20, duration: 400, delay: 200 }}>
-					<button type="button" class="btn-primary-lg" onclick={openNameDialog}>
+					<button type="button" class="btn-primary-lg" onclick={openNameDialog} disabled={isAtLimit}>
 						{i18n.boards.createNewBoard}
 					</button>
+					{#if isAtLimit}
+						<p class="limit-message">{i18n.boards.limitReached}</p>
+					{:else}
+						<p class="remaining-message">{i18n.boards.remaining(remainingBoards)}</p>
+					{/if}
 				</div>
 			{:else}
 				<div class="empty-state glass-panel" in:scale={{ duration: 300, start: 0.9 }}>
@@ -123,9 +131,14 @@
 					</div>
 					<h2 class="empty-title">{i18n.boards.noBoardsYet}</h2>
 					<p class="empty-desc">{i18n.main.createFirstBoardDesc}</p>
-					<button type="button" class="btn-primary-lg" onclick={openNameDialog}>
+					<button type="button" class="btn-primary-lg" onclick={openNameDialog} disabled={isAtLimit}>
 						{i18n.boards.createFirstBoard}
 					</button>
+					{#if isAtLimit}
+						<p class="limit-message">{i18n.boards.limitReached}</p>
+					{:else}
+						<p class="remaining-message">{i18n.boards.remaining(remainingBoards)}</p>
+					{/if}
 				</div>
 			{/if}
 		</main>
@@ -334,7 +347,8 @@
 
 	.new-board-section {
 		display: flex;
-		justify-content: center;
+		flex-direction: column;
+		align-items: center;
 	}
 
 	/* Empty State */
@@ -389,9 +403,30 @@
 		transition: transform 0.2s, box-shadow 0.2s;
 	}
 
-	.btn-primary-lg:hover {
+	.btn-primary-lg:hover:not(:disabled) {
 		transform: translateY(-2px);
 		box-shadow: 0 8px 30px color-mix(in srgb, var(--theme-primary) 50%, transparent);
+	}
+
+	.btn-primary-lg:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+		transform: none;
+		box-shadow: none;
+	}
+
+	.limit-message {
+		color: var(--theme-text-muted);
+		font-size: 0.875rem;
+		text-align: center;
+		margin-top: 0.5rem;
+	}
+
+	.remaining-message {
+		color: var(--theme-text-muted);
+		font-size: 0.875rem;
+		text-align: center;
+		margin-top: 0.5rem;
 	}
 
 	/* Modal Styles */
