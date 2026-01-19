@@ -193,7 +193,7 @@ const translations: Record<Locale, TranslationKeys> = {
 		},
 		privacy: {
 			title: 'プライバシーポリシー',
-			lastUpdated: '最終更新日: 2025年1月',
+			lastUpdated: '最終更新日: 2026年1月',
 			sections: [
 				{
 					heading: '1. 収集する情報',
@@ -217,13 +217,13 @@ const translations: Record<Locale, TranslationKeys> = {
 				},
 				{
 					heading: '6. お問い合わせ',
-					content: 'プライバシーに関するお問い合わせは、GitHubリポジトリのIssueからご連絡ください。'
+					content: 'プライバシーに関するお問い合わせは、お問い合わせフォーム（https://docs.google.com/forms/d/e/1FAIpQLSdh0uKJRursWnqFIFlLfD4BX4ePD-Jh-OHPpF3P2_4Bpz5MFQ/viewform）からご連絡ください。'
 				}
 			]
 		},
 		terms: {
 			title: '利用規約',
-			lastUpdated: '最終更新日: 2025年1月',
+			lastUpdated: '最終更新日: 2026年1月',
 			sections: [
 				{
 					heading: '1. サービス概要',
@@ -252,6 +252,10 @@ const translations: Record<Locale, TranslationKeys> = {
 				{
 					heading: '7. 準拠法',
 					content: '本規約は日本法に準拠し、日本の裁判所を専属的合意管轄裁判所とします。'
+				},
+				{
+					heading: '8. お問い合わせ',
+					content: '本規約に関するお問い合わせは、お問い合わせフォーム（https://docs.google.com/forms/d/e/1FAIpQLSdh0uKJRursWnqFIFlLfD4BX4ePD-Jh-OHPpF3P2_4Bpz5MFQ/viewform）からご連絡ください。'
 				}
 			]
 		},
@@ -362,7 +366,7 @@ const translations: Record<Locale, TranslationKeys> = {
 		},
 		privacy: {
 			title: 'Privacy Policy',
-			lastUpdated: 'Last updated: January 2025',
+			lastUpdated: 'Last updated: January 2026',
 			sections: [
 				{
 					heading: '1. Information We Collect',
@@ -386,13 +390,13 @@ const translations: Record<Locale, TranslationKeys> = {
 				},
 				{
 					heading: '6. Contact',
-					content: 'For privacy-related inquiries, please contact us through our GitHub repository Issues.'
+					content: 'For privacy-related inquiries, please contact us through our contact form (https://docs.google.com/forms/d/e/1FAIpQLSdh0uKJRursWnqFIFlLfD4BX4ePD-Jh-OHPpF3P2_4Bpz5MFQ/viewform).'
 				}
 			]
 		},
 		terms: {
 			title: 'Terms of Service',
-			lastUpdated: 'Last updated: January 2025',
+			lastUpdated: 'Last updated: January 2026',
 			sections: [
 				{
 					heading: '1. Service Overview',
@@ -421,6 +425,10 @@ const translations: Record<Locale, TranslationKeys> = {
 				{
 					heading: '7. Governing Law',
 					content: 'These terms are governed by Japanese law, with Japanese courts having exclusive jurisdiction.'
+				},
+				{
+					heading: '8. Contact',
+					content: 'For inquiries about these terms, please contact us through our contact form (https://docs.google.com/forms/d/e/1FAIpQLSdh0uKJRursWnqFIFlLfD4BX4ePD-Jh-OHPpF3P2_4Bpz5MFQ/viewform).'
 				}
 			]
 		},
