@@ -1,0 +1,82 @@
+# Documentation Update Report
+
+Generated: 2026-01-19
+Source of Truth: package.json, .env.example
+
+## Files Created/Updated
+
+| File | Status | Lines |
+|------|--------|-------|
+| docs/CONTRIB.md | NEW | 155 |
+| docs/RUNBOOK.md | NEW | 200 |
+
+## Source Data Summary
+
+### package.json Scripts (10 scripts)
+
+| Script | Command | Documented |
+|--------|---------|-----------|
+| dev | vite dev | Yes |
+| build | vite build | Yes |
+| preview | vite preview | Yes |
+| prepare | svelte-kit sync | Yes |
+| check | svelte-check | Yes |
+| check:watch | svelte-check --watch | Yes |
+| test | vitest | Yes |
+| test:unit | vitest run | Yes |
+| test:e2e | playwright test | Yes |
+| test:e2e:ui | playwright test --ui | Yes |
+| lint | echo (not configured) | Yes |
+
+### Environment Variables (4 variables)
+
+| Variable | Required | Documented |
+|----------|----------|-----------|
+| PUBLIC_SUPABASE_URL | Yes | Yes |
+| PUBLIC_SUPABASE_ANON_KEY | Yes | Yes |
+| PUBLIC_ANALYTICS_ID | No (future) | Yes |
+| PUBLIC_APP_URL | No (future) | Yes |
+
+## Obsolete Documentation Check
+
+Checking for docs not modified in 90+ days...
+
+| File | Last Modified | Age | Status |
+|------|--------------|-----|--------|
+| bingo-goal-app/README.md | 2026-01-16 | 3 days | Current |
+| CLAUDE.md | 2026-01-17 | 2 days | Current |
+| docs/plans/2025-01-18-theme-selector-improvement.md | 2026-01-18 | 1 day | Current |
+| codemaps/*.md | 2026-01-19 | 0 days | Current |
+
+No obsolete documentation found (all files modified within 90 days).
+
+## Diff Summary
+
+- Total new files: 2
+- Total new lines: ~355
+- Obsolete files requiring review: 0
+
+## Coverage
+
+### CONTRIB.md Coverage
+- [x] Prerequisites
+- [x] Environment setup
+- [x] Environment variables reference
+- [x] Scripts reference table
+- [x] Development workflow
+- [x] Testing procedures
+- [x] Tech stack
+- [x] Code style guidelines
+- [x] Commit guidelines
+
+### RUNBOOK.md Coverage
+- [x] Deployment procedures
+- [x] Build process
+- [x] Environment variables
+- [x] Platform-specific deploy (Vercel, Netlify)
+- [x] Supabase setup
+- [x] Database migration scripts
+- [x] Monitoring and alerts
+- [x] Common issues and fixes (4 scenarios)
+- [x] Rollback procedures
+- [x] Emergency contacts/status pages

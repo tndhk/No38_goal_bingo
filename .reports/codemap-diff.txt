@@ -1,0 +1,60 @@
+# Codemap Diff Report
+
+Generated: 2026-01-19
+
+## Status
+
+Initial codemap creation (no previous version exists)
+
+## Files Created
+
+| File | Lines | Status |
+|------|-------|--------|
+| codemaps/architecture.md | 120 | NEW |
+| codemaps/frontend.md | 160 | NEW |
+| codemaps/backend.md | 180 | NEW |
+| codemaps/data.md | 170 | NEW |
+
+## Change Summary
+
+- Total files: 4
+- Total lines: ~630
+- Diff percentage: N/A (initial creation)
+
+## Content Coverage
+
+### architecture.md
+- High-level architecture diagram
+- Directory structure
+- Key patterns (5 patterns documented)
+- Data flow overview
+- Security measures
+
+### frontend.md
+- Component hierarchy (3 levels)
+- Component tables (UI, Bingo, Landing)
+- Store documentation
+- Routes mapping
+- Styling/theming system
+- Import graph
+
+### backend.md
+- Server-side file documentation
+- Supabase integration
+- Database schema
+- Storage adapter interface
+- Authentication flow
+- Data merge logic
+- API patterns
+
+### data.md
+- Domain types (TypeScript)
+- Database schema (Supabase)
+- Type mapping (TS ↔ DB)
+- Data validation rules
+- State transitions
+- Migration documentation
+
+## Next Actions
+
+No user approval required (initial creation, no existing codemaps to compare)
