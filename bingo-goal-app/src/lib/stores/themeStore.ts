@@ -46,12 +46,6 @@ export const currentTheme = derived(themeStore, ($themeId): Theme => {
 	return themes[$themeId];
 });
 
-export const currentThemeId = derived(themeStore, ($themeId): ThemeId => $themeId);
-
-export function setTheme(id: ThemeId): void {
-	themeStore.setTheme(id);
-}
-
 export function initializeTheme(): void {
 	themeStore.initialize();
 }

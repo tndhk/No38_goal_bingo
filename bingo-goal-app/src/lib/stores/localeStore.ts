@@ -43,7 +43,3 @@ function createLocaleStore() {
 export const localeStore = createLocaleStore();
 
 export const currentLocale = derived(localeStore, ($locale): Locale => $locale);
-
-export function setLocale(locale: Locale): void {
-	localeStore.setLocale(locale);
-}

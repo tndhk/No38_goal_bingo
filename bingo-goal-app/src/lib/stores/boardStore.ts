@@ -294,13 +294,6 @@ export function setCurrentBoard(boardId: string | null): void {
 	}));
 }
 
-export function setIsSaving(isSaving: boolean): void {
-	boardStore.update((state) => ({
-		...state,
-		isSaving
-	}));
-}
-
 export const currentBoard = derived(boardStore, ($state) => {
 	if (!$state.currentBoardId) return null;
 	return $state.boards.find((b) => b.id === $state.currentBoardId) ?? null;

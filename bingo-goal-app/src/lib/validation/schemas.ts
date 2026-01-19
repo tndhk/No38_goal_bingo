@@ -4,8 +4,7 @@ import type { BoardSize, CellPosition } from '$lib/types/bingo';
 // Constants for validation
 export const GOAL_MAX_LENGTH = 50;
 export const BOARD_NAME_MAX_LENGTH = 100;
-export const BOARD_NAME_MIN_LENGTH = 1;
-export const VALID_BOARD_SIZES = [3, 4, 5] as const;
+const BOARD_NAME_MIN_LENGTH = 1;
 
 // Goal text schema
 export const goalSchema = z
@@ -40,8 +39,8 @@ export const cellPositionSchema = z.string().refine(
 	{ message: '無効なセル位置です' }
 );
 
-// Cell schema
-export const cellSchema = z.object({
+// Cell schema (internal use)
+const cellSchema = z.object({
 	position: cellPositionSchema,
 	goal: goalSchema,
 	isAchieved: z.boolean()
@@ -53,13 +52,6 @@ export const createBoardInputSchema = z.object({
 	size: boardSizeSchema
 });
 
-// Board update input schema
-export const updateBoardInputSchema = z.object({
-	id: z.string().uuid('無効なボードIDです'),
-	name: boardNameSchema.optional(),
-	size: boardSizeSchema.optional()
-});
-
 // Cell update input schema
 export const updateCellInputSchema = z.object({
 	boardId: z.string().uuid('無効なボードIDです'),
@@ -69,12 +61,7 @@ export const updateCellInputSchema = z.object({
 });
 
 // Types inferred from schemas
-export type GoalInput = z.infer<typeof goalSchema>;
-export type BoardNameInput = z.infer<typeof boardNameSchema>;
-export type BoardSizeInput = z.infer<typeof boardSizeSchema>;
-export type CellInput = z.infer<typeof cellSchema>;
 export type CreateBoardInput = z.infer<typeof createBoardInputSchema>;
-export type UpdateBoardInput = z.infer<typeof updateBoardInputSchema>;
 export type UpdateCellInput = z.infer<typeof updateCellInputSchema>;
 
 // Validation result type - using issues for zod v4 compatibility
