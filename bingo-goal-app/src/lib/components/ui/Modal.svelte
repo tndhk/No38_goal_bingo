@@ -5,10 +5,11 @@
 		isOpen: boolean;
 		onclose: () => void;
 		title?: string;
+		variant?: 'center' | 'bottom';
 		children?: Snippet;
 	}
 
-	let { isOpen, onclose, title, children }: Props = $props();
+	let { isOpen, onclose, title, variant = 'bottom', children }: Props = $props();
 
 	function handleKeydown(event: KeyboardEvent) {
 		if (event.key === 'Escape') {
@@ -29,7 +30,7 @@
 	<!-- svelte-ignore a11y_click_events_have_key_events -->
 	<div
 		role="presentation"
-		class="backdrop"
+		class="backdrop {variant === 'bottom' ? 'variant-bottom' : 'variant-center'}"
 		onclick={handleBackdropClick}
 		data-testid="modal-backdrop"
 	>
@@ -38,7 +39,7 @@
 			aria-modal="true"
 			aria-labelledby={title ? 'modal-title' : undefined}
 			tabindex="-1"
-			class="modal-content"
+			class="modal-content {variant === 'bottom' ? 'modal-bottom' : 'modal-center'}"
 			onclick={(e) => e.stopPropagation()}
 		>
 			{#if title}
@@ -60,13 +61,28 @@
 		left: 0;
 		z-index: 1000;
 		display: flex;
-		align-items: center;
 		justify-content: center;
-		background-color: rgba(0, 0, 0, 0.8); /* Much darker backdrop */
+		background-color: rgba(0, 0, 0, 0.8);
 		backdrop-filter: blur(12px);
 		-webkit-backdrop-filter: blur(12px);
 		animation: fadeIn 0.3s ease-out;
 		padding: 1rem;
+	}
+
+	.variant-center {
+		align-items: center;
+	}
+
+	.variant-bottom {
+		align-items: center;
+	}
+
+	/* Mobile: Bottom sheet for variant-bottom */
+	@media (max-width: 640px) {
+		.variant-bottom {
+			align-items: flex-end;
+			padding: 0;
+		}
 	}
 
 	.modal-content {
@@ -74,14 +90,32 @@
 		background: color-mix(in srgb, var(--theme-surface) 95%, black);
 		backdrop-filter: blur(24px);
 		-webkit-backdrop-filter: blur(24px);
-		border-radius: 1.5rem;
 		box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 		max-width: 28rem;
 		width: 100%;
 		padding: 2.5rem;
-		animation: modalEnter 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-		border: 2px solid var(--theme-border); /* Thicker border */
+		border: 2px solid var(--theme-border);
 		position: relative;
+	}
+
+	.modal-center {
+		border-radius: 1.5rem;
+		animation: modalEnterCenter 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+	}
+
+	.modal-bottom {
+		border-radius: 1.5rem;
+		animation: modalEnterCenter 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+	}
+
+	/* Mobile: Bottom sheet styling */
+	@media (max-width: 640px) {
+		.modal-bottom {
+			max-width: 100%;
+			border-radius: 1.5rem 1.5rem 0 0;
+			padding: 2rem 1.5rem calc(2rem + var(--safe-area-bottom));
+			animation: slideUpFromBottom 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+		}
 	}
 
 	.modal-title {
@@ -99,7 +133,7 @@
 		to { opacity: 1; }
 	}
 
-	@keyframes modalEnter {
+	@keyframes modalEnterCenter {
 		from {
 			opacity: 0;
 			transform: scale(0.9) translateY(20px);
@@ -107,6 +141,17 @@
 		to {
 			opacity: 1;
 			transform: scale(1) translateY(0);
+		}
+	}
+
+	@keyframes slideUpFromBottom {
+		from {
+			opacity: 0;
+			transform: translateY(100%);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
 		}
 	}
 </style>

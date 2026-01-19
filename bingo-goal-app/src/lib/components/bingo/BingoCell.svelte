@@ -86,10 +86,10 @@
 		justify-content: center;
 		width: 100%;
 		height: 100%;
-		min-height: 80px;
+		min-height: var(--cell-min-height, 80px);
 		padding: 0.5rem;
 		border-radius: 0.75rem;
-		font-size: 0.875rem;
+		font-size: var(--cell-font-size, 0.875rem);
 		font-weight: 500;
 		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 		cursor: pointer;
@@ -209,6 +209,13 @@
 		-webkit-box-orient: vertical;
 		overflow: hidden;
 		line-height: 1.4;
+	}
+
+	/* Small screens: fewer lines */
+	@media (max-width: 400px) {
+		.goal-text {
+			-webkit-line-clamp: 2;
+		}
 	}
 
 	/* Check icon */

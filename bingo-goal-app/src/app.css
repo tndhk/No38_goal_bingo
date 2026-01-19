@@ -48,6 +48,12 @@
    Themes
    ================================ */
 
+:root {
+	/* Touch & Safe Area */
+	--touch-target-min: 44px;
+	--safe-area-bottom: env(safe-area-inset-bottom, 0px);
+}
+
 :root,
 [data-theme="aurora"] {
 	/* Deep Cosmic Vibe */

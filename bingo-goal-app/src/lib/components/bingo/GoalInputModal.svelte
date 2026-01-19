@@ -39,7 +39,7 @@
 	}
 </script>
 
-<Modal {isOpen} onclose={onClose} title={i18n.goal.title}>
+<Modal {isOpen} onclose={onClose} title={i18n.goal.title} variant="bottom">
 	<div class="modal-body">
 		<textarea
 			bind:value={goalText}
@@ -155,11 +155,21 @@
 		margin-top: 1rem;
 	}
 
+	/* Mobile: Stack buttons vertically */
+	@media (max-width: 640px) {
+		.button-group {
+			display: flex;
+			flex-direction: column;
+			gap: 0.75rem;
+		}
+	}
+
 	.btn {
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		height: 3.5rem; /* Fixed height for all buttons */
+		min-height: var(--touch-target-min, 44px);
 		padding: 0 1.5rem;
 		border-radius: 1rem;
 		font-weight: 700;
@@ -177,6 +187,13 @@
 		box-shadow: 0 8px 20px -5px var(--theme-glow);
 	}
 
+	/* Mobile: Save button at bottom (last in flex order) */
+	@media (max-width: 640px) {
+		.btn-primary {
+			order: 3;
+		}
+	}
+
 	.btn-primary:hover {
 		transform: translateY(-2px);
 		box-shadow: 0 12px 25px -5px var(--theme-glow);
@@ -186,6 +203,13 @@
 		background: rgba(255, 255, 255, 0.05);
 		color: var(--theme-text);
 		border-color: var(--theme-border);
+	}
+
+	/* Mobile: Cancel button in middle */
+	@media (max-width: 640px) {
+		.btn-ghost {
+			order: 2;
+		}
 	}
 
 	.btn-ghost:hover {
@@ -199,6 +223,14 @@
 		background: rgba(239, 68, 68, 0.1);
 		color: #ef4444;
 		border-color: rgba(239, 68, 68, 0.3);
+	}
+
+	/* Mobile: Delete button at top (first in flex order) */
+	@media (max-width: 640px) {
+		.btn-danger {
+			order: 1;
+			margin-bottom: 0;
+		}
 	}
 
 	.btn-danger:hover {
