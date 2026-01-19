@@ -248,5 +248,3 @@ const translations: Record<Locale, TranslationKeys> = {
 export function t(locale: Locale): TranslationKeys {
 	return translations[locale];
 }
-
-export default translations;

@@ -145,12 +145,8 @@ export const themeIds: ThemeId[] = ['aurora', 'neon', 'midnight', 'glass'];
 
 export const defaultThemeId: ThemeId = 'aurora';
 
-export function getTheme(id: ThemeId): Theme {
-	return themes[id];
-}
-
 export function isValidThemeId(id: string): id is ThemeId {
 	return themeIds.includes(id as ThemeId);
 }
 
-export type { Theme, ThemeId, ThemeMeta, ThemeColors, ThemeFonts, ThemeIcon } from './types';
+export type { Theme, ThemeId } from './types';

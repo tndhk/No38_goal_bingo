@@ -20,20 +20,6 @@ export function generateCellPositions(size: BoardSize): CellPosition[] {
 	return positions;
 }
 
-// Legacy cell positions for backward compatibility
-export type LegacyCellPosition =
-	| 'topLeft'
-	| 'topCenter'
-	| 'topRight'
-	| 'middleLeft'
-	| 'middleCenter'
-	| 'middleRight'
-	| 'bottomLeft'
-	| 'bottomCenter'
-	| 'bottomRight';
-
-export const CELL_POSITIONS: CellPosition[] = generateCellPositions(3);
-
 export type Cell = {
 	position: CellPosition;
 	goal: string;
@@ -79,9 +65,6 @@ export function generateBingoLines(size: BoardSize): BingoLine[] {
 
 	return lines;
 }
-
-// Legacy BINGO_LINES for backward compatibility
-export const BINGO_LINES: BingoLine[] = generateBingoLines(3);
 
 export type BingoBoard = {
 	id: string;

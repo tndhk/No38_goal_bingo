@@ -2,8 +2,6 @@ import type { StorageAdapter } from './storageAdapter';
 import type { AppState, BingoBoard } from '$lib/types/bingo';
 import { STORAGE_KEY, migrateBoard, boardToStoredBoard, type StoredState } from './migration';
 
-export { STORAGE_KEY };
-
 export function createLocalStorageAdapter(): StorageAdapter {
 	return {
 		async load(): Promise<AppState | null> {
