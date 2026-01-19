@@ -64,6 +64,33 @@ export type TranslationKeys = {
 		errorDesc: string;
 		returnHome: string;
 	};
+	seo: {
+		title: string;
+		description: string;
+		ogTitle: string;
+		ogDescription: string;
+	};
+	footer: {
+		privacy: string;
+		terms: string;
+	};
+	privacy: {
+		title: string;
+		lastUpdated: string;
+		sections: Array<{ heading: string; content: string }>;
+	};
+	terms: {
+		title: string;
+		lastUpdated: string;
+		sections: Array<{ heading: string; content: string }>;
+	};
+	error: {
+		notFound: string;
+		notFoundDesc: string;
+		genericTitle: string;
+		genericDesc: string;
+		returnHome: string;
+	};
 };
 
 const translations: Record<Locale, TranslationKeys> = {
@@ -153,6 +180,87 @@ const translations: Record<Locale, TranslationKeys> = {
 			errorTitle: '認証エラー',
 			errorDesc: '問題が発生しました。もう一度お試しください。',
 			returnHome: 'ホームに戻る'
+		},
+		seo: {
+			title: 'BinGoal! - 目標をビンゴで楽しく達成',
+			description: '目標をビンゴ形式で管理するWebアプリ。3x3から5x5のグリッドに目標を設定し、達成するたびにBINGO!演出で楽しく継続。Googleログインでクラウド同期対応。',
+			ogTitle: 'BinGoal! - 目標をビンゴで楽しく達成',
+			ogDescription: '9つのマスに目標を書いて、達成するたびにビンゴが揃う。楽しく目標管理を始めよう。'
+		},
+		footer: {
+			privacy: 'プライバシーポリシー',
+			terms: '利用規約'
+		},
+		privacy: {
+			title: 'プライバシーポリシー',
+			lastUpdated: '最終更新日: 2025年1月',
+			sections: [
+				{
+					heading: '1. 収集する情報',
+					content: '当サービスでは、Googleアカウントでログインした場合に以下の情報を収集します：メールアドレス、表示名、プロフィール画像URL。これらはユーザー認証とサービス提供のために使用されます。'
+				},
+				{
+					heading: '2. 情報の使用目的',
+					content: '収集した情報は、ユーザー認証、ビンゴボードデータのクラウド同期、サービスの改善のために使用されます。'
+				},
+				{
+					heading: '3. データの保存',
+					content: 'ユーザーデータはSupabase（PostgreSQL）に安全に保存されます。データは暗号化され、適切なアクセス制御が実施されています。'
+				},
+				{
+					heading: '4. 第三者サービス',
+					content: '当サービスは認証にGoogle OAuth、データ保存にSupabaseを使用しています。これらのサービスは各社のプライバシーポリシーに従って運営されています。'
+				},
+				{
+					heading: '5. Cookieの使用',
+					content: '当サービスでは認証トークンの保存にCookieを使用します。これはサービスの正常な動作に必要です。'
+				},
+				{
+					heading: '6. お問い合わせ',
+					content: 'プライバシーに関するお問い合わせは、GitHubリポジトリのIssueからご連絡ください。'
+				}
+			]
+		},
+		terms: {
+			title: '利用規約',
+			lastUpdated: '最終更新日: 2025年1月',
+			sections: [
+				{
+					heading: '1. サービス概要',
+					content: 'BinGoal!は、目標をビンゴ形式で管理するWebアプリケーションです。ユーザーは目標を設定し、達成状況を追跡できます。'
+				},
+				{
+					heading: '2. アカウント',
+					content: 'Googleアカウントでログインすることで、データをクラウドに保存できます。ゲストモードではデータはローカルストレージに保存されます。'
+				},
+				{
+					heading: '3. ユーザーの責任',
+					content: 'ユーザーは自身のアカウントのセキュリティを維持し、入力するコンテンツに責任を持つものとします。'
+				},
+				{
+					heading: '4. 禁止事項',
+					content: 'サービスの悪用、不正アクセス、他のユーザーへの迷惑行為は禁止されています。'
+				},
+				{
+					heading: '5. 免責事項',
+					content: '当サービスは現状有姿で提供されます。データの損失や利用に起因する損害について、運営者は責任を負いません。'
+				},
+				{
+					heading: '6. サービスの変更・終了',
+					content: '運営者はサービスの内容を予告なく変更、または終了する権利を有します。'
+				},
+				{
+					heading: '7. 準拠法',
+					content: '本規約は日本法に準拠し、日本の裁判所を専属的合意管轄裁判所とします。'
+				}
+			]
+		},
+		error: {
+			notFound: 'ページが見つかりません',
+			notFoundDesc: 'お探しのページは存在しないか、移動した可能性があります。',
+			genericTitle: 'エラーが発生しました',
+			genericDesc: '問題が発生しました。しばらくしてからもう一度お試しください。',
+			returnHome: 'ホームに戻る'
 		}
 	},
 	en: {
@@ -240,6 +348,87 @@ const translations: Record<Locale, TranslationKeys> = {
 		auth: {
 			errorTitle: 'Authentication Error',
 			errorDesc: 'Something went wrong. Please try again.',
+			returnHome: 'Return Home'
+		},
+		seo: {
+			title: 'BinGoal! - Achieve Goals the Bingo Way',
+			description: 'A goal management web app with a bingo twist. Set goals in 3x3 to 5x5 grids and celebrate each achievement with BINGO! animations. Cloud sync with Google login.',
+			ogTitle: 'BinGoal! - Achieve Goals the Bingo Way',
+			ogDescription: 'Write your goals in 9 squares and get BINGO when you achieve them. Start your fun goal journey today.'
+		},
+		footer: {
+			privacy: 'Privacy Policy',
+			terms: 'Terms of Service'
+		},
+		privacy: {
+			title: 'Privacy Policy',
+			lastUpdated: 'Last updated: January 2025',
+			sections: [
+				{
+					heading: '1. Information We Collect',
+					content: 'When you sign in with Google, we collect: email address, display name, and profile picture URL. This information is used for user authentication and service delivery.'
+				},
+				{
+					heading: '2. How We Use Information',
+					content: 'Collected information is used for user authentication, cloud synchronization of bingo board data, and service improvement.'
+				},
+				{
+					heading: '3. Data Storage',
+					content: 'User data is securely stored in Supabase (PostgreSQL). Data is encrypted and appropriate access controls are implemented.'
+				},
+				{
+					heading: '4. Third-Party Services',
+					content: 'Our service uses Google OAuth for authentication and Supabase for data storage. These services operate under their respective privacy policies.'
+				},
+				{
+					heading: '5. Cookies',
+					content: 'We use cookies to store authentication tokens. This is necessary for the proper functioning of the service.'
+				},
+				{
+					heading: '6. Contact',
+					content: 'For privacy-related inquiries, please contact us through our GitHub repository Issues.'
+				}
+			]
+		},
+		terms: {
+			title: 'Terms of Service',
+			lastUpdated: 'Last updated: January 2025',
+			sections: [
+				{
+					heading: '1. Service Overview',
+					content: 'BinGoal! is a web application for managing goals in a bingo format. Users can set goals and track their achievement status.'
+				},
+				{
+					heading: '2. Accounts',
+					content: 'By signing in with Google, you can save your data to the cloud. In guest mode, data is saved to local storage.'
+				},
+				{
+					heading: '3. User Responsibilities',
+					content: 'Users are responsible for maintaining the security of their accounts and the content they input.'
+				},
+				{
+					heading: '4. Prohibited Activities',
+					content: 'Service abuse, unauthorized access, and harassment of other users are prohibited.'
+				},
+				{
+					heading: '5. Disclaimer',
+					content: 'The service is provided "as is". We are not responsible for data loss or damages arising from use of the service.'
+				},
+				{
+					heading: '6. Service Changes',
+					content: 'We reserve the right to modify or discontinue the service without prior notice.'
+				},
+				{
+					heading: '7. Governing Law',
+					content: 'These terms are governed by Japanese law, with Japanese courts having exclusive jurisdiction.'
+				}
+			]
+		},
+		error: {
+			notFound: 'Page Not Found',
+			notFoundDesc: 'The page you are looking for does not exist or has been moved.',
+			genericTitle: 'Something Went Wrong',
+			genericDesc: 'An error occurred. Please try again later.',
 			returnHome: 'Return Home'
 		}
 	}

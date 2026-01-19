@@ -45,6 +45,13 @@
 			<FeaturesSection {translations} />
 		</main>
 
+		<footer class="landing-footer">
+			<div class="footer-links">
+				<a href="/privacy" class="footer-link">{translations.footer.privacy}</a>
+				<span class="footer-divider">|</span>
+				<a href="/terms" class="footer-link">{translations.footer.terms}</a>
+			</div>
+		</footer>
 	</div>
 </div>
 
@@ -150,5 +157,34 @@
 		display: flex;
 		align-items: center;
 		gap: 0.75rem;
+	}
+
+	/* Footer */
+	.landing-footer {
+		padding: 2rem 1.5rem;
+		text-align: center;
+	}
+
+	.footer-links {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 1rem;
+	}
+
+	.footer-link {
+		color: var(--theme-text-light);
+		text-decoration: none;
+		font-size: 0.875rem;
+		transition: color 0.2s;
+	}
+
+	.footer-link:hover {
+		color: var(--theme-text);
+	}
+
+	.footer-divider {
+		color: var(--theme-text-light);
+		opacity: 0.5;
 	}
 </style>

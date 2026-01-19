@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e1b4b"/>
+      <stop offset="100%" style="stop-color:#312e81"/>
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#818cf8"/>
+      <stop offset="100%" style="stop-color:#6366f1"/>
+    </linearGradient>
+    <linearGradient id="cellGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#a5b4fc"/>
+      <stop offset="100%" style="stop-color:#c7d2fe"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGrad)"/>
+
+  <!-- Decorative circles -->
+  <circle cx="100" cy="100" r="200" fill="#818cf8" opacity="0.1"/>
+  <circle cx="1100" cy="530" r="250" fill="#6366f1" opacity="0.1"/>
+
+  <!-- Left side: Bingo Grid -->
+  <g transform="translate(120, 115)">
+    <!-- Grid background -->
+    <rect width="400" height="400" rx="24" fill="url(#cardGrad)"/>
+
+    <!-- 3x3 Bingo Grid cells -->
+    <!-- Row 1 -->
+    <rect x="24" y="24" width="108" height="108" rx="12" fill="url(#cellGrad)"/>
+    <rect x="146" y="24" width="108" height="108" rx="12" fill="url(#cellGrad)"/>
+    <rect x="268" y="24" width="108" height="108" rx="12" fill="url(#cellGrad)"/>
+
+    <!-- Row 2 -->
+    <rect x="24" y="146" width="108" height="108" rx="12" fill="url(#cellGrad)"/>
+    <!-- Center cell - achieved with star -->
+    <rect x="146" y="146" width="108" height="108" rx="12" fill="#fbbf24"/>
+    <path d="M200 175l8 16 18 2.6-13 12.7 3 17.7-16-8.4-16 8.4 3-17.7-13-12.7 18-2.6z" fill="#fff"/>
+    <rect x="268" y="146" width="108" height="108" rx="12" fill="url(#cellGrad)"/>
+
+    <!-- Row 3 -->
+    <rect x="24" y="268" width="108" height="108" rx="12" fill="url(#cellGrad)"/>
+    <rect x="146" y="268" width="108" height="108" rx="12" fill="url(#cellGrad)"/>
+    <rect x="268" y="268" width="108" height="108" rx="12" fill="url(#cellGrad)"/>
+
+    <!-- Checkmarks -->
+    <path d="M60 70l12 12 24-24" stroke="#10b981" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <path d="M304 70l12 12 24-24" stroke="#10b981" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <path d="M304 314l12 12 24-24" stroke="#10b981" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <path d="M60 192l12 12 24-24" stroke="#10b981" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </g>
+
+  <!-- Right side: Text -->
+  <g transform="translate(600, 160)">
+    <text x="0" y="0" font-family="system-ui, -apple-system, sans-serif" font-size="96" font-weight="700" fill="#fff">BinGoal!</text>
+    <text x="0" y="80" font-family="system-ui, -apple-system, sans-serif" font-size="36" fill="#c7d2fe">目標を、ビンゴで楽しく</text>
+    <text x="0" y="130" font-family="system-ui, -apple-system, sans-serif" font-size="36" fill="#c7d2fe">Goals, Bingo Style</text>
+
+    <!-- Features -->
+    <g transform="translate(0, 200)">
+      <circle cx="16" cy="16" r="16" fill="#10b981"/>
+      <path d="M10 16l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <text x="48" y="22" font-family="system-ui, -apple-system, sans-serif" font-size="24" fill="#e0e7ff">3x3 ~ 5x5 グリッド</text>
+    </g>
+    <g transform="translate(0, 260)">
+      <circle cx="16" cy="16" r="16" fill="#fbbf24"/>
+      <text x="8" y="23" font-family="system-ui, -apple-system, sans-serif" font-size="16" fill="#fff">★</text>
+      <text x="48" y="22" font-family="system-ui, -apple-system, sans-serif" font-size="24" fill="#e0e7ff">BINGO! 達成アニメーション</text>
+    </g>
+    <g transform="translate(0, 320)">
+      <circle cx="16" cy="16" r="16" fill="#818cf8"/>
+      <text x="8" y="23" font-family="system-ui, -apple-system, sans-serif" font-size="16" fill="#fff">☁</text>
+      <text x="48" y="22" font-family="system-ui, -apple-system, sans-serif" font-size="24" fill="#e0e7ff">クラウド同期対応</text>
+    </g>
+  </g>
+</svg>
