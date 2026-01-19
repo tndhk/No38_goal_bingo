@@ -11,6 +11,12 @@ import {
 import { createSupabaseAdapter } from '$lib/utils/supabaseAdapter';
 import { mergeLocalDataToCloud, getBoardsToUpload } from '$lib/utils/dataMerge';
 import type { Database } from '$lib/supabase/types';
+import {
+	validateBoardName,
+	validateGoal,
+	boardSizeSchema,
+	type ValidationResult
+} from '$lib/validation/schemas';
 
 const DEBOUNCE_MS = 500;
 
@@ -191,9 +197,32 @@ export async function initializeStore(): Promise<void> {
 	storeState.isInitialized = true;
 }
 
-export function createBoard(name: string, size: BoardSize = 3): void {
+export type CreateBoardResult =
+	| { success: true; boardId: string }
+	| { success: false; errors: { name?: string; size?: string } };
+
+export function createBoard(name: string, size: BoardSize = 3): CreateBoardResult {
+	// Validate name
+	const nameResult = validateBoardName(name);
+	if (!nameResult.success) {
+		return {
+			success: false,
+			errors: { name: nameResult.errors[0]?.message ?? 'Invalid board name' }
+		};
+	}
+
+	// Validate size
+	const sizeResult = boardSizeSchema.safeParse(size);
+	if (!sizeResult.success) {
+		return {
+			success: false,
+			errors: { size: 'Invalid board size' }
+		};
+	}
+
+	const newBoard = createEmptyBoard(nameResult.data, size);
+
 	boardStore.update((state) => {
-		const newBoard = createEmptyBoard(name, size);
 		return {
 			...state,
 			boards: [...state.boards, newBoard],
@@ -201,15 +230,36 @@ export function createBoard(name: string, size: BoardSize = 3): void {
 		};
 	});
 	triggerAutoSave();
+
+	return { success: true, boardId: newBoard.id };
 }
 
-export function updateCell(boardId: string, position: CellPosition, goal: string): void {
+export type UpdateCellResult =
+	| { success: true }
+	| { success: false; error: string };
+
+export function updateCell(
+	boardId: string,
+	position: CellPosition,
+	goal: string
+): UpdateCellResult {
+	// Validate goal
+	const goalResult = validateGoal(goal);
+	if (!goalResult.success) {
+		return {
+			success: false,
+			error: goalResult.errors[0]?.message ?? 'Invalid goal'
+		};
+	}
+
 	boardStore.update((state) =>
 		updateBoardInState(state, boardId, (board) =>
-			updateBoardCells(board, position, (cell) => ({ ...cell, goal }))
+			updateBoardCells(board, position, (cell) => ({ ...cell, goal: goalResult.data }))
 		)
 	);
 	triggerAutoSave();
+
+	return { success: true };
 }
 
 export function toggleAchieved(boardId: string, position: CellPosition): void {

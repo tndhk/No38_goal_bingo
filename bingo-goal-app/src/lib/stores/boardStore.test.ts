@@ -172,4 +172,89 @@ describe('boardStore', () => {
 		expect(state.boards[0].size).toBe(5);
 		expect(state.boards[0].cells).toHaveLength(25);
 	});
+
+	describe('validation', () => {
+		test('createBoard() returns success with valid name', () => {
+			const result = createBoard('Valid Name');
+			expect(result.success).toBe(true);
+			if (result.success) {
+				expect(result.boardId).toBeDefined();
+			}
+		});
+
+		test('createBoard() returns error for empty name', () => {
+			const result = createBoard('');
+			expect(result.success).toBe(false);
+			if (!result.success) {
+				expect(result.errors.name).toBeDefined();
+			}
+		});
+
+		test('createBoard() returns error for whitespace-only name', () => {
+			const result = createBoard('   ');
+			expect(result.success).toBe(false);
+			if (!result.success) {
+				expect(result.errors.name).toBeDefined();
+			}
+		});
+
+		test('createBoard() trims board name', () => {
+			const result = createBoard('  Trimmed Name  ');
+			expect(result.success).toBe(true);
+			const state = get(boardStore);
+			expect(state.boards[0].name).toBe('Trimmed Name');
+		});
+
+		test('createBoard() returns error for name exceeding 100 characters', () => {
+			const longName = 'a'.repeat(101);
+			const result = createBoard(longName);
+			expect(result.success).toBe(false);
+			if (!result.success) {
+				expect(result.errors.name).toBeDefined();
+			}
+		});
+
+		test('updateCell() returns success with valid goal', () => {
+			createBoard('Test');
+			const state = get(boardStore);
+			const boardId = state.boards[0].id;
+
+			const result = updateCell(boardId, 'cell_0_0', 'Valid Goal');
+			expect(result.success).toBe(true);
+		});
+
+		test('updateCell() returns error for goal exceeding 50 characters', () => {
+			createBoard('Test');
+			const state = get(boardStore);
+			const boardId = state.boards[0].id;
+
+			const longGoal = 'a'.repeat(51);
+			const result = updateCell(boardId, 'cell_0_0', longGoal);
+			expect(result.success).toBe(false);
+			if (!result.success) {
+				expect(result.error).toBeDefined();
+			}
+		});
+
+		test('updateCell() trims goal text', () => {
+			createBoard('Test');
+			const state = get(boardStore);
+			const boardId = state.boards[0].id;
+
+			updateCell(boardId, 'cell_0_0', '  Trimmed Goal  ');
+
+			const updatedState = get(boardStore);
+			const cell = updatedState.boards[0].cells.find((c) => c.position === 'cell_0_0');
+			expect(cell?.goal).toBe('Trimmed Goal');
+		});
+
+		test('updateCell() accepts empty goal', () => {
+			createBoard('Test');
+			const state = get(boardStore);
+			const boardId = state.boards[0].id;
+
+			const result = updateCell(boardId, 'cell_0_0', '');
+			expect(result.success).toBe(true);
+		});
+	});
 });
