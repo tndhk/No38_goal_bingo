@@ -31,7 +31,7 @@
 			{#each sections as section}
 				<section class="section">
 					<h2 class="section-heading">{section.heading}</h2>
-					<p class="section-content">{section.content}</p>
+					<p class="section-content">{@html section.content}</p>
 				</section>
 			{/each}
 		</div>
@@ -115,6 +115,16 @@
 	.section-content {
 		color: var(--theme-text-light);
 		line-height: 1.7;
+	}
+
+	.section-content :global(a) {
+		color: var(--theme-primary);
+		text-decoration: underline;
+		transition: opacity 0.2s;
+	}
+
+	.section-content :global(a:hover) {
+		opacity: 0.8;
 	}
 
 	.footer-links {
