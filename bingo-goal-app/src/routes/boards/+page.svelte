@@ -101,7 +101,7 @@
 </script>
 
 <svelte:head>
-	<title>My Bingoals - BinGoal!</title>
+	<title>BinGoal!</title>
 </svelte:head>
 
 <div class="page-container">

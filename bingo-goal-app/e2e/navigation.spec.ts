@@ -8,8 +8,8 @@ test.describe('Page Navigation', () => {
 
 	test('should load boards page', async ({ page }) => {
 		await page.goto('/boards');
-		await expect(page).toHaveTitle(/My Bingoals/);
-		await expect(page.locator('text=マイビンゴール').first()).toBeVisible();
+		await expect(page).toHaveTitle(/BinGoal!/);
+		await expect(page.locator('text=My Bingos').first()).toBeVisible();
 	});
 
 	test('should navigate from boards page to home', async ({ page }) => {

@@ -80,8 +80,8 @@ describe('translations', () => {
 
 	describe('boards page translations', () => {
 		it('should have myBingoals translation', () => {
-			expect(t('ja').boards.myBingoals).toBe('マイビンゴール');
-			expect(t('en').boards.myBingoals).toBe('My Bingoals');
+			expect(t('ja').boards.myBingoals).toBe('My Bingos');
+			expect(t('en').boards.myBingoals).toBe('My Bingos');
 		});
 
 		it('should have noBoardsYet translation', () => {

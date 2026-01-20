@@ -12,7 +12,7 @@
 </script>
 
 <svelte:head>
-	<title>{title} - BinGoal!</title>
+	<title>BinGoal!</title>
 </svelte:head>
 
 <div class="page">
