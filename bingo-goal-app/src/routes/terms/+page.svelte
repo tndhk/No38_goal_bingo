@@ -8,7 +8,7 @@
 </script>
 
 <svelte:head>
-	<title>{i18n.terms.title} - BinGoal!</title>
+	<title>BinGoal!</title>
 </svelte:head>
 
 <LegalPage

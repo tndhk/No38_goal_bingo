@@ -159,7 +159,7 @@ const translations: Record<Locale, TranslationKeys> = {
 			defaultName: (year: number) => `${year}年の目標`
 		},
 		boards: {
-			myBingoals: 'マイビンゴール',
+			myBingoals: 'My Bingos',
 			noBoardsYet: 'ビンゴがありません',
 			createFirstBoard: '最初のビンゴを作成',
 			createNewBoard: '+ 新しいビンゴ',
@@ -335,7 +335,7 @@ const translations: Record<Locale, TranslationKeys> = {
 			defaultName: (year: number) => `${year} Goals`
 		},
 		boards: {
-			myBingoals: 'My Bingoals',
+			myBingoals: 'My Bingos',
 			noBoardsYet: 'No Boards Yet',
 			createFirstBoard: 'Create Your First Board',
 			createNewBoard: '+ Create New Board',

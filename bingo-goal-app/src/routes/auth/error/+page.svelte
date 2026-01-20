@@ -9,7 +9,7 @@
 </script>
 
 <svelte:head>
-	<title>{i18n.auth.errorTitle} - BinGoal!</title>
+	<title>BinGoal!</title>
 </svelte:head>
 
 <div class="page">
