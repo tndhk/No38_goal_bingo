@@ -21,7 +21,11 @@
 	let pressTimer: ReturnType<typeof setTimeout> | null = null;
 	let isLongPress = false;
 
-	function handleMouseDown() {
+	function handleMouseDown(event: MouseEvent | TouchEvent) {
+		// iPhoneでスクロールと誤認されないようにpreventDefaultを呼ぶ
+		if (event.type === 'touchstart') {
+			event.preventDefault();
+		}
 		isLongPress = false;
 		pressTimer = setTimeout(() => {
 			isLongPress = true;
@@ -97,6 +101,11 @@
 		font-family: var(--font-body);
 		backdrop-filter: blur(8px);
 		-webkit-backdrop-filter: blur(8px);
+		/* iPhoneでのスクロール誤認防止とタップ遅延解消 */
+		touch-action: manipulation;
+		-webkit-touch-callout: none;
+		-webkit-user-select: none;
+		user-select: none;
 	}
 
 	.cell:focus-visible {
