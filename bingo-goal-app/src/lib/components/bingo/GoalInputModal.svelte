@@ -23,9 +23,23 @@
 	const i18n = $derived(t(locale));
 
 	let goalText = $state(currentGoal);
+	let textareaRef: HTMLTextAreaElement | null = $state(null);
+
+	// 編集モードかどうか（既存の目標があるか）
+	const isEditMode = $derived(currentGoal.length > 0);
 
 	$effect(() => {
 		goalText = currentGoal;
+	});
+
+	// モーダルが開いたらテキストエリアにフォーカス
+	$effect(() => {
+		if (isOpen && textareaRef) {
+			// 少し遅延させてモーダルのアニメーション後にフォーカス
+			setTimeout(() => {
+				textareaRef?.focus();
+			}, 100);
+		}
 	});
 
 	const remainingChars = $derived(MAX_LENGTH - goalText.length);
@@ -43,6 +57,7 @@
 	<div class="modal-body">
 		<textarea
 			bind:value={goalText}
+			bind:this={textareaRef}
 			maxlength={MAX_LENGTH}
 			placeholder={i18n.goal.placeholder}
 			rows="3"
@@ -55,35 +70,20 @@
 			<span class="char-count-max">{MAX_LENGTH}</span>
 		</div>
 
-		<button
-			type="button"
-			onclick={onToggleAchieved}
-			class="toggle-achieved-btn"
-			class:achieved={isAchieved}
-		>
-			{#if isAchieved}
-				<svg class="toggle-icon" viewBox="0 0 24 24" fill="currentColor">
-					<path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-				</svg>
-				<span>{i18n.goal.achieved}</span>
-			{:else}
-				<svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-					<circle cx="12" cy="12" r="10"/>
-				</svg>
-				<span>{i18n.goal.markAchieved}</span>
-			{/if}
-		</button>
+		{#if isEditMode}
+			<button
+				type="button"
+				onclick={onToggleAchieved}
+				class="toggle-switch-container"
+			>
+				<span class="toggle-label">{i18n.goal.achieved}</span>
+				<span class="toggle-switch" class:active={isAchieved}>
+					<span class="toggle-knob"></span>
+				</span>
+			</button>
+		{/if}
 
 		<div class="button-group">
-			{#if currentGoal}
-				<button
-					type="button"
-					onclick={handleClear}
-					class="btn btn-danger"
-				>
-					{i18n.goal.clear}
-				</button>
-			{/if}
 			<button
 				type="button"
 				onclick={onClose}
@@ -99,6 +99,19 @@
 				{i18n.common.save}
 			</button>
 		</div>
+
+		{#if isEditMode}
+			<button
+				type="button"
+				onclick={handleClear}
+				class="btn-delete"
+			>
+				<svg class="delete-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/>
+				</svg>
+				<span>{i18n.goal.clear}</span>
+			</button>
+		{/if}
 	</div>
 </Modal>
 
@@ -150,25 +163,15 @@
 
 	.button-group {
 		display: grid;
-		grid-template-columns: repeat(2, 1fr);
-		gap: 1rem;
-		margin-top: 1rem;
-	}
-
-	/* Mobile: Stack buttons vertically */
-	@media (max-width: 640px) {
-		.button-group {
-			display: flex;
-			flex-direction: column;
-			gap: 0.75rem;
-		}
+		grid-template-columns: 1fr 1fr;
+		gap: 0.75rem;
 	}
 
 	.btn {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		height: 3.5rem; /* Fixed height for all buttons */
+		height: 3.25rem;
 		min-height: var(--touch-target-min, 44px);
 		padding: 0 1.5rem;
 		border-radius: 1rem;
@@ -177,21 +180,13 @@
 		cursor: pointer;
 		transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 		font-family: var(--font-body);
-		border: 2px solid transparent; /* Base border for height consistency */
+		border: 2px solid transparent;
 	}
 
 	.btn-primary {
-		grid-column: span 1;
 		background: var(--theme-primary);
 		color: var(--theme-text-on-primary);
 		box-shadow: 0 8px 20px -5px var(--theme-glow);
-	}
-
-	/* Mobile: Save button at bottom (last in flex order) */
-	@media (max-width: 640px) {
-		.btn-primary {
-			order: 3;
-		}
 	}
 
 	.btn-primary:hover {
@@ -205,79 +200,94 @@
 		border-color: var(--theme-border);
 	}
 
-	/* Mobile: Cancel button in middle */
-	@media (max-width: 640px) {
-		.btn-ghost {
-			order: 2;
-		}
-	}
-
 	.btn-ghost:hover {
 		background: rgba(255, 255, 255, 0.1);
 		border-color: var(--theme-primary);
 	}
 
-	.btn-danger {
-		grid-column: span 2; /* Full width danger button above others */
-		margin-bottom: 0.5rem;
-		background: rgba(239, 68, 68, 0.1);
-		color: #ef4444;
-		border-color: rgba(239, 68, 68, 0.3);
-	}
-
-	/* Mobile: Delete button at top (first in flex order) */
-	@media (max-width: 640px) {
-		.btn-danger {
-			order: 1;
-			margin-bottom: 0;
-		}
-	}
-
-	.btn-danger:hover {
-		background: rgba(239, 68, 68, 0.2);
-		border-color: #ef4444;
-	}
-
-	.toggle-achieved-btn {
+	/* Toggle Switch */
+	.toggle-switch-container {
 		display: flex;
 		align-items: center;
-		justify-content: center;
-		gap: 1rem;
+		justify-content: space-between;
 		width: 100%;
-		height: 4rem; /* Prominent height */
-		padding: 0 1.5rem;
+		padding: 1rem 1.25rem;
 		border: 2px solid var(--theme-border);
-		border-radius: 1.25rem;
-		background: rgba(255, 255, 255, 0.08);
-		font-weight: 700;
-		font-size: 1.125rem;
-		color: var(--theme-text);
+		border-radius: 1rem;
+		background: rgba(255, 255, 255, 0.05);
 		cursor: pointer;
-		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+		transition: all 0.2s ease;
 		font-family: var(--font-body);
 	}
 
-	.toggle-achieved-btn:hover {
+	.toggle-switch-container:hover {
 		border-color: var(--theme-primary);
-		background: rgba(255, 255, 255, 0.15);
-		transform: translateY(-2px);
+		background: rgba(255, 255, 255, 0.08);
 	}
 
-	.toggle-achieved-btn.achieved {
+	.toggle-label {
+		font-weight: 600;
+		font-size: 1rem;
+		color: var(--theme-text);
+	}
+
+	.toggle-switch {
+		position: relative;
+		width: 3.25rem;
+		height: 2rem;
+		background: rgba(255, 255, 255, 0.2);
+		border-radius: 1rem;
+		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	}
+
+	.toggle-switch.active {
 		background: linear-gradient(135deg, var(--theme-primary), var(--theme-secondary));
-		border-color: transparent;
-		color: var(--theme-text-on-primary);
-		box-shadow: 0 10px 20px -5px var(--theme-glow);
+		box-shadow: 0 4px 12px -2px var(--theme-glow);
 	}
 
-	.toggle-achieved-btn.achieved:hover {
-		transform: translateY(-3px);
-		box-shadow: 0 15px 30px -10px var(--theme-glow);
-		filter: brightness(1.1);
-	}
-
-	.toggle-icon {
+	.toggle-knob {
+		position: absolute;
+		top: 0.25rem;
+		left: 0.25rem;
 		width: 1.5rem;
 		height: 1.5rem;
+		background: white;
+		border-radius: 50%;
+		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+	}
+
+	.toggle-switch.active .toggle-knob {
+		transform: translateX(1.25rem);
+	}
+
+	/* Delete Button */
+	.btn-delete {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.5rem;
+		width: 100%;
+		padding: 0.75rem;
+		margin-top: 0.5rem;
+		border: none;
+		border-radius: 0.75rem;
+		background: transparent;
+		color: var(--theme-text-muted);
+		font-size: 0.9rem;
+		font-weight: 500;
+		cursor: pointer;
+		transition: all 0.2s ease;
+		font-family: var(--font-body);
+	}
+
+	.btn-delete:hover {
+		color: #ef4444;
+		background: rgba(239, 68, 68, 0.1);
+	}
+
+	.delete-icon {
+		width: 1.125rem;
+		height: 1.125rem;
 	}
 </style>
