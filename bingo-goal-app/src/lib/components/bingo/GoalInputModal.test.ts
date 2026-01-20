@@ -93,30 +93,30 @@ describe('GoalInputModal', () => {
 		expect(screen.getByText('Goal')).toBeTruthy();
 	});
 
-	test('displays Not Achieved button when isAchieved is false', () => {
+	test('does not show achieved toggle in new entry mode', () => {
 		render(GoalInputModal, { props: defaultProps });
 
-		// テスト環境ではlocaleが'en'（vitest環境のnavigator.languageがen）
-		expect(screen.getByText('Mark achieved')).toBeTruthy();
+		// 新規入力モード（currentGoalが空）では達成トグルは表示されない
+		expect(screen.queryByText('Achieved')).toBeNull();
 	});
 
-	test('displays Achieved button when isAchieved is true', () => {
+	test('shows achieved toggle in edit mode', () => {
 		render(GoalInputModal, {
-			props: { ...defaultProps, isAchieved: true }
+			props: { ...defaultProps, currentGoal: 'Existing goal' }
 		});
 
-		// テスト環境ではlocaleが'en'（vitest環境のnavigator.languageがen）
+		// 編集モード（currentGoalがある）では達成トグルが表示される
 		expect(screen.getByText('Achieved')).toBeTruthy();
 	});
 
-	test('calls onToggleAchieved when achieved button is clicked', async () => {
+	test('calls onToggleAchieved when toggle switch is clicked', async () => {
 		const onToggleAchieved = vi.fn();
 		render(GoalInputModal, {
-			props: { ...defaultProps, onToggleAchieved }
+			props: { ...defaultProps, currentGoal: 'Existing goal', onToggleAchieved }
 		});
 
-		// テスト環境ではlocaleが'en'（vitest環境のnavigator.languageがen）
-		const toggleButton = screen.getByText('Mark achieved');
+		// 編集モードで達成トグルをクリック
+		const toggleButton = screen.getByText('Achieved');
 		await fireEvent.click(toggleButton);
 
 		expect(onToggleAchieved).toHaveBeenCalledTimes(1);
