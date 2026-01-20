@@ -1,38 +1,66 @@
-# sv
+# BinGoal!
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+目標ビンゴ管理Webアプリ。ビンゴ形式で目標を設定・達成を追跡できます。
 
-## Creating a project
+## Features
 
-If you're seeing this, you've probably already done this step. Congrats!
+- 3x3, 4x4, 5x5 のビンゴボードを作成
+- 目標の設定と達成状況の管理
+- ビンゴ達成時のお祝いアニメーション
+- Google認証でクラウド同期
+- ダークモード対応
+- 多言語対応（日本語/英語）
 
-```sh
-# create a new project in the current directory
-npx sv create
+## Quick Start
 
-# create a new project in my-app
-npx sv create my-app
-```
+```bash
+# 依存関係をインストール
+npm install
 
-## Developing
+# 環境変数を設定
+cp .env.example .env.local
+# .env.local を編集
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```sh
+# 開発サーバーを起動
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
-## Building
+http://localhost:5173 でアプリにアクセス。
 
-To create a production version of your app:
+## Scripts
 
-```sh
-npm run build
-```
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | 開発サーバー起動 |
+| `npm run build` | プロダクションビルド |
+| `npm run preview` | ビルドプレビュー |
+| `npm run check` | TypeScript型チェック |
+| `npm run test` | ユニットテスト（watch） |
+| `npm run test:unit` | ユニットテスト |
+| `npm run test:e2e` | E2Eテスト |
 
-You can preview the production build with `npm run preview`.
+## Environment Variables
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `PUBLIC_SUPABASE_URL` | Yes | Supabase URL |
+| `PUBLIC_SUPABASE_ANON_KEY` | Yes | Supabase Anon Key |
+| `PUBLIC_GA_MEASUREMENT_ID` | No | Google Analytics ID |
+
+## Tech Stack
+
+- SvelteKit v2
+- Svelte 5
+- TypeScript
+- Tailwind CSS v4
+- Supabase (Auth + PostgreSQL)
+- Vitest + Playwright
+
+## Documentation
+
+- [Contributing Guide](docs/CONTRIB.md) - 開発ワークフロー
+- [Runbook](docs/RUNBOOK.md) - デプロイ・運用手順
+
+## License
+
+Private

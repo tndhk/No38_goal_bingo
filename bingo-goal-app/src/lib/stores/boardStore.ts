@@ -21,6 +21,14 @@ import { MAX_BOARDS } from '$lib/constants/tokens';
 
 const DEBOUNCE_MS = 500;
 
+export type MergeEvent = {
+	type: 'MERGE_COMPLETE';
+	skippedCount: number;
+	skippedBoardNames: string[];
+};
+
+export const mergeEvents = writable<MergeEvent | null>(null);
+
 const initialState: AppState = {
 	boards: [],
 	currentBoardId: null,
@@ -126,7 +134,9 @@ async function handleLoginMerge(): Promise<void> {
 
 	const localData = getLocalStorageData();
 	const cloudData = await storeState.adapter.load();
-	const boardsToUpload = getBoardsToUpload(localData, cloudData);
+
+	// MAX_BOARDS制限付きでアップロード対象を取得
+	const boardsToUpload = getBoardsToUpload(localData, cloudData, MAX_BOARDS);
 
 	if (boardsToUpload.length > 0) {
 		const results = await Promise.allSettled(
@@ -144,8 +154,20 @@ async function handleLoginMerge(): Promise<void> {
 		}
 	}
 
-	const mergedState = mergeLocalDataToCloud(localData, cloudData);
-	boardStore.set(mergedState);
+	// MAX_BOARDS制限付きでマージ（MergeResultを受け取る）
+	const mergeResult = mergeLocalDataToCloud(localData, cloudData, MAX_BOARDS);
+
+	// スキップされたボードがあれば通知イベントを発行
+	if (mergeResult.skippedBoards.length > 0) {
+		mergeEvents.set({
+			type: 'MERGE_COMPLETE',
+			skippedCount: mergeResult.skippedBoards.length,
+			skippedBoardNames: mergeResult.skippedBoards.map((b) => b.name)
+		});
+	}
+
+	// 後方互換性のため、state部分を直接セット
+	boardStore.set(mergeResult.state);
 
 	clearLocalStorage();
 

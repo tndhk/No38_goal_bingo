@@ -48,6 +48,7 @@ export type TranslationKeys = {
 		deleteConfirm: (name: string) => string;
 		limitReached: string;
 		remaining: (count: number) => string;
+		mergeSkipped: (count: number) => string;
 	};
 	goal: {
 		title: string;
@@ -166,7 +167,8 @@ const translations: Record<Locale, TranslationKeys> = {
 			deleteConfirm: (name: string) =>
 				`「${name}」を削除しますか？この操作は元に戻せません。`,
 			limitReached: '上限に達しました',
-			remaining: (count: number) => `残り${count}個作成可能`
+			remaining: (count: number) => `残り${count}個作成可能`,
+			mergeSkipped: (count: number) => `制限のため${count}個のボードをスキップしました`
 		},
 		goal: {
 			title: '目標',
@@ -341,7 +343,8 @@ const translations: Record<Locale, TranslationKeys> = {
 			deleteConfirm: (name: string) =>
 				`Delete "${name}"? This action cannot be undone.`,
 			limitReached: 'Limit reached',
-			remaining: (count: number) => `${count} more available`
+			remaining: (count: number) => `${count} more available`,
+			mergeSkipped: (count: number) => `${count} board(s) skipped due to limit`
 		},
 		goal: {
 			title: 'Goal',
