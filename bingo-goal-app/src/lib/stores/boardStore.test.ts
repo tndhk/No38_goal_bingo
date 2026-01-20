@@ -257,4 +257,37 @@ describe('boardStore', () => {
 			expect(result.success).toBe(true);
 		});
 	});
+
+	describe('ボード作成数制限', () => {
+		test('3個までボードを作成できる', () => {
+			createBoard('Board 1', 3);
+			createBoard('Board 2', 3);
+			const result = createBoard('Board 3', 3);
+			expect(result.success).toBe(true);
+		});
+
+		test('4個目の作成はエラーになる', () => {
+			createBoard('Board 1', 3);
+			createBoard('Board 2', 3);
+			createBoard('Board 3', 3);
+			const result = createBoard('Board 4', 3);
+			expect(result.success).toBe(false);
+			if (!result.success) {
+				expect(result.errors.name).toBe('LIMIT_EXCEEDED');
+			}
+		});
+
+		test('ボード削除後は再度作成できる', async () => {
+			createBoard('Board 1', 3);
+			createBoard('Board 2', 3);
+			createBoard('Board 3', 3);
+			const state = get(boardStore);
+			const board1Id = state.boards[0].id;
+
+			await deleteBoard(board1Id);
+
+			const result = createBoard('Board 4', 3);
+			expect(result.success).toBe(true);
+		});
+	});
 });

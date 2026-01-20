@@ -8,11 +8,13 @@
 		initializeStore,
 		deleteBoard,
 		setCurrentBoard,
-		createBoard
+		createBoard,
+		mergeEvents
 	} from '$lib/stores/boardStore';
 	import { currentTheme } from '$lib/stores/themeStore';
 	import { localeStore } from '$lib/stores/localeStore';
 	import { t } from '$lib/i18n/translations';
+	import { MAX_BOARDS } from '$lib/constants/tokens';
 	import type { BoardSize } from '$lib/types/bingo';
 	import BoardList from '$lib/components/bingo/BoardList.svelte';
 	import Dialog from '$lib/components/ui/Dialog.svelte';
@@ -22,15 +24,40 @@
 	let isNameDialogOpen = $state(false);
 	let newBoardName = $state('');
 	let selectedSize = $state<BoardSize>(3);
+	let showSkipNotification = $state(false);
+	let skippedCount = $state(0);
 
 	const boards = $derived($boardStore.boards);
 	const themeIcon = $derived($currentTheme.meta.icon);
 	const locale = $derived($localeStore);
 	const i18n = $derived(t(locale));
+	const remainingBoards = $derived(MAX_BOARDS - boards.length);
+	const isAtLimit = $derived(boards.length >= MAX_BOARDS);
 
 	onMount(() => {
 		initializeStore();
 	});
+
+	$effect(() => {
+		const unsubscribe = mergeEvents.subscribe((event) => {
+			if (event && event.skippedCount > 0) {
+				skippedCount = event.skippedCount;
+				showSkipNotification = true;
+
+				setTimeout(() => {
+					showSkipNotification = false;
+					mergeEvents.set(null);
+				}, 5000);
+			}
+		});
+
+		return () => unsubscribe();
+	});
+
+	function dismissNotification() {
+		showSkipNotification = false;
+		mergeEvents.set(null);
+	}
 
 	function handleSelectBoard(boardId: string) {
 		setCurrentBoard(boardId);
@@ -110,9 +137,16 @@
 					/>
 				</div>
 				<div class="new-board-section" in:fly={{ y: 20, duration: 400, delay: 200 }}>
-					<button type="button" class="btn-primary-lg" onclick={openNameDialog}>
+					<button type="button" class="btn-primary-lg" onclick={openNameDialog} disabled={isAtLimit}>
 						{i18n.boards.createNewBoard}
 					</button>
+					<p class="board-count-message">
+						{#if isAtLimit}
+							{i18n.boards.limitReached}
+						{:else}
+							{i18n.boards.remaining(remainingBoards)}
+						{/if}
+					</p>
 				</div>
 			{:else}
 				<div class="empty-state glass-panel" in:scale={{ duration: 300, start: 0.9 }}>
@@ -123,14 +157,45 @@
 					</div>
 					<h2 class="empty-title">{i18n.boards.noBoardsYet}</h2>
 					<p class="empty-desc">{i18n.main.createFirstBoardDesc}</p>
-					<button type="button" class="btn-primary-lg" onclick={openNameDialog}>
+					<button type="button" class="btn-primary-lg" onclick={openNameDialog} disabled={isAtLimit}>
 						{i18n.boards.createFirstBoard}
 					</button>
+					<p class="board-count-message">
+						{#if isAtLimit}
+							{i18n.boards.limitReached}
+						{:else}
+							{i18n.boards.remaining(remainingBoards)}
+						{/if}
+					</p>
 				</div>
 			{/if}
 		</main>
 	</div>
 </div>
+
+{#if showSkipNotification}
+	<div
+		class="skip-notification"
+		role="alert"
+		aria-live="polite"
+		transition:fly={{ y: -20, duration: 300 }}
+	>
+		<div class="notification-content">
+			<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+				<path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+			</svg>
+			<span class="notification-message">{i18n.boards.mergeSkipped(skippedCount)}</span>
+		</div>
+		<button
+			type="button"
+			class="notification-dismiss"
+			onclick={dismissNotification}
+			aria-label="OK"
+		>
+			OK
+		</button>
+	</div>
+{/if}
 
 <Dialog
 	isOpen={isDeleteDialogOpen}
@@ -334,7 +399,8 @@
 
 	.new-board-section {
 		display: flex;
-		justify-content: center;
+		flex-direction: column;
+		align-items: center;
 	}
 
 	/* Empty State */
@@ -389,9 +455,23 @@
 		transition: transform 0.2s, box-shadow 0.2s;
 	}
 
-	.btn-primary-lg:hover {
+	.btn-primary-lg:hover:not(:disabled) {
 		transform: translateY(-2px);
 		box-shadow: 0 8px 30px color-mix(in srgb, var(--theme-primary) 50%, transparent);
+	}
+
+	.btn-primary-lg:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+		transform: none;
+		box-shadow: none;
+	}
+
+	.board-count-message {
+		color: var(--theme-text-muted);
+		font-size: 0.875rem;
+		text-align: center;
+		margin-top: 0.5rem;
 	}
 
 	/* Modal Styles */
@@ -546,5 +626,56 @@
 	.btn-primary:hover {
 		transform: translateY(-1px);
 		box-shadow: 0 6px 20px var(--theme-glow);
+	}
+
+	/* Skip Notification Toast */
+	.skip-notification {
+		position: fixed;
+		top: 1rem;
+		left: 50%;
+		transform: translateX(-50%);
+		z-index: 1100;
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		padding: 1rem 1.5rem;
+		background: linear-gradient(135deg, #f59e0b, #d97706);
+		border-radius: 1rem;
+		box-shadow: 0 10px 30px rgba(245, 158, 11, 0.4);
+		color: white;
+		max-width: calc(100% - 2rem);
+	}
+
+	.notification-content {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+	}
+
+	.notification-content svg {
+		flex-shrink: 0;
+	}
+
+	.notification-message {
+		font-weight: 600;
+		font-size: 0.9375rem;
+		line-height: 1.4;
+	}
+
+	.notification-dismiss {
+		flex-shrink: 0;
+		padding: 0.5rem 1rem;
+		background: rgba(255, 255, 255, 0.2);
+		border: none;
+		border-radius: 0.5rem;
+		color: white;
+		font-weight: 600;
+		font-size: 0.875rem;
+		cursor: pointer;
+		transition: background 0.2s;
+	}
+
+	.notification-dismiss:hover {
+		background: rgba(255, 255, 255, 0.3);
 	}
 </style>

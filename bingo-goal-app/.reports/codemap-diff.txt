@@ -1,0 +1,26 @@
+Codemap Diff Report
+===================
+Generated: 2026-01-20
+
+Previous Version: None (Initial creation)
+Current Version: 2026-01-20
+
+Files Created:
+--------------
++ docs/codemaps/architecture.md  (new)
++ docs/codemaps/frontend.md      (new)
++ docs/codemaps/data.md          (new)
+
+Diff Summary:
+-------------
+- architecture.md: Initial creation - system overview, tech stack, patterns
+- frontend.md: Initial creation - components, stores, routing, i18n
+- data.md: Initial creation - types, database schema, validation, adapters
+
+Change Percentage: N/A (first generation)
+
+Notes:
+------
+- Backend codemap skipped (Supabase BaaS - no custom backend code)
+- All codemaps include freshness timestamp
+- Focus on high-level structure, not implementation details

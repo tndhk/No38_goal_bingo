@@ -17,8 +17,17 @@ import {
 	boardSizeSchema,
 	type ValidationResult
 } from '$lib/validation/schemas';
+import { MAX_BOARDS } from '$lib/constants/tokens';
 
 const DEBOUNCE_MS = 500;
+
+export type MergeEvent = {
+	type: 'MERGE_COMPLETE';
+	skippedCount: number;
+	skippedBoardNames: string[];
+};
+
+export const mergeEvents = writable<MergeEvent | null>(null);
 
 const initialState: AppState = {
 	boards: [],
@@ -125,7 +134,9 @@ async function handleLoginMerge(): Promise<void> {
 
 	const localData = getLocalStorageData();
 	const cloudData = await storeState.adapter.load();
-	const boardsToUpload = getBoardsToUpload(localData, cloudData);
+
+	// MAX_BOARDS制限付きでアップロード対象を取得
+	const boardsToUpload = getBoardsToUpload(localData, cloudData, MAX_BOARDS);
 
 	if (boardsToUpload.length > 0) {
 		const results = await Promise.allSettled(
@@ -143,8 +154,20 @@ async function handleLoginMerge(): Promise<void> {
 		}
 	}
 
-	const mergedState = mergeLocalDataToCloud(localData, cloudData);
-	boardStore.set(mergedState);
+	// MAX_BOARDS制限付きでマージ（MergeResultを受け取る）
+	const mergeResult = mergeLocalDataToCloud(localData, cloudData, MAX_BOARDS);
+
+	// スキップされたボードがあれば通知イベントを発行
+	if (mergeResult.skippedBoards.length > 0) {
+		mergeEvents.set({
+			type: 'MERGE_COMPLETE',
+			skippedCount: mergeResult.skippedBoards.length,
+			skippedBoardNames: mergeResult.skippedBoards.map((b) => b.name)
+		});
+	}
+
+	// 後方互換性のため、state部分を直接セット
+	boardStore.set(mergeResult.state);
 
 	clearLocalStorage();
 
@@ -202,6 +225,15 @@ export type CreateBoardResult =
 	| { success: false; errors: { name?: string; size?: string } };
 
 export function createBoard(name: string, size: BoardSize = 3): CreateBoardResult {
+	// ボード作成数上限チェック
+	const currentState = get(boardStore);
+	if (currentState.boards.length >= MAX_BOARDS) {
+		return {
+			success: false,
+			errors: { name: 'LIMIT_EXCEEDED' }
+		};
+	}
+
 	// Validate name
 	const nameResult = validateBoardName(name);
 	if (!nameResult.success) {
