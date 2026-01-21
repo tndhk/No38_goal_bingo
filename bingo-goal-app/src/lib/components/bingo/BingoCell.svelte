@@ -57,6 +57,11 @@
 	}
 
 	function handleClick() {
+		// mouseupが発火しなかった場合のフォールバック（Chrome対策）
+		if (pressTimer) {
+			clearTimeout(pressTimer);
+			pressTimer = null;
+		}
 		if (handled) return;
 		if (!isLongPress) {
 			ontap();
