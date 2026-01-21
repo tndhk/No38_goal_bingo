@@ -20,6 +20,8 @@
 
 	let pressTimer: ReturnType<typeof setTimeout> | null = null;
 	let isLongPress = false;
+	let handled = false;
+	let handledResetTimer: ReturnType<typeof setTimeout> | null = null;
 
 	function handleMouseDown(event: MouseEvent | TouchEvent) {
 		// iPhoneでスクロールと誤認されないようにpreventDefaultを呼ぶ
@@ -38,10 +40,27 @@
 			clearTimeout(pressTimer);
 			pressTimer = null;
 		}
+		if (!isLongPress && !handled) {
+			handled = true;
+			ontap();
+			if (handledResetTimer) clearTimeout(handledResetTimer);
+			handledResetTimer = setTimeout(() => { handled = false; }, 100);
+		}
+		isLongPress = false;
+	}
+
+	function handleTouchMove() {
+		if (pressTimer) {
+			clearTimeout(pressTimer);
+			pressTimer = null;
+		}
+	}
+
+	function handleClick() {
+		if (handled) return;
 		if (!isLongPress) {
 			ontap();
 		}
-		isLongPress = false;
 	}
 
 	function handleMouseLeave() {
@@ -51,6 +70,13 @@
 		}
 		isLongPress = false;
 	}
+
+	$effect(() => {
+		return () => {
+			if (pressTimer) clearTimeout(pressTimer);
+			if (handledResetTimer) clearTimeout(handledResetTimer);
+		};
+	});
 </script>
 
 <button
@@ -60,8 +86,10 @@
 	onmouseup={handleMouseUp}
 	onmouseleave={handleMouseLeave}
 	ontouchstart={handleMouseDown}
+	ontouchmove={handleTouchMove}
 	ontouchend={handleMouseUp}
 	ontouchcancel={handleMouseLeave}
+	onclick={handleClick}
 >
 	{#if isEmpty}
 		<span class="empty-state">

@@ -89,4 +89,62 @@ describe('BingoCell', () => {
 		const button = container.querySelector('button');
 		expect(button?.classList.contains('bingo-highlight')).toBe(false);
 	});
+
+	// Touch event handling tests
+	test('does not double-fire ontap when touch event is followed by click event', async () => {
+		const ontap = vi.fn();
+		const cell = createCell({ goal: 'Test goal' });
+		render(BingoCell, { props: { cell, ontap } });
+
+		const button = screen.getByRole('button');
+
+		// Touch event sequence (simulating mobile)
+		await fireEvent.touchStart(button);
+		await fireEvent.touchEnd(button);
+
+		// Click event that may follow touch (browser synthesized)
+		await fireEvent.click(button);
+
+		// Should only be called once, not twice
+		expect(ontap).toHaveBeenCalledTimes(1);
+	});
+
+	test('calls ontap via click event when touchend fails to fire', async () => {
+		const ontap = vi.fn();
+		const cell = createCell({ goal: 'Test goal' });
+		render(BingoCell, { props: { cell, ontap } });
+
+		const button = screen.getByRole('button');
+
+		// Only click event (simulating touchend not firing)
+		await fireEvent.click(button);
+
+		expect(ontap).toHaveBeenCalledTimes(1);
+	});
+
+	test('cancels long press when touch moves', async () => {
+		vi.useFakeTimers();
+		const ontap = vi.fn();
+		const onlongpress = vi.fn();
+		const cell = createCell({ goal: 'Test goal' });
+		render(BingoCell, { props: { cell, ontap, onlongpress } });
+
+		const button = screen.getByRole('button');
+
+		await fireEvent.touchStart(button);
+
+		// Move finger before 500ms
+		vi.advanceTimersByTime(200);
+		await fireEvent.touchMove(button);
+
+		// Wait past the long press threshold
+		vi.advanceTimersByTime(400);
+
+		await fireEvent.touchEnd(button);
+
+		// Long press should be cancelled, tap should fire
+		expect(onlongpress).not.toHaveBeenCalled();
+		expect(ontap).toHaveBeenCalledTimes(1);
+		vi.useRealTimers();
+	});
 });
