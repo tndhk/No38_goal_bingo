@@ -13,6 +13,29 @@
 	const user = $derived($currentUser);
 
 	let isLoading = $state(false);
+	let avatarError = $state(false);
+
+	function isValidImageUrl(url: string | undefined): url is string {
+		if (!url) return false;
+		try {
+			const parsedUrl = new URL(url);
+			return ['https:', 'http:'].includes(parsedUrl.protocol);
+		} catch {
+			return false;
+		}
+	}
+
+	const avatarUrl = $derived(() => {
+		const picture = user?.user_metadata?.picture;
+		const avatar = user?.user_metadata?.avatar_url;
+		if (isValidImageUrl(picture)) return picture;
+		if (isValidImageUrl(avatar)) return avatar;
+		return null;
+	});
+
+	function handleAvatarError() {
+		avatarError = true;
+	}
 
 	async function handleSignIn() {
 		isLoading = true;
@@ -45,11 +68,12 @@
 		disabled={isLoading}
 		title={user?.email ?? 'Sign out'}
 	>
-		{#if user?.user_metadata?.avatar_url}
+		{#if avatarUrl() && !avatarError}
 			<img
-				src={user.user_metadata.avatar_url}
+				src={avatarUrl()}
 				alt="Avatar"
 				class="avatar"
+				onerror={handleAvatarError}
 			/>
 		{:else}
 			<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
