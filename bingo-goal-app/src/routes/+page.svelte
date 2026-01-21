@@ -362,6 +362,8 @@
 		z-index: 0;
 		background: radial-gradient(circle at 50% 0%, var(--theme-bg-grad-end), var(--theme-bg-grad-start));
 		overflow: hidden;
+		/* iPhoneでタッチイベントが背景に捕捉されないようにする */
+		pointer-events: none;
 	}
 
 	.orb {
