@@ -118,6 +118,7 @@
 		text-align: left;
 		border-radius: 1rem 0 0 1rem;
 		transition: background 0.2s ease-out;
+		min-height: var(--touch-target-min);
 	}
 
 	.card-button:hover {
@@ -206,6 +207,8 @@
 		justify-content: center;
 		width: 2.5rem;
 		height: 2.5rem;
+		min-height: var(--touch-target-min);
+		min-width: var(--touch-target-min);
 		padding: 0;
 		background: transparent;
 		border: none;

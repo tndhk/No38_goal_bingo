@@ -9,6 +9,7 @@
 	import { authStore } from '$lib/stores/authStore';
 	import { setSupabaseClient } from '$lib/stores/boardStore';
 	import { initGA } from '$lib/utils/analytics';
+	import OfflineIndicator from '$lib/components/ui/OfflineIndicator.svelte';
 	import type { LayoutData } from './$types';
 
 	let { children, data }: { children: Snippet; data: LayoutData } = $props();
@@ -62,4 +63,25 @@
 	<link href={theme.fonts.googleFontsUrl} rel="stylesheet" />
 </svelte:head>
 
-{@render children()}
+<div class="app-container">
+	<OfflineIndicator />
+	<main class="main-content">
+		{@render children()}
+	</main>
+</div>
+
+<style>
+	.app-container {
+		min-height: 100vh;
+		/* Safe Area support for notched devices */
+		padding-top: var(--safe-area-top);
+		padding-right: var(--safe-area-right);
+		padding-bottom: var(--safe-area-bottom);
+		padding-left: var(--safe-area-left);
+	}
+
+	.main-content {
+		position: relative;
+		z-index: 1;
+	}
+</style>
