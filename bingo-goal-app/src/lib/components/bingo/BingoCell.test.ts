@@ -147,4 +147,42 @@ describe('BingoCell', () => {
 		expect(ontap).toHaveBeenCalledTimes(1);
 		vi.useRealTimers();
 	});
+
+	test('calls ontap on quick touch (touchstart -> touchend)', async () => {
+		vi.useFakeTimers();
+		const ontap = vi.fn();
+		const cell = createCell({ goal: 'Test goal' });
+		render(BingoCell, { props: { cell, ontap } });
+
+		const button = screen.getByRole('button');
+
+		await fireEvent.touchStart(button);
+		// Quick tap: less than 500ms
+		vi.advanceTimersByTime(100);
+		await fireEvent.touchEnd(button);
+
+		expect(ontap).toHaveBeenCalledTimes(1);
+		vi.useRealTimers();
+	});
+
+	test('does not call preventDefault on touchstart', async () => {
+		const ontap = vi.fn();
+		const cell = createCell({ goal: 'Test goal' });
+		render(BingoCell, { props: { cell, ontap } });
+
+		const button = screen.getByRole('button');
+
+		// Create a touch event with a spy on preventDefault
+		const touchEvent = new TouchEvent('touchstart', {
+			bubbles: true,
+			cancelable: true,
+			touches: [{ clientX: 0, clientY: 0 } as Touch]
+		});
+		const preventDefaultSpy = vi.spyOn(touchEvent, 'preventDefault');
+
+		await fireEvent(button, touchEvent);
+
+		// preventDefault should NOT be called
+		expect(preventDefaultSpy).not.toHaveBeenCalled();
+	});
 });

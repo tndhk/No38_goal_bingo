@@ -24,10 +24,6 @@
 	let handledResetTimer: ReturnType<typeof setTimeout> | null = null;
 
 	function handleMouseDown(event: MouseEvent | TouchEvent) {
-		// iPhoneでスクロールと誤認されないようにpreventDefaultを呼ぶ
-		if (event.type === 'touchstart') {
-			event.preventDefault();
-		}
 		isLongPress = false;
 		pressTimer = setTimeout(() => {
 			isLongPress = true;
