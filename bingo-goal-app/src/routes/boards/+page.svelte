@@ -18,6 +18,7 @@
 	import type { BoardSize } from '$lib/types/bingo';
 	import BoardList from '$lib/components/bingo/BoardList.svelte';
 	import Dialog from '$lib/components/ui/Dialog.svelte';
+	import PullToRefresh from '$lib/components/ui/PullToRefresh.svelte';
 
 	let isDeleteDialogOpen = $state(false);
 	let boardToDelete = $state<{ id: string; name: string } | null>(null);
@@ -128,47 +129,52 @@
 		</header>
 
 		<main class="main-content">
-			{#if boards.length > 0}
-				<div in:fly={{ y: 20, duration: 400, delay: 100 }}>
-					<BoardList
-						{boards}
-						onSelectBoard={handleSelectBoard}
-						onDeleteBoard={handleDeleteRequest}
-					/>
-				</div>
-				<div class="new-board-section" in:fly={{ y: 20, duration: 400, delay: 200 }}>
-					<button type="button" class="btn-primary-lg" onclick={openNameDialog} disabled={isAtLimit}>
-						{i18n.boards.createNewBoard}
-					</button>
-					<p class="board-count-message">
-						{#if isAtLimit}
-							{i18n.boards.limitReached}
-						{:else}
-							{i18n.boards.remaining(remainingBoards)}
-						{/if}
-					</p>
-				</div>
-			{:else}
-				<div class="empty-state glass-panel" in:scale={{ duration: 300, start: 0.9 }}>
-					<div class="empty-icon-wrapper">
-						<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-						</svg>
+			<PullToRefresh onRefresh={async () => {
+				// Refresh boards data
+				await initializeStore();
+			}}>
+				{#if boards.length > 0}
+					<div in:fly={{ y: 20, duration: 400, delay: 100 }}>
+						<BoardList
+							{boards}
+							onSelectBoard={handleSelectBoard}
+							onDeleteBoard={handleDeleteRequest}
+						/>
 					</div>
-					<h2 class="empty-title">{i18n.boards.noBoardsYet}</h2>
-					<p class="empty-desc">{i18n.main.createFirstBoardDesc}</p>
-					<button type="button" class="btn-primary-lg" onclick={openNameDialog} disabled={isAtLimit}>
-						{i18n.boards.createFirstBoard}
-					</button>
-					<p class="board-count-message">
-						{#if isAtLimit}
-							{i18n.boards.limitReached}
-						{:else}
-							{i18n.boards.remaining(remainingBoards)}
-						{/if}
-					</p>
-				</div>
-			{/if}
+					<div class="new-board-section" in:fly={{ y: 20, duration: 400, delay: 200 }}>
+						<button type="button" class="btn-primary-lg" onclick={openNameDialog} disabled={isAtLimit}>
+							{i18n.boards.createNewBoard}
+						</button>
+						<p class="board-count-message">
+							{#if isAtLimit}
+								{i18n.boards.limitReached}
+							{:else}
+								{i18n.boards.remaining(remainingBoards)}
+							{/if}
+						</p>
+					</div>
+				{:else}
+					<div class="empty-state glass-panel" in:scale={{ duration: 300, start: 0.9 }}>
+						<div class="empty-icon-wrapper">
+							<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+							</svg>
+						</div>
+						<h2 class="empty-title">{i18n.boards.noBoardsYet}</h2>
+						<p class="empty-desc">{i18n.main.createFirstBoardDesc}</p>
+						<button type="button" class="btn-primary-lg" onclick={openNameDialog} disabled={isAtLimit}>
+							{i18n.boards.createFirstBoard}
+						</button>
+						<p class="board-count-message">
+							{#if isAtLimit}
+								{i18n.boards.limitReached}
+							{:else}
+								{i18n.boards.remaining(remainingBoards)}
+							{/if}
+						</p>
+					</div>
+				{/if}
+			</PullToRefresh>
 		</main>
 	</div>
 </div>

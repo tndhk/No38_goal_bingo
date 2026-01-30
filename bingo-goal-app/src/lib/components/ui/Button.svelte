@@ -48,6 +48,8 @@
 		transition: all 0.2s ease-out;
 		outline: none;
 		font-family: var(--theme-font-body);
+		min-height: var(--touch-target-min);
+		min-width: var(--touch-target-min);
 	}
 
 	.btn:focus-visible {
